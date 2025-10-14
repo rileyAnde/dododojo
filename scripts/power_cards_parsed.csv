@@ -1,0 +1,67 @@
+CardName,Element,Value,EffectCode,Param1,Param2,Scope,Target,Note
+FX_DISCARD_COLOR,fire,1,DISCARD_COLOR,purple,,ROUND,ALL,Discard all purple cards (both players)
+FX_DISCARD_COLOR,water,1,DISCARD_COLOR,purple,,ROUND,ALL,Discard all purple cards (both players)
+FX_DISCARD_COLOR,ice,1,DISCARD_COLOR,purple,,ROUND,ALL,Discard all purple cards (both players)
+FX_DISCARD_COLOR,air,1,DISCARD_COLOR,purple,,ROUND,ALL,Discard all purple cards (both players)
+FX_DISCARD_COLOR,earth,1,DISCARD_COLOR,purple,,ROUND,ALL,Discard all purple cards (both players)
+FX_CHANGE_TYPE_BOTH,fire,1,CHANGE_TYPE,water,fire,BOTH,ALL,Water cards become fire for both players
+FX_CHANGE_TYPE_BOTH,water,1,CHANGE_TYPE,water,fire,BOTH,ALL,Water cards become fire for both players
+FX_CHANGE_TYPE_BOTH,ice,1,CHANGE_TYPE,water,fire,BOTH,ALL,Water cards become fire for both players
+FX_CHANGE_TYPE_BOTH,air,1,CHANGE_TYPE,water,fire,BOTH,ALL,Water cards become fire for both players
+FX_CHANGE_TYPE_BOTH,earth,1,CHANGE_TYPE,water,fire,BOTH,ALL,Water cards become fire for both players
+FX_LOWER_WINS,fire,1,RULE_LOWER_WINS,,,ROUND,ALL,Lower value card wins this round
+FX_LOWER_WINS,water,1,RULE_LOWER_WINS,,,ROUND,ALL,Lower value card wins this round
+FX_LOWER_WINS,ice,1,RULE_LOWER_WINS,,,ROUND,ALL,Lower value card wins this round
+FX_LOWER_WINS,air,1,RULE_LOWER_WINS,,,ROUND,ALL,Lower value card wins this round
+FX_LOWER_WINS,earth,1,RULE_LOWER_WINS,,,ROUND,ALL,Lower value card wins this round
+FX_DISCARD_COLOR_SINGLE,fire,1,DISCARD_COLOR,orange,1,ROUND,OPPONENT,Discard an orange card from opponent
+FX_DISCARD_COLOR_SINGLE,water,1,DISCARD_COLOR,orange,1,ROUND,OPPONENT,Discard an orange card from opponent
+FX_DISCARD_COLOR_SINGLE,ice,1,DISCARD_COLOR,orange,1,ROUND,OPPONENT,Discard an orange card from opponent
+FX_DISCARD_COLOR_SINGLE,air,1,DISCARD_COLOR,orange,1,ROUND,OPPONENT,Discard an orange card from opponent
+FX_DISCARD_COLOR_SINGLE,earth,1,DISCARD_COLOR,orange,1,ROUND,OPPONENT,Discard an orange card from opponent
+FX_BLOCK_TYPE_NEXT,fire,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
+FX_BLOCK_TYPE_NEXT,water,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
+FX_BLOCK_TYPE_NEXT,ice,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
+FX_BLOCK_TYPE_NEXT,air,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
+FX_BLOCK_TYPE_NEXT,earth,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
+FX_CHANGE_TYPE_ROUND,ice,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,fire,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,water,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,air,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,earth,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
+FX_MODIFY_NEXT_OPPONENT,fire,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
+FX_MODIFY_NEXT_OPPONENT,water,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
+FX_MODIFY_NEXT_OPPONENT,ice,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
+FX_MODIFY_NEXT_OPPONENT,air,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
+FX_MODIFY_NEXT_OPPONENT,earth,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
+FX_MODIFY_NEXT_PLAYER,water,1,MODIFY_NEXT, +2,PLAYER,NEXT_TURN,PLAYER,Next played card +2 to player
+FX_MODIFY_NEXT_PLAYER,fire,1,MODIFY_NEXT, +2,PLAYER,NEXT_TURN,PLAYER,Next played card +2 to player
+FX_MODIFY_NEXT_PLAYER,ice,1,MODIFY_NEXT, +2,PLAYER,NEXT_TURN,PLAYER,Next played card +2 to player
+FX_MODIFY_NEXT_PLAYER,air,1,MODIFY_NEXT, +2,PLAYER,NEXT_TURN,PLAYER,Next played card +2 to player
+FX_MODIFY_NEXT_PLAYER,earth,1,MODIFY_NEXT, +2,PLAYER,NEXT_TURN,PLAYER,Next played card +2 to player
+FX_DISCARD_COLOR_SPECIFIC,fire,3,DISCARD_COLOR,purple,1,ROUND,OPPONENT,Discard a purple card from opponent
+FX_DISCARD_COLOR_SPECIFIC,water,3,DISCARD_COLOR,purple,1,ROUND,OPPONENT,Discard a purple card from opponent
+FX_DISCARD_COLOR_SPECIFIC,ice,3,DISCARD_COLOR,purple,1,ROUND,OPPONENT,Discard a purple card from opponent
+FX_DISCARD_COLOR_SPECIFIC,air,3,DISCARD_COLOR,purple,1,ROUND,OPPONENT,Discard a purple card from opponent
+FX_DISCARD_COLOR_SPECIFIC,earth,3,DISCARD_COLOR,purple,1,ROUND,OPPONENT,Discard a purple card from opponent
+FX_DISCARD_BLUE,fire,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
+FX_DISCARD_BLUE,water,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
+FX_DISCARD_BLUE,ice,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
+FX_DISCARD_BLUE,air,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
+FX_DISCARD_BLUE,earth,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
+FX_CHANGE_FIRE_TO_SNOW_ALL,water,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
+FX_CHANGE_FIRE_TO_SNOW_ALL,fire,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
+FX_CHANGE_FIRE_TO_SNOW_ALL,ice,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
+FX_CHANGE_FIRE_TO_SNOW_ALL,air,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
+FX_CHANGE_FIRE_TO_SNOW_ALL,earth,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
+FX_BLOCK_FIRE_NEXT,water,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
+FX_BLOCK_FIRE_NEXT,fire,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
+FX_BLOCK_FIRE_NEXT,ice,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
+FX_BLOCK_FIRE_NEXT,air,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
+FX_BLOCK_FIRE_NEXT,earth,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
+FX_WATER_BEcomes_FIRE_ROUND,fire,6,CHANGE_TYPE,water,fire,ROUND,ALL,Water becomes fire for this round
+FX_WATER_BEcomes_FIRE_ROUND,water,6,CHANGE_TYPE,water,fire,ROUND,ALL,Water becomes fire for this round
+FX_WATER_BEcomes_FIRE_ROUND,ice,6,CHANGE_TYPE,water,fire,ROUND,ALL,Water becomes fire for this round
+FX_WATER_BEcomes_FIRE_ROUND,air,6,CHANGE_TYPE,water,fire,ROUND,ALL,Water becomes fire for this round
+FX_WATER_BEcomes_FIRE_ROUND,earth,6,CHANGE_TYPE,water,fire,ROUND,ALL,Water becomes fire for this round
+*** End Patch

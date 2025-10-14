@@ -1,0 +1,2919 @@
+<?xml version='1.0' encoding='utf-8'?>
+<cards>
+    <card id="0">
+        <type>fire</type>
+        <level>1</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="1">
+        <type>fire</type>
+        <level>1</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="2">
+        <type>fire</type>
+        <level>1</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="3">
+        <type>fire</type>
+        <level>1</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="4">
+        <type>fire</type>
+        <level>1</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="5">
+        <type>fire</type>
+        <level>1</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="6">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="7">
+        <type>fire</type>
+        <level>2</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="8">
+        <type>fire</type>
+        <level>2</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="9">
+        <type>fire</type>
+        <level>2</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="10">
+        <type>fire</type>
+        <level>2</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="11">
+        <type>fire</type>
+        <level>2</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="12">
+        <type>fire</type>
+        <level>2</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="13">
+        <type>fire</type>
+        <level>2</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="14">
+        <type>fire</type>
+        <level>3</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="15">
+        <type>fire</type>
+        <level>3</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="16">
+        <type>fire</type>
+        <level>3</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="17">
+        <type>fire</type>
+        <level>3</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="18">
+        <type>fire</type>
+        <level>3</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="19">
+        <type>fire</type>
+        <level>3</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="20">
+        <type>fire</type>
+        <level>3</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="21">
+        <type>fire</type>
+        <level>4</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="22">
+        <type>fire</type>
+        <level>4</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="23">
+        <type>fire</type>
+        <level>4</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="24">
+        <type>fire</type>
+        <level>4</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="25">
+        <type>fire</type>
+        <level>4</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="26">
+        <type>fire</type>
+        <level>4</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="27">
+        <type>fire</type>
+        <level>4</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="28">
+        <type>fire</type>
+        <level>5</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="29">
+        <type>fire</type>
+        <level>5</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="30">
+        <type>fire</type>
+        <level>5</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="31">
+        <type>fire</type>
+        <level>5</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="32">
+        <type>fire</type>
+        <level>5</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="33">
+        <type>fire</type>
+        <level>5</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="34">
+        <type>fire</type>
+        <level>5</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="35">
+        <type>fire</type>
+        <level>6</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="36">
+        <type>fire</type>
+        <level>6</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="37">
+        <type>fire</type>
+        <level>6</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="38">
+        <type>fire</type>
+        <level>6</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="39">
+        <type>fire</type>
+        <level>6</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="40">
+        <type>fire</type>
+        <level>6</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="41">
+        <type>fire</type>
+        <level>6</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="42">
+        <type>fire</type>
+        <level>7</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="43">
+        <type>fire</type>
+        <level>7</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="44">
+        <type>fire</type>
+        <level>7</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="45">
+        <type>fire</type>
+        <level>7</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="46">
+        <type>fire</type>
+        <level>7</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="47">
+        <type>fire</type>
+        <level>7</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="48">
+        <type>fire</type>
+        <level>7</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="49">
+        <type>fire</type>
+        <level>8</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="50">
+        <type>fire</type>
+        <level>8</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="51">
+        <type>fire</type>
+        <level>8</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="52">
+        <type>fire</type>
+        <level>8</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="53">
+        <type>fire</type>
+        <level>8</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="54">
+        <type>fire</type>
+        <level>8</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="55">
+        <type>fire</type>
+        <level>8</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="56">
+        <type>fire</type>
+        <level>9</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="57">
+        <type>fire</type>
+        <level>9</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="58">
+        <type>fire</type>
+        <level>9</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="59">
+        <type>fire</type>
+        <level>9</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="60">
+        <type>fire</type>
+        <level>9</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="61">
+        <type>fire</type>
+        <level>9</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="62">
+        <type>fire</type>
+        <level>9</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="63">
+        <type>fire</type>
+        <level>10</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="64">
+        <type>fire</type>
+        <level>10</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="65">
+        <type>fire</type>
+        <level>10</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="66">
+        <type>fire</type>
+        <level>10</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="67">
+        <type>fire</type>
+        <level>10</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="68">
+        <type>fire</type>
+        <level>10</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="69">
+        <type>fire</type>
+        <level>10</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="70">
+        <type>fire</type>
+        <level>11</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="71">
+        <type>fire</type>
+        <level>11</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="72">
+        <type>fire</type>
+        <level>11</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="73">
+        <type>fire</type>
+        <level>11</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="74">
+        <type>fire</type>
+        <level>11</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="75">
+        <type>fire</type>
+        <level>11</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="76">
+        <type>fire</type>
+        <level>11</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="77">
+        <type>fire</type>
+        <level>12</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="78">
+        <type>fire</type>
+        <level>12</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="79">
+        <type>fire</type>
+        <level>12</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="80">
+        <type>fire</type>
+        <level>12</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="81">
+        <type>fire</type>
+        <level>12</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="82">
+        <type>fire</type>
+        <level>12</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="83">
+        <type>fire</type>
+        <level>12</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="84">
+        <type>water</type>
+        <level>1</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="85">
+        <type>water</type>
+        <level>1</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="86">
+        <type>water</type>
+        <level>1</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="87">
+        <type>water</type>
+        <level>1</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="88">
+        <type>water</type>
+        <level>1</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="89">
+        <type>water</type>
+        <level>1</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="90">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="91">
+        <type>water</type>
+        <level>2</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="92">
+        <type>water</type>
+        <level>2</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="93">
+        <type>water</type>
+        <level>2</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="94">
+        <type>water</type>
+        <level>2</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="95">
+        <type>water</type>
+        <level>2</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="96">
+        <type>water</type>
+        <level>2</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="97">
+        <type>water</type>
+        <level>2</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="98">
+        <type>water</type>
+        <level>3</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="99">
+        <type>water</type>
+        <level>3</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="100">
+        <type>water</type>
+        <level>3</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="101">
+        <type>water</type>
+        <level>3</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="102">
+        <type>water</type>
+        <level>3</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="103">
+        <type>water</type>
+        <level>3</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="104">
+        <type>water</type>
+        <level>3</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="105">
+        <type>water</type>
+        <level>4</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="106">
+        <type>water</type>
+        <level>4</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="107">
+        <type>water</type>
+        <level>4</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="108">
+        <type>water</type>
+        <level>4</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="109">
+        <type>water</type>
+        <level>4</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="110">
+        <type>water</type>
+        <level>4</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="111">
+        <type>water</type>
+        <level>4</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="112">
+        <type>water</type>
+        <level>5</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="113">
+        <type>water</type>
+        <level>5</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="114">
+        <type>water</type>
+        <level>5</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="115">
+        <type>water</type>
+        <level>5</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="116">
+        <type>water</type>
+        <level>5</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="117">
+        <type>water</type>
+        <level>5</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="118">
+        <type>water</type>
+        <level>5</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="119">
+        <type>water</type>
+        <level>6</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="120">
+        <type>water</type>
+        <level>6</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="121">
+        <type>water</type>
+        <level>6</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="122">
+        <type>water</type>
+        <level>6</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="123">
+        <type>water</type>
+        <level>6</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="124">
+        <type>water</type>
+        <level>6</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="125">
+        <type>water</type>
+        <level>6</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="126">
+        <type>water</type>
+        <level>7</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="127">
+        <type>water</type>
+        <level>7</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="128">
+        <type>water</type>
+        <level>7</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="129">
+        <type>water</type>
+        <level>7</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="130">
+        <type>water</type>
+        <level>7</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="131">
+        <type>water</type>
+        <level>7</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="132">
+        <type>water</type>
+        <level>7</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="133">
+        <type>water</type>
+        <level>8</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="134">
+        <type>water</type>
+        <level>8</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="135">
+        <type>water</type>
+        <level>8</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="136">
+        <type>water</type>
+        <level>8</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="137">
+        <type>water</type>
+        <level>8</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="138">
+        <type>water</type>
+        <level>8</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="139">
+        <type>water</type>
+        <level>8</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="140">
+        <type>water</type>
+        <level>9</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="141">
+        <type>water</type>
+        <level>9</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="142">
+        <type>water</type>
+        <level>9</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="143">
+        <type>water</type>
+        <level>9</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="144">
+        <type>water</type>
+        <level>9</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="145">
+        <type>water</type>
+        <level>9</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="146">
+        <type>water</type>
+        <level>9</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="147">
+        <type>water</type>
+        <level>10</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="148">
+        <type>water</type>
+        <level>10</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="149">
+        <type>water</type>
+        <level>10</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="150">
+        <type>water</type>
+        <level>10</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="151">
+        <type>water</type>
+        <level>10</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="152">
+        <type>water</type>
+        <level>10</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="153">
+        <type>water</type>
+        <level>10</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="154">
+        <type>water</type>
+        <level>11</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="155">
+        <type>water</type>
+        <level>11</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="156">
+        <type>water</type>
+        <level>11</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="157">
+        <type>water</type>
+        <level>11</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="158">
+        <type>water</type>
+        <level>11</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="159">
+        <type>water</type>
+        <level>11</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="160">
+        <type>water</type>
+        <level>11</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="161">
+        <type>water</type>
+        <level>12</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="162">
+        <type>water</type>
+        <level>12</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="163">
+        <type>water</type>
+        <level>12</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="164">
+        <type>water</type>
+        <level>12</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="165">
+        <type>water</type>
+        <level>12</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="166">
+        <type>water</type>
+        <level>12</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="167">
+        <type>water</type>
+        <level>12</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="168">
+        <type>earth</type>
+        <level>1</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="169">
+        <type>earth</type>
+        <level>1</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="170">
+        <type>earth</type>
+        <level>1</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="171">
+        <type>earth</type>
+        <level>1</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="172">
+        <type>earth</type>
+        <level>1</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="173">
+        <type>earth</type>
+        <level>1</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="174">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="175">
+        <type>earth</type>
+        <level>2</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="176">
+        <type>earth</type>
+        <level>2</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="177">
+        <type>earth</type>
+        <level>2</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="178">
+        <type>earth</type>
+        <level>2</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="179">
+        <type>earth</type>
+        <level>2</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="180">
+        <type>earth</type>
+        <level>2</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="181">
+        <type>earth</type>
+        <level>2</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="182">
+        <type>earth</type>
+        <level>3</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="183">
+        <type>earth</type>
+        <level>3</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="184">
+        <type>earth</type>
+        <level>3</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="185">
+        <type>earth</type>
+        <level>3</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="186">
+        <type>earth</type>
+        <level>3</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="187">
+        <type>earth</type>
+        <level>3</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="188">
+        <type>earth</type>
+        <level>3</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="189">
+        <type>earth</type>
+        <level>4</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="190">
+        <type>earth</type>
+        <level>4</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="191">
+        <type>earth</type>
+        <level>4</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="192">
+        <type>earth</type>
+        <level>4</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="193">
+        <type>earth</type>
+        <level>4</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="194">
+        <type>earth</type>
+        <level>4</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="195">
+        <type>earth</type>
+        <level>4</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="196">
+        <type>earth</type>
+        <level>5</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="197">
+        <type>earth</type>
+        <level>5</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="198">
+        <type>earth</type>
+        <level>5</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="199">
+        <type>earth</type>
+        <level>5</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="200">
+        <type>earth</type>
+        <level>5</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="201">
+        <type>earth</type>
+        <level>5</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="202">
+        <type>earth</type>
+        <level>5</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="203">
+        <type>earth</type>
+        <level>6</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="204">
+        <type>earth</type>
+        <level>6</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="205">
+        <type>earth</type>
+        <level>6</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="206">
+        <type>earth</type>
+        <level>6</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="207">
+        <type>earth</type>
+        <level>6</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="208">
+        <type>earth</type>
+        <level>6</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="209">
+        <type>earth</type>
+        <level>6</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="210">
+        <type>earth</type>
+        <level>7</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="211">
+        <type>earth</type>
+        <level>7</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="212">
+        <type>earth</type>
+        <level>7</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="213">
+        <type>earth</type>
+        <level>7</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="214">
+        <type>earth</type>
+        <level>7</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="215">
+        <type>earth</type>
+        <level>7</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="216">
+        <type>earth</type>
+        <level>7</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="217">
+        <type>earth</type>
+        <level>8</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="218">
+        <type>earth</type>
+        <level>8</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="219">
+        <type>earth</type>
+        <level>8</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="220">
+        <type>earth</type>
+        <level>8</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="221">
+        <type>earth</type>
+        <level>8</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="222">
+        <type>earth</type>
+        <level>8</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="223">
+        <type>earth</type>
+        <level>8</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="224">
+        <type>earth</type>
+        <level>9</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="225">
+        <type>earth</type>
+        <level>9</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="226">
+        <type>earth</type>
+        <level>9</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="227">
+        <type>earth</type>
+        <level>9</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="228">
+        <type>earth</type>
+        <level>9</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="229">
+        <type>earth</type>
+        <level>9</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="230">
+        <type>earth</type>
+        <level>9</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="231">
+        <type>earth</type>
+        <level>10</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="232">
+        <type>earth</type>
+        <level>10</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="233">
+        <type>earth</type>
+        <level>10</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="234">
+        <type>earth</type>
+        <level>10</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="235">
+        <type>earth</type>
+        <level>10</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="236">
+        <type>earth</type>
+        <level>10</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="237">
+        <type>earth</type>
+        <level>10</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="238">
+        <type>earth</type>
+        <level>11</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="239">
+        <type>earth</type>
+        <level>11</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="240">
+        <type>earth</type>
+        <level>11</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="241">
+        <type>earth</type>
+        <level>11</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="242">
+        <type>earth</type>
+        <level>11</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="243">
+        <type>earth</type>
+        <level>11</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="244">
+        <type>earth</type>
+        <level>11</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="245">
+        <type>earth</type>
+        <level>12</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="246">
+        <type>earth</type>
+        <level>12</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="247">
+        <type>earth</type>
+        <level>12</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="248">
+        <type>earth</type>
+        <level>12</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="249">
+        <type>earth</type>
+        <level>12</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="250">
+        <type>earth</type>
+        <level>12</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="251">
+        <type>earth</type>
+        <level>12</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="252">
+        <type>air</type>
+        <level>1</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="253">
+        <type>air</type>
+        <level>1</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="254">
+        <type>air</type>
+        <level>1</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="255">
+        <type>air</type>
+        <level>1</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="256">
+        <type>air</type>
+        <level>1</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="257">
+        <type>air</type>
+        <level>1</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="258">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="259">
+        <type>air</type>
+        <level>2</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="260">
+        <type>air</type>
+        <level>2</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="261">
+        <type>air</type>
+        <level>2</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="262">
+        <type>air</type>
+        <level>2</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="263">
+        <type>air</type>
+        <level>2</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="264">
+        <type>air</type>
+        <level>2</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="265">
+        <type>air</type>
+        <level>2</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="266">
+        <type>air</type>
+        <level>3</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="267">
+        <type>air</type>
+        <level>3</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="268">
+        <type>air</type>
+        <level>3</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="269">
+        <type>air</type>
+        <level>3</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="270">
+        <type>air</type>
+        <level>3</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="271">
+        <type>air</type>
+        <level>3</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="272">
+        <type>air</type>
+        <level>3</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="273">
+        <type>air</type>
+        <level>4</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="274">
+        <type>air</type>
+        <level>4</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="275">
+        <type>air</type>
+        <level>4</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="276">
+        <type>air</type>
+        <level>4</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="277">
+        <type>air</type>
+        <level>4</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="278">
+        <type>air</type>
+        <level>4</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="279">
+        <type>air</type>
+        <level>4</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="280">
+        <type>air</type>
+        <level>5</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="281">
+        <type>air</type>
+        <level>5</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="282">
+        <type>air</type>
+        <level>5</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="283">
+        <type>air</type>
+        <level>5</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="284">
+        <type>air</type>
+        <level>5</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="285">
+        <type>air</type>
+        <level>5</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="286">
+        <type>air</type>
+        <level>5</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="287">
+        <type>air</type>
+        <level>6</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="288">
+        <type>air</type>
+        <level>6</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="289">
+        <type>air</type>
+        <level>6</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="290">
+        <type>air</type>
+        <level>6</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="291">
+        <type>air</type>
+        <level>6</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="292">
+        <type>air</type>
+        <level>6</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="293">
+        <type>air</type>
+        <level>6</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="294">
+        <type>air</type>
+        <level>7</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="295">
+        <type>air</type>
+        <level>7</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="296">
+        <type>air</type>
+        <level>7</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="297">
+        <type>air</type>
+        <level>7</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="298">
+        <type>air</type>
+        <level>7</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="299">
+        <type>air</type>
+        <level>7</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="300">
+        <type>air</type>
+        <level>7</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="301">
+        <type>air</type>
+        <level>8</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="302">
+        <type>air</type>
+        <level>8</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="303">
+        <type>air</type>
+        <level>8</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="304">
+        <type>air</type>
+        <level>8</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="305">
+        <type>air</type>
+        <level>8</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="306">
+        <type>air</type>
+        <level>8</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="307">
+        <type>air</type>
+        <level>8</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="308">
+        <type>air</type>
+        <level>9</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="309">
+        <type>air</type>
+        <level>9</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="310">
+        <type>air</type>
+        <level>9</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="311">
+        <type>air</type>
+        <level>9</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="312">
+        <type>air</type>
+        <level>9</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="313">
+        <type>air</type>
+        <level>9</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="314">
+        <type>air</type>
+        <level>9</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="315">
+        <type>air</type>
+        <level>10</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="316">
+        <type>air</type>
+        <level>10</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="317">
+        <type>air</type>
+        <level>10</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="318">
+        <type>air</type>
+        <level>10</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="319">
+        <type>air</type>
+        <level>10</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="320">
+        <type>air</type>
+        <level>10</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="321">
+        <type>air</type>
+        <level>10</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="322">
+        <type>air</type>
+        <level>11</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="323">
+        <type>air</type>
+        <level>11</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="324">
+        <type>air</type>
+        <level>11</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="325">
+        <type>air</type>
+        <level>11</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="326">
+        <type>air</type>
+        <level>11</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="327">
+        <type>air</type>
+        <level>11</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="328">
+        <type>air</type>
+        <level>11</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="329">
+        <type>air</type>
+        <level>12</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="330">
+        <type>air</type>
+        <level>12</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="331">
+        <type>air</type>
+        <level>12</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="332">
+        <type>air</type>
+        <level>12</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="333">
+        <type>air</type>
+        <level>12</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="334">
+        <type>air</type>
+        <level>12</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="335">
+        <type>air</type>
+        <level>12</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="336">
+        <type>ice</type>
+        <level>1</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="337">
+        <type>ice</type>
+        <level>1</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="338">
+        <type>ice</type>
+        <level>1</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="339">
+        <type>ice</type>
+        <level>1</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="340">
+        <type>ice</type>
+        <level>1</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="341">
+        <type>ice</type>
+        <level>1</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="342">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="343">
+        <type>ice</type>
+        <level>2</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="344">
+        <type>ice</type>
+        <level>2</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="345">
+        <type>ice</type>
+        <level>2</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="346">
+        <type>ice</type>
+        <level>2</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="347">
+        <type>ice</type>
+        <level>2</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="348">
+        <type>ice</type>
+        <level>2</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="349">
+        <type>ice</type>
+        <level>2</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="350">
+        <type>ice</type>
+        <level>3</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="351">
+        <type>ice</type>
+        <level>3</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="352">
+        <type>ice</type>
+        <level>3</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="353">
+        <type>ice</type>
+        <level>3</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="354">
+        <type>ice</type>
+        <level>3</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="355">
+        <type>ice</type>
+        <level>3</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="356">
+        <type>ice</type>
+        <level>3</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="357">
+        <type>ice</type>
+        <level>4</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="358">
+        <type>ice</type>
+        <level>4</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="359">
+        <type>ice</type>
+        <level>4</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="360">
+        <type>ice</type>
+        <level>4</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="361">
+        <type>ice</type>
+        <level>4</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="362">
+        <type>ice</type>
+        <level>4</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="363">
+        <type>ice</type>
+        <level>4</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="364">
+        <type>ice</type>
+        <level>5</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="365">
+        <type>ice</type>
+        <level>5</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="366">
+        <type>ice</type>
+        <level>5</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="367">
+        <type>ice</type>
+        <level>5</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="368">
+        <type>ice</type>
+        <level>5</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="369">
+        <type>ice</type>
+        <level>5</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="370">
+        <type>ice</type>
+        <level>5</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="371">
+        <type>ice</type>
+        <level>6</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="372">
+        <type>ice</type>
+        <level>6</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="373">
+        <type>ice</type>
+        <level>6</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="374">
+        <type>ice</type>
+        <level>6</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="375">
+        <type>ice</type>
+        <level>6</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="376">
+        <type>ice</type>
+        <level>6</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="377">
+        <type>ice</type>
+        <level>6</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="378">
+        <type>ice</type>
+        <level>7</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="379">
+        <type>ice</type>
+        <level>7</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="380">
+        <type>ice</type>
+        <level>7</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="381">
+        <type>ice</type>
+        <level>7</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="382">
+        <type>ice</type>
+        <level>7</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="383">
+        <type>ice</type>
+        <level>7</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="384">
+        <type>ice</type>
+        <level>7</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="385">
+        <type>ice</type>
+        <level>8</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="386">
+        <type>ice</type>
+        <level>8</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="387">
+        <type>ice</type>
+        <level>8</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="388">
+        <type>ice</type>
+        <level>8</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="389">
+        <type>ice</type>
+        <level>8</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="390">
+        <type>ice</type>
+        <level>8</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="391">
+        <type>ice</type>
+        <level>8</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="392">
+        <type>ice</type>
+        <level>9</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="393">
+        <type>ice</type>
+        <level>9</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="394">
+        <type>ice</type>
+        <level>9</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="395">
+        <type>ice</type>
+        <level>9</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="396">
+        <type>ice</type>
+        <level>9</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="397">
+        <type>ice</type>
+        <level>9</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="398">
+        <type>ice</type>
+        <level>9</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="399">
+        <type>ice</type>
+        <level>10</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="400">
+        <type>ice</type>
+        <level>10</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="401">
+        <type>ice</type>
+        <level>10</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="402">
+        <type>ice</type>
+        <level>10</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="403">
+        <type>ice</type>
+        <level>10</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="404">
+        <type>ice</type>
+        <level>10</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="405">
+        <type>ice</type>
+        <level>10</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="406">
+        <type>ice</type>
+        <level>11</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="407">
+        <type>ice</type>
+        <level>11</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="408">
+        <type>ice</type>
+        <level>11</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="409">
+        <type>ice</type>
+        <level>11</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="410">
+        <type>ice</type>
+        <level>11</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="411">
+        <type>ice</type>
+        <level>11</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="412">
+        <type>ice</type>
+        <level>11</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="413">
+        <type>ice</type>
+        <level>12</level>
+        <color>blue</color>
+        <fx />
+    </card>
+    <card id="414">
+        <type>ice</type>
+        <level>12</level>
+        <color>red</color>
+        <fx />
+    </card>
+    <card id="415">
+        <type>ice</type>
+        <level>12</level>
+        <color>green</color>
+        <fx />
+    </card>
+    <card id="416">
+        <type>ice</type>
+        <level>12</level>
+        <color>yellow</color>
+        <fx />
+    </card>
+    <card id="417">
+        <type>ice</type>
+        <level>12</level>
+        <color>purple</color>
+        <fx />
+    </card>
+    <card id="418">
+        <type>ice</type>
+        <level>12</level>
+        <color>white</color>
+        <fx />
+    </card>
+    <card id="419">
+        <type>ice</type>
+        <level>12</level>
+        <color>black</color>
+        <fx />
+    </card>
+    <card id="420">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple||ROUND|ALL</fx>
+    </card>
+    <card id="421">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple||ROUND|ALL</fx>
+    </card>
+    <card id="422">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple||ROUND|ALL</fx>
+    </card>
+    <card id="423">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple||ROUND|ALL</fx>
+    </card>
+    <card id="424">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple||ROUND|ALL</fx>
+    </card>
+    <card id="425">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|BOTH|ALL</fx>
+    </card>
+    <card id="426">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|BOTH|ALL</fx>
+    </card>
+    <card id="427">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|BOTH|ALL</fx>
+    </card>
+    <card id="428">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|BOTH|ALL</fx>
+    </card>
+    <card id="429">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|BOTH|ALL</fx>
+    </card>
+    <card id="430">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>RULE_LOWER_WINS|||ROUND|ALL</fx>
+    </card>
+    <card id="431">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>RULE_LOWER_WINS|||ROUND|ALL</fx>
+    </card>
+    <card id="432">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>RULE_LOWER_WINS|||ROUND|ALL</fx>
+    </card>
+    <card id="433">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>RULE_LOWER_WINS|||ROUND|ALL</fx>
+    </card>
+    <card id="434">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>RULE_LOWER_WINS|||ROUND|ALL</fx>
+    </card>
+    <card id="435">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|orange|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="436">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|orange|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="437">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|orange|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="438">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|orange|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="439">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|orange|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="440">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|water||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="441">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|water||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="442">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|water||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="443">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|water||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="444">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|water||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="445">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|ice|water|ROUND|ALL</fx>
+    </card>
+    <card id="446">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|ice|water|ROUND|ALL</fx>
+    </card>
+    <card id="447">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|ice|water|ROUND|ALL</fx>
+    </card>
+    <card id="448">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|ice|water|ROUND|ALL</fx>
+    </card>
+    <card id="449">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|ice|water|ROUND|ALL</fx>
+    </card>
+    <card id="450">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|-2|OPPONENT|NEXT_TURN|OPPONENT</fx>
+    </card>
+    <card id="451">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|-2|OPPONENT|NEXT_TURN|OPPONENT</fx>
+    </card>
+    <card id="452">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|-2|OPPONENT|NEXT_TURN|OPPONENT</fx>
+    </card>
+    <card id="453">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|-2|OPPONENT|NEXT_TURN|OPPONENT</fx>
+    </card>
+    <card id="454">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|-2|OPPONENT|NEXT_TURN|OPPONENT</fx>
+    </card>
+    <card id="455">
+        <type>water</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|+2|PLAYER|NEXT_TURN|PLAYER</fx>
+    </card>
+    <card id="456">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|+2|PLAYER|NEXT_TURN|PLAYER</fx>
+    </card>
+    <card id="457">
+        <type>ice</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|+2|PLAYER|NEXT_TURN|PLAYER</fx>
+    </card>
+    <card id="458">
+        <type>air</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|+2|PLAYER|NEXT_TURN|PLAYER</fx>
+    </card>
+    <card id="459">
+        <type>earth</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>MODIFY_NEXT|+2|PLAYER|NEXT_TURN|PLAYER</fx>
+    </card>
+    <card id="460">
+        <type>fire</type>
+        <level>3</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="461">
+        <type>water</type>
+        <level>3</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="462">
+        <type>ice</type>
+        <level>3</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="463">
+        <type>air</type>
+        <level>3</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="464">
+        <type>earth</type>
+        <level>3</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|purple|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="465">
+        <type>fire</type>
+        <level>4</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|blue|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="466">
+        <type>water</type>
+        <level>4</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|blue|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="467">
+        <type>ice</type>
+        <level>4</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|blue|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="468">
+        <type>air</type>
+        <level>4</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|blue|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="469">
+        <type>earth</type>
+        <level>4</level>
+        <color>black</color>
+        <fx>DISCARD_COLOR|blue|1|ROUND|OPPONENT</fx>
+    </card>
+    <card id="470">
+        <type>water</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|fire|snow|ALL|ALL</fx>
+    </card>
+    <card id="471">
+        <type>fire</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|fire|snow|ALL|ALL</fx>
+    </card>
+    <card id="472">
+        <type>ice</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|fire|snow|ALL|ALL</fx>
+    </card>
+    <card id="473">
+        <type>air</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|fire|snow|ALL|ALL</fx>
+    </card>
+    <card id="474">
+        <type>earth</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|fire|snow|ALL|ALL</fx>
+    </card>
+    <card id="475">
+        <type>water</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|fire||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="476">
+        <type>fire</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|fire||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="477">
+        <type>ice</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|fire||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="478">
+        <type>air</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|fire||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="479">
+        <type>earth</type>
+        <level>7</level>
+        <color>black</color>
+        <fx>BLOCK_TYPE_NEXT|fire||NEXT_TURN|ALL</fx>
+    </card>
+    <card id="480">
+        <type>fire</type>
+        <level>6</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|ROUND|ALL</fx>
+    </card>
+    <card id="481">
+        <type>water</type>
+        <level>6</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|ROUND|ALL</fx>
+    </card>
+    <card id="482">
+        <type>ice</type>
+        <level>6</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|ROUND|ALL</fx>
+    </card>
+    <card id="483">
+        <type>air</type>
+        <level>6</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|ROUND|ALL</fx>
+    </card>
+    <card id="484">
+        <type>earth</type>
+        <level>6</level>
+        <color>black</color>
+        <fx>CHANGE_TYPE|water|fire|ROUND|ALL</fx>
+    </card>
+    <card id="485">
+        <type>fire</type>
+        <level>1</level>
+        <color>black</color>
+        <fx>||||</fx>
+    </card>
+</cards>
