@@ -1,15 +1,22 @@
-use rusqlite::{Connection, Result};
-
-#[derive(Debug)]
+use actix_web::{web, get, App, HttpServer, Responder, HttpResponse};
+use actix_cors::Cors;
+use rusqlite::{Connection, Result as SqlResult};
+use serde::{Serialize, Deserialize};
+use std::sync::Mutex;
+#[derive(Debug, Serialize, Deserialize)]
 struct User {
     //id: i32,
     username: String,
     password: String,
 }
 
-fn get_all_users(conn: &Connection) -> Result<Vec<User>> {
+struct AppState {
+    conn: Mutex<Connection>,
+}
+
+async fn get_all_users(conn: &Connection) -> SqlResult<Vec<User>> {
     // Use explicit column names instead of SELECT *
-    let mut stmt = conn.prepare("SELECT id, username, password FROM users")?;
+    let mut stmt = conn.prepare("SELECT * FROM users")?;
     
     let users = stmt.query_map([], |row| {
         Ok(User {
@@ -27,37 +34,41 @@ fn get_all_users(conn: &Connection) -> Result<Vec<User>> {
     Ok(user_list)
 }
 
-fn main() -> Result<()> {
-    // Connect to SQLite database (creates it if it doesn't exist)
-    let conn = Connection::open("db/mydb.db")?;
+#[get("/users")]
+async fn get_users(data: web::Data<AppState>) -> impl Responder {
+    let conn = data.conn.lock().unwrap();
     
-    // Create users table for demonstration
-    // conn.execute(
-    //     "CREATE TABLE IF NOT EXISTS users (
-    //         id INTEGER PRIMARY KEY,
-    //         name TEXT NOT NULL,
-    //         password TEXT NOT NULL
-    //     )",
-    //     [],
-    // )?;
-    
-    // Insert some example data
-    // conn.execute(
-    //     "INSERT INTO users (name, password) VALUES (?1, ?2)",
-    //     ["Alice", "securepassword"],
-    // )?;
-    // conn.execute(
-    //     "INSERT INTO users (name, password) VALUES (?1, ?2)",
-    //     ["Bob", "securepassword"],
-    // )?;
-    
-    // Call our SELECT * FROM users function
-    let users = get_all_users(&conn)?;
-    
-    println!("All users:");
-    for user in users {
-        println!("Username: {:?}, Password: {:?}", user.username, user.password);
+    match get_all_users(&conn).await {
+        Ok(users) => HttpResponse::Ok().json(users),
+        Err(e) => HttpResponse::InternalServerError()
+            .body(format!("Database error: {}", e)),
     }
-    
-    Ok(())
 }
+
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    // Connect to SQLite database (creates it if it doesn't exist)
+    let conn = Connection::open("src/db/mydb.db")
+        .expect("Failed to connect to the database");
+
+    let app_state = web::Data::new(AppState {
+        conn : Mutex::new(conn),
+    });
+
+    let _ =HttpServer::new(move || {
+        let cors = Cors::permissive();
+        App::new()
+            .wrap(cors)
+            .app_data(app_state.clone())
+            .service(get_users)
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await;
+
+    Ok(())
+    }
+
+
+    //Users/rylandedwards/Documents/GitHub/dododojo/src/db_interface/src/db/mydb.db
