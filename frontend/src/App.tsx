@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
-import BattleScreen from './components/battlescreen';
+import BattleScreen from './components/BattleScreen';
 
 type Page = 'login' | 'home' | 'battle';
 

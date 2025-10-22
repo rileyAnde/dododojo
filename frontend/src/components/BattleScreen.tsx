@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
-
 
 interface BattleScreenProps {
   onReturnHome?: () => void;
@@ -15,29 +14,93 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   
   // Game state
   const [battle] = useState(() => new Battle(playerName, enemyName));
-  const [gamePhase, setGamePhase] = useState<'selection' | 'reveal' | 'result'>('selection');
+  const [gamePhase, setGamePhase] = useState<'loading' | 'selection' | 'reveal' | 'result'>('loading');
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [enemyCard, setEnemyCard] = useState<Card | null>(null);
   const [roundWinner, setRoundWinner] = useState<string | null>(null);
   const [gameWinner, setGameWinner] = useState<number>(0);
 
-  // Mock deck - in production, this comes from backend/user data
-  const playerDeck: Card[] = [
-    { id: 1, type: 'fire', rank: 5, color: 'red', fx: '' },
-    { id: 2, type: 'water', rank: 7, color: 'blue', fx: '' },
-    { id: 3, type: 'ice', rank: 4, color: 'white', fx: '' },
-    { id: 4, type: 'air', rank: 8, color: 'yellow', fx: '' },
-    { id: 5, type: 'earth', rank: 6, color: 'green', fx: '' },
-  ];
+  // Card data
+  const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
+  const [enemyDeck, setEnemyDeck] = useState<Card[]>([]);
+  const [allCards, setAllCards] = useState<Card[]>([]);
 
-  const enemyDeck: Card[] = [
-    { id: 101, type: 'fire', rank: 2, color: 'orange', fx: '' },
-    { id: 102, type: 'water', rank: 3, color: 'purple', fx: '' },
-    { id: 103, type: 'ice', rank: 2, color: 'black', fx: '' },
-    { id: 104, type: 'air', rank: 3, color: 'gray', fx: '' },
-    { id: 105, type: 'earth', rank: 2, color: 'brown', fx: '' },
-  ];
+  // Load cards from XML
+  useEffect(() => {
+    async function loadCards() {
+      try {
+        const response = await fetch('/cards.xml');
+        const xmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+        
+        const cardElements = xmlDoc.getElementsByTagName('card');
+        const cards: Card[] = [];
+        
+        for (let i = 0; i < cardElements.length; i++) {
+          const cardEl = cardElements[i];
+          const id = parseInt(cardEl.getAttribute('id') || '0');
+          const type = cardEl.getElementsByTagName('type')[0]?.textContent || 'fire';
+          const rank = parseInt(cardEl.getElementsByTagName('level')[0]?.textContent || '1');
+          const color = cardEl.getElementsByTagName('color')[0]?.textContent || 'red';
+          const fx = cardEl.getElementsByTagName('fx')[0]?.textContent || '';
+          cards.push({ id, type, rank, color, fx });
+        }
 
+        setAllCards(cards);
+
+        // Player deck
+        const types = ['fire', 'water', 'ice', 'air', 'earth'];
+        const colors = ['red', 'blue', 'white', 'yellow', 'green'];
+        const playerCards: Card[] = [];
+        types.forEach((type, idx) => {
+          const matchingCards = cards.filter(c =>
+            c.type === type &&
+            c.color === colors[idx] &&
+            c.rank >= 4 && c.rank <= 8 &&
+            c.fx === ''
+          );
+          if (matchingCards.length > 0) playerCards.push(matchingCards[0]);
+        });
+
+        // Enemy deck
+        const enemyCards: Card[] = [];
+        types.forEach((type) => {
+          const matchingCards = cards.filter(c =>
+            c.type === type &&
+            c.rank >= 2 && c.rank <= 4 &&
+            c.fx === ''
+          );
+          if (matchingCards.length > 0) enemyCards.push(matchingCards[0]);
+        });
+
+        setPlayerDeck(playerCards);
+        setEnemyDeck(enemyCards);
+        setGamePhase('selection');
+      } catch (error) {
+        console.error('Error loading cards:', error);
+        // fallback mock data
+        setPlayerDeck([
+          { id: 1, type: 'fire', rank: 5, color: 'red', fx: '' },
+          { id: 2, type: 'water', rank: 7, color: 'blue', fx: '' },
+          { id: 3, type: 'ice', rank: 4, color: 'white', fx: '' },
+          { id: 4, type: 'air', rank: 8, color: 'yellow', fx: '' },
+          { id: 5, type: 'earth', rank: 6, color: 'green', fx: '' },
+        ]);
+        setEnemyDeck([
+          { id: 101, type: 'fire', rank: 2, color: 'orange', fx: '' },
+          { id: 102, type: 'water', rank: 3, color: 'purple', fx: '' },
+          { id: 103, type: 'ice', rank: 2, color: 'black', fx: '' },
+          { id: 104, type: 'air', rank: 3, color: 'yellow', fx: '' },
+          { id: 105, type: 'earth', rank: 2, color: 'green', fx: '' },
+        ]);
+        setGamePhase('selection');
+      }
+    }
+    loadCards();
+  }, []);
+
+  // Helpers
   const getCardIcon = (type: string) => {
     switch (type) {
       case 'fire': return <Flame className="w-8 h-8" />;
@@ -60,34 +123,54 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     }
   };
 
+  // Reusable Card Display Component
+  const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'large' }> = ({ card, size = 'large' }) => {
+    const [imageError, setImageError] = useState(false);
+    const imagePath = `/cards/${card.id}.png`;
+    const sizeClasses = size === 'large' ? 'w-48 h-64' : 'w-32 h-44';
+
+    if (imageError) {
+      return (
+        <div className={`relative ${sizeClasses} bg-gradient-to-br ${getCardColor(card.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
+          <div className="flex justify-between items-start mb-2">
+            <span className="text-white font-bold text-3xl">{card.rank}</span>
+            <div className="text-white">{getCardIcon(card.type)}</div>
+          </div>
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="bg-black bg-opacity-50 rounded-lg p-2">
+              <div className="text-white text-sm font-bold uppercase">{card.type}</div>
+              <div className="text-white text-xs capitalize">{card.color}</div>
+              {card.fx && <div className="text-yellow-300 text-xs mt-1">⚡ Power Card</div>}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <img
+        src={imagePath}
+        alt={`${card.type} card rank ${card.rank}`}
+        className={`${sizeClasses} rounded-2xl shadow-2xl border-4 border-white object-cover`}
+        onError={() => setImageError(true)}
+      />
+    );
+  };
+
+  // Gameplay logic
   const handleCardSelect = (card: Card) => {
     if (gamePhase !== 'selection') return;
-    
     setSelectedCard(card);
-    
-    // Enemy picks random card
     const randomEnemy = enemyDeck[Math.floor(Math.random() * enemyDeck.length)];
     setEnemyCard(randomEnemy);
-    
-    // Move to reveal phase
     setGamePhase('reveal');
-    
-    // Process battle after delay
     setTimeout(() => {
       battle.turn(card, randomEnemy);
       const winner = battle.winner(card, randomEnemy);
-      
-      if (winner?.id === card.id) {
-        setRoundWinner(playerName);
-      } else if (winner?.id === randomEnemy.id) {
-        setRoundWinner(enemyName);
-      } else {
-        setRoundWinner('Tie');
-      }
-      
-      const gameResult = battle.checkwin();
-      setGameWinner(gameResult);
-      
+      if (winner?.id === card.id) setRoundWinner(playerName);
+      else if (winner?.id === randomEnemy.id) setRoundWinner(enemyName);
+      else setRoundWinner('Tie');
+      setGameWinner(battle.checkwin());
       setGamePhase('result');
     }, 2000);
   };
@@ -102,6 +185,19 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   const state = battle.getState();
   const playerWonCount = state.player_won.flat().length;
   const enemyWonCount = state.enemy_won.flat().length;
+
+  // --- UI Phases ---
+
+  if (gamePhase === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+          <p className="text-white text-xl">Loading cards...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (gameWinner !== 0) {
     return (
@@ -132,53 +228,34 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                {playerName[0]}
-              </div>
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">{playerName[0]}</div>
               <div>
                 <div className="text-white font-bold">{playerName}</div>
                 <div className="text-cyan-400 text-sm">{playerWonCount} cards won</div>
               </div>
             </div>
-
             <div className="flex items-center gap-2">
               <Swords className="text-yellow-400" size={32} />
               <span className="text-white text-2xl font-bold">VS</span>
             </div>
-
             <div className="flex items-center gap-3">
               <div>
                 <div className="text-white font-bold text-right">{enemyName}</div>
                 <div className="text-red-400 text-sm text-right">{enemyWonCount} cards won</div>
               </div>
-              <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
-                {enemyName[0]}
-              </div>
+              <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">{enemyName[0]}</div>
             </div>
           </div>
-
         </div>
       </div>
 
       {/* Battle Arena */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="grid grid-cols-2 gap-8">
-          {/* Player Card Area */}
           <div className="flex flex-col items-center">
             <h3 className="text-cyan-400 font-bold text-xl mb-4">Your Card</h3>
             {selectedCard ? (
-              <div className={`w-48 h-64 bg-gradient-to-br ${getCardColor(selectedCard.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
-                <div className="flex justify-between items-start mb-2">
-                  <span className="text-white font-bold text-2xl">{selectedCard.rank}</span>
-                  <div className="text-white">{getCardIcon(selectedCard.type)}</div>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="bg-black bg-opacity-30 rounded-lg p-2">
-                    <div className="text-white text-sm font-bold uppercase">{selectedCard.type}</div>
-                    <div className="text-white text-xs">{selectedCard.color}</div>
-                  </div>
-                </div>
-              </div>
+              <CardDisplay card={selectedCard} />
             ) : (
               <div className="w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
                 <span className="text-white text-opacity-50">Select a card</span>
@@ -186,24 +263,10 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
             )}
           </div>
 
-          {/* Enemy Card Area */}
           <div className="flex flex-col items-center">
             <h3 className="text-red-400 font-bold text-xl mb-4">Opponent's Card</h3>
             {gamePhase === 'reveal' || gamePhase === 'result' ? (
-              enemyCard && (
-                <div className={`w-48 h-64 bg-gradient-to-br ${getCardColor(enemyCard.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-white font-bold text-2xl">{enemyCard.rank}</span>
-                    <div className="text-white">{getCardIcon(enemyCard.type)}</div>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-black bg-opacity-30 rounded-lg p-2">
-                      <div className="text-white text-sm font-bold uppercase">{enemyCard.type}</div>
-                      <div className="text-white text-xs">{enemyCard.color}</div>
-                    </div>
-                  </div>
-                </div>
-              )
+              enemyCard && <CardDisplay card={enemyCard} />
             ) : (
               <div className="w-48 h-64 bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl shadow-2xl border-4 border-white flex items-center justify-center">
                 <span className="text-white text-6xl">?</span>
@@ -212,7 +275,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
           </div>
         </div>
 
-        {/* Round Result */}
         {gamePhase === 'result' && roundWinner && (
           <div className="text-center mt-8">
             <div className="inline-block bg-yellow-400 text-black px-8 py-4 rounded-full text-2xl font-bold shadow-2xl">
@@ -237,17 +299,9 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
               <button
                 key={card.id}
                 onClick={() => handleCardSelect(card)}
-                className={`w-32 h-44 bg-gradient-to-br ${getCardColor(card.type)} rounded-xl p-3 shadow-xl hover:scale-110 hover:-translate-y-2 transition duration-200 border-2 border-white cursor-pointer`}
+                className="hover:scale-110 hover:-translate-y-2 transition duration-200"
               >
-                <div className="flex justify-between items-start mb-1">
-                  <span className="text-white font-bold text-xl">{card.rank}</span>
-                  <div className="text-white scale-75">{getCardIcon(card.type)}</div>
-                </div>
-                <div className="mt-auto">
-                  <div className="bg-black bg-opacity-30 rounded p-1">
-                    <div className="text-white text-xs font-bold uppercase">{card.type}</div>
-                  </div>
-                </div>
+                <CardDisplay card={card} size="small" />
               </button>
             ))}
           </div>
@@ -257,4 +311,4 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   );
 };
 
-export default CardJitsuBattle; 
+export default CardJitsuBattle;
