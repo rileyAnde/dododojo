@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
+import BattleScreen from './components/battlescreen';
 
-type Page = 'login' | 'home';
+type Page = 'login' | 'home' | 'battle';
 
 interface User {
   username: string;
@@ -106,6 +107,15 @@ const CardJitsuGame: React.FC = () => {
     );
   }
 
+  if (currentPage === 'battle') {
+    return (
+      <BattleScreen 
+        onReturnHome={() => setCurrentPage('home')}
+        playerName={user?.username}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-900 to-blue-800 relative overflow-hidden">
       {/* Animated background elements */}
@@ -182,24 +192,15 @@ const CardJitsuGame: React.FC = () => {
               </div>
             </button>
 
-            {/* Stats card */}
-            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-6 border border-white border-opacity-20">
-              <h3 className="text-white font-bold mb-4">Your Stats</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between text-white">
-                  <span>Wins</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between text-white">
-                  <span>Losses</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between text-white">
-                  <span>Win Rate</span>
-                  <span className="font-bold">--</span>
+            <button onClick={() => setCurrentPage('battle')} className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-purple-600 hover:to-pink-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
+              <div className="flex items-center justify-center gap-4">
+                <Map size={32} />
+                <div className="text-left">
+                  <div className="font-bold text-lg">Battle</div>
+                  <div className="text-sm text-red-100">Join a Battle</div>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
