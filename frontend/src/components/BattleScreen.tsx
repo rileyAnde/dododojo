@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
+import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
 
 interface BattleScreenProps {
   onReturnHome?: () => void;
@@ -23,77 +24,20 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   // Card data
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
   const [enemyDeck, setEnemyDeck] = useState<Card[]>([]);
-  const [allCards, setAllCards] = useState<Card[]>([]);
 
   // Load cards from XML
   useEffect(() => {
     async function loadCards() {
       try {
-        const response = await fetch('/cards.xml');
-        const xmlText = await response.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-        
-        const cardElements = xmlDoc.getElementsByTagName('card');
-        const cards: Card[] = [];
-        
-        for (let i = 0; i < cardElements.length; i++) {
-          const cardEl = cardElements[i];
-          const id = parseInt(cardEl.getAttribute('id') || '0');
-          const type = cardEl.getElementsByTagName('type')[0]?.textContent || 'fire';
-          const rank = parseInt(cardEl.getElementsByTagName('level')[0]?.textContent || '1');
-          const color = cardEl.getElementsByTagName('color')[0]?.textContent || 'red';
-          const fx = cardEl.getElementsByTagName('fx')[0]?.textContent || '';
-          cards.push({ id, type, rank, color, fx });
-        }
-
-        setAllCards(cards);
-
-        // Player deck
-        const types = ['fire', 'water', 'ice', 'air', 'earth'];
-        const colors = ['red', 'blue', 'white', 'yellow', 'green'];
-        const playerCards: Card[] = [];
-        types.forEach((type, idx) => {
-          const matchingCards = cards.filter(c =>
-            c.type === type &&
-            c.color === colors[idx] &&
-            c.rank >= 4 && c.rank <= 8 &&
-            c.fx === ''
-          );
-          if (matchingCards.length > 0) playerCards.push(matchingCards[0]);
-        });
-
-        // Enemy deck
-        const enemyCards: Card[] = [];
-        types.forEach((type) => {
-          const matchingCards = cards.filter(c =>
-            c.type === type &&
-            c.rank >= 2 && c.rank <= 4 &&
-            c.fx === ''
-          );
-          if (matchingCards.length > 0) enemyCards.push(matchingCards[0]);
-        });
-
-        setPlayerDeck(playerCards);
-        setEnemyDeck(enemyCards);
+        // loads all the cards in cards.xml 
+        const cards = await loadCardsFromXML();
+        setPlayerDeck(createPlayerDeck(cards));
+        setEnemyDeck(createEnemyDeck(cards));
         setGamePhase('selection');
       } catch (error) {
         console.error('Error loading cards:', error);
-        // fallback mock data
-        setPlayerDeck([
-          { id: 1, type: 'fire', rank: 5, color: 'red', fx: '' },
-          { id: 2, type: 'water', rank: 7, color: 'blue', fx: '' },
-          { id: 3, type: 'ice', rank: 4, color: 'white', fx: '' },
-          { id: 4, type: 'air', rank: 8, color: 'yellow', fx: '' },
-          { id: 5, type: 'earth', rank: 6, color: 'green', fx: '' },
-        ]);
-        setEnemyDeck([
-          { id: 101, type: 'fire', rank: 2, color: 'orange', fx: '' },
-          { id: 102, type: 'water', rank: 3, color: 'purple', fx: '' },
-          { id: 103, type: 'ice', rank: 2, color: 'black', fx: '' },
-          { id: 104, type: 'air', rank: 3, color: 'yellow', fx: '' },
-          { id: 105, type: 'earth', rank: 2, color: 'green', fx: '' },
-        ]);
+        setPlayerDeck(FALLBACK_PLAYER_DECK);
+        setEnemyDeck(FALLBACK_ENEMY_DECK);
         setGamePhase('selection');
       }
     }
@@ -123,7 +67,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     }
   };
 
-  // Reusable Card Display Component
+  // reusable card display component
   const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'large' }> = ({ card, size = 'large' }) => {
     const [imageError, setImageError] = useState(false);
     const imagePath = `/cards/${card.id}.png`;
@@ -157,9 +101,11 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     );
   };
 
-  // Gameplay logic
+  // gameplay logic
   const handleCardSelect = (card: Card) => {
-    if (gamePhase !== 'selection') return;
+    if (gamePhase !== 'selection') {
+      return;
+    }
     setSelectedCard(card);
     const randomEnemy = enemyDeck[Math.floor(Math.random() * enemyDeck.length)];
     setEnemyCard(randomEnemy);
@@ -167,11 +113,17 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     setTimeout(() => {
       battle.turn(card, randomEnemy);
       const winner = battle.winner(card, randomEnemy);
-      if (winner?.id === card.id) setRoundWinner(playerName);
-      else if (winner?.id === randomEnemy.id) setRoundWinner(enemyName);
-      else setRoundWinner('Tie');
-      setGameWinner(battle.checkwin());
-      setGamePhase('result');
+      if (winner?.id === card.id) {
+        setRoundWinner(playerName);
+      }
+      else if (winner?.id === randomEnemy.id) {
+        setRoundWinner(enemyName);
+      }
+      else {
+        setRoundWinner('Tie');
+        setGameWinner(battle.checkwin());
+        setGamePhase('result');
+      }
     }, 2000);
   };
 
@@ -186,7 +138,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   const playerWonCount = state.player_won.flat().length;
   const enemyWonCount = state.enemy_won.flat().length;
 
-  // --- UI Phases ---
+  // ui phases
 
   if (gamePhase === 'loading') {
     return (
@@ -223,7 +175,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
-      {/* Header */}
+      {/* header */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
           <div className="flex justify-between items-center">
@@ -249,7 +201,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         </div>
       </div>
 
-      {/* Battle Arena */}
+      {/* battle Arena */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="grid grid-cols-2 gap-8">
           <div className="flex flex-col items-center">
@@ -290,7 +242,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         )}
       </div>
 
-      {/* Player Hand */}
+      {/* player Hand */}
       {gamePhase === 'selection' && (
         <div className="max-w-6xl mx-auto">
           <h3 className="text-white font-bold text-xl mb-4 text-center">Choose Your Card</h3>
