@@ -5,6 +5,6 @@
 --     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 -- );
 
--- INSERT INTO users (username, password) VALUES ('admin', 'securepassword');
+INSERT INTO users (username, password) VALUES ('ryland', 'password123');
 
-SELECT * FROM users;
+-- SELECT * FROM users;
