@@ -1,3 +1,8 @@
+#TODO Make schema for cards and decks for each user
+
+#TODO Make methods to makes new users, add cards to a deck, and anything else.
+
+
 using SQLite for database as it is built in for nearly everything
 
 To test client_example.ts it has to be compiled into js (idk why thats what it told me)
