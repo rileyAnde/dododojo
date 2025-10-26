@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
 
-type Page = 'login' | 'home';
+type Page = 'login' | 'signup' | 'home' | 'battle';
 
 interface User {
   username: string;
+  password: string;
   penguinColor: string;
 }
 
@@ -14,35 +15,100 @@ const CardJitsuGame: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [accounts, setAccounts] = useState<User[]>([]);
 
-  // connect this to the backend
+
+  // connect this to the backend 
   const handleLogin = () => {
-    if (username.trim()) {
-      const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      
-      setUser({
-        username: username.trim(),
-        penguinColor: randomColor
-      });
-      setCurrentPage('home');
+    if (!username.trim() || !password.trim()) {//works
+      alert('Please enter a username and password.');
+      return;
     }
+    if (!username.trim()) { //pop up for no username entered -- works
+      alert('Please enter a username!');
+      return;
+    }
+    if (!password.trim()) {//pop up for no password entered -- works 
+      alert('Please enter a password!');
+      return;
+    }
+    const existingUser = accounts.find(
+      (acc) =>
+        acc.username === username.trim() &&
+        acc.password === password.trim()
+    );
+    if (!existingUser) {
+      alert('Invalid login!');
+      return;
+    }
+
+//don't need this if user already has or doesn't have an account
+    // if (username.trim()) {
+    //   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
+    //   const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    //   setUser({ // cannot have a user without a valid usr/paswd
+    //     username: username.trim(),
+    //     penguinColor: randomColor
+    //   });
+    // }
+    //  setCurrentPage('home');
+
+    // // }
+    setUser(existingUser);
+    setCurrentPage('home');
   };
 
-  const handleLogout = () => {
+
+//make sure password is tight bonded with username because currently every time a new session is launched, the username/passwords 
+// aren't saved on the server and are reset upon new execution
+  const handleSignUp = () => {
+    if (!username.trim() || !password.trim() || !confirmPassword.trim()) { 
+      alert('Please fill out the fields!');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    const existingUser = accounts.find((acc) => acc.username === username.trim());
+    if (existingUser) {
+      alert('This account already exists!');
+      return;
+
+    }
+
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+    const newUser = ({
+      username: username.trim(),
+      password: password.trim(),
+      penguinColor: randomColor,
+    });
+    setAccounts([...accounts, newUser]);
+    console.log("Users Registered:", [...accounts, newUser]);
+    setUser(newUser);
+    setCurrentPage('home');
+  };
+
+
+  const handleLogout = () => { //figure out after getting the signup working
     setUser(null);
     setUsername('');
     setPassword('');
-    setCurrentPage('login');
+    setConfirmPassword('');
+    setCurrentPage('login'); //back to the beginning
   };
 
-  // display login page
+  // may need a way to log what user logins have been made!
   if (currentPage === 'login') {
     return (
-      // outer container with a gradient background
-      // login card with boxes for username and password (right now user can just enter any name and password to login)
-      // box to click to enter the game
-      // sign up button doesn't do anything 
+      // outer container with a gradient background: done 
+      // box to click to enter the game (works)
+      // sign up button doesn't do anything -- working on making it like an actual site
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center p-4">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-32 h-32 bg-white rounded-full opacity-10 animate-pulse"></div>
@@ -60,7 +126,7 @@ const CardJitsuGame: React.FC = () => {
 
           <div className="space-y-6">
             <div>
-              <div className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="block text-sm font-medium text-red-700 mb-2">
                 Username
               </div>
               <input
@@ -73,7 +139,7 @@ const CardJitsuGame: React.FC = () => {
             </div>
 
             <div>
-              <div className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="block text-sm font-medium text-blue-700 mb-2">
                 Password
               </div>
               <input
@@ -81,13 +147,13 @@ const CardJitsuGame: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                placeholder="Enter your password"
+                placeholder="Enter password"
               />
             </div>
 
             <button
               onClick={handleLogin}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition duration-200 shadow-lg"
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition duration-200 shadow-lg"
             >
               Enter the Dojo
             </button>
@@ -96,8 +162,11 @@ const CardJitsuGame: React.FC = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <button className="text-blue-600 hover:text-blue-700 font-semibold">
-                Sign up
+              <button
+                onClick={() => setCurrentPage('signup')}
+                className="text-pink-600 hover:text-yellow-700 font-semibold"
+              >
+                Sign up here!
               </button>
             </p>
           </div>
@@ -106,6 +175,81 @@ const CardJitsuGame: React.FC = () => {
     );
   }
 
+
+  if (currentPage === 'signup') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-900 via-yellow-700 to-green-500 flex items-center justify-center p-4">
+        <div className="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="inline-block bg-gradient-to-r from-yellow-500 to-green-500 text-white p-4 rounded-full mb-4">
+              <Users size={48} />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">Player Registration!</h1>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <div className="block text-sm font-medium text-red-700 mb-2">
+                Username
+              </div>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                placeholder="Create a username!"
+              />
+            </div>
+
+            <div>
+              <div className="block text-sm font-medium text-blue-700 mb-2">
+                Password
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                placeholder="Create a secure password!"
+              />
+            </div>
+            <div>
+              <div className="block text-sm font-medium text-yellow-700 mb-2">
+                Re-enter Password
+              </div>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                placeholder="Re-enter your password!"
+              />
+            </div>
+
+            <button //signup button
+              onClick={handleSignUp}
+              className="w-full bg-gradient-to-r from-yellow-500 to-green-600 text-white py-3 rounded-lg font-semibold hover:from-green-600  transform hover:scale-105 transition duration-200 shadow-lg"
+            >
+              Confirm sign up
+            </button>
+          </div>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account with Card Jitsu?{' '}
+              <button
+                onClick={() => setCurrentPage('login')}
+                className="text-red-600 hover:text-blue-700 font-semibold"
+              >
+                Click here!
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  //home page!
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-900 to-blue-800 relative overflow-hidden">
       {/* Animated background elements */}
@@ -145,12 +289,12 @@ const CardJitsuGame: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-20 shadow-2xl">
               <h2 className="text-2xl font-bold text-white mb-6">Your Penguin</h2>
-              
+
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="flex flex-col items-center justify-center py-12">
-                  <DodoCharacter 
-                    color={user?.penguinColor || '#FF6B6B'} 
-                    size="large" 
+                  <DodoCharacter
+                    color={user?.penguinColor || '#FF6B6B'}
+                    size="large"
                   />
                 </div>
                 <div className="mt-6 text-center">
