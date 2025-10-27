@@ -121,9 +121,9 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       }
       else {
         setRoundWinner('Tie');
-        setGameWinner(battle.checkwin());
-        setGamePhase('result');
       }
+      setGameWinner(battle.checkwin());
+      setGamePhase('result');
     }, 2000);
   };
 
