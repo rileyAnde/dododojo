@@ -1,1 +1,9 @@
 frontend/folder/
+/src/db_interface/target/
+/src/db_interface/.idea/
+/src/db_interface/.vscode/
+/src/db_interface/cargo.lock
+/node_modules/
+.DS_Store
+/.env
+/src/dist
