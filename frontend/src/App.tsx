@@ -3,7 +3,7 @@ import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
 import BattleScreen from './components/BattleScreen';
 
-type Page = 'login' | 'signup' | 'home' | 'battle' | 'battle';
+type Page = 'login' | 'signup' | 'home' | 'battle';
 
 interface User {
   username: string;
@@ -103,6 +103,13 @@ const CardJitsuGame: React.FC = () => {
     setConfirmPassword('');
     setCurrentPage('login'); //back to the beginning
   };
+
+  if (currentPage === 'battle') {
+    return (
+      <BattleScreen onReturnHome={() => setCurrentPage('home')}
+      playerName={user?.username} />
+    )
+  }
 
   // may need a way to log what user logins have been made!
   if (currentPage === 'login') {
