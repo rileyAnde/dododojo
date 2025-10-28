@@ -6,7 +6,7 @@ import math
 BASE = os.path.join(os.path.dirname(__file__), '..', 'textures', 'base_dojo_card.png')
 SYMBOLS_DIR = os.path.join(os.path.dirname(__file__), '..', 'textures', 'elementsymbols')
 CARDS_XML = os.path.join(os.path.dirname(__file__), '..', 'resources', 'cards.xml')
-OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'textures', 'cards')
+OUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'public', 'cards')
 
 os.makedirs(OUT_DIR, exist_ok=True)
 

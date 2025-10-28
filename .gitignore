@@ -4,7 +4,9 @@ frontend/folder/
 /src/db_interface/.vscode/
 /src/db_interface/cargo.lock
 /node_modules/
-frontend/node_modules/
+/frontend/node_modules/
+/frontend/public/cards/
+/frontend/public/cards.xml
 .DS_Store
 /.env
 /src/dist

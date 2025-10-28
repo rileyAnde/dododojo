@@ -119,6 +119,6 @@ def save_cards_to_file(filename: str):
     print(f"Generated {total_cards} cards in {filename}")
 
 if __name__ == "__main__":
-    output_file = "resources\cards.xml"
+    output_file = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'public', 'cards.xml')
     save_cards_to_file(output_file)
     print("Done!")
