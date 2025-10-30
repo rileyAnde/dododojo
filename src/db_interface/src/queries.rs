@@ -9,9 +9,15 @@ pub async fn get_all_users(conn: &Connection) -> SqlResult<Vec<User>> {
     
     let users = stmt.query_map([], |row| {
         Ok(User {
-            //id: row.get("id")?,
-            username: row.get("username")?,
-            password: row.get("password")?,
+            id: row.get("id")?,
+            username: row.get("Username")?,
+            password: row.get("Password")?,
+            level: row.get("Level")?,
+            inventory: row.get("Inventory")?,
+            primary_deck: row.get("Primary_Deck")?,
+            gyms_owned: row.get("Gyms_Owned")?,
+            created_at: row.get("Created_At")?,
+            updated_at: row.get("Updated_At")?,
         })
     })?;
     
@@ -29,8 +35,8 @@ pub async fn get_one_user(conn: &Connection, username: String) -> SqlResult<User
     let user = stmt.query_row([username], |row| {
         Ok(User {
             //id: row.get("id")?,
-            username: row.get("username")?,
-            password: row.get("password")?,
+            username: row.get("Username")?,
+            password: row.get("Password")?,
         })
     })?;
     

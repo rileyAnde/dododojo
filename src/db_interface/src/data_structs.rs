@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use rusqlite::{Connection};
 use std::sync::Mutex;
+use std::collections::HashMap;
 
 
 pub struct AppState {
@@ -9,8 +10,15 @@ pub struct AppState {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User {
+    pub id: i32,
     pub username: String,
     pub password: String,
+    pub level: i32,
+    pub inventory: String, //<CardID, Quantity> cant use HashMap directly with rusqlite
+    pub primary_deck: String, // Array<i32> JSON array of Card IDs
+    pub gyms_owned: String, // Array<String> JSON array of Gym names
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 
