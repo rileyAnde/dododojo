@@ -1,10 +1,5 @@
 // src/deckGenerator.ts
-type Card = {
-  id: string;
-  type: string;
-  level: number;
-  color: string;
-};
+import { Card } from '../../../battle';
 
 /**
  * Generates an enemy deck biased toward a specific type.
@@ -34,7 +29,7 @@ export function generateEnemyDeck(
 /**
  * Randomly selects cards from a list (no replacement).
  */
-function sampleWithoutReplacement<T>(arr: T[], n: number): T[] {
+export function sampleWithoutReplacement<T>(arr: T[], n: number): T[] {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -71,47 +66,3 @@ export function rollCardDrop(
   return [false, null];
 }
 
-// --- Example usage for Sprint 1 demo ---
-if (require.main === module) {
-  const demoPool: Card[] = [];
-  const types = ["fire", "ice", "earth", "water", "air"] as const;
-
-  // Build a pool of 20 cards for each type
-  for (const t of types) {
-    for (let i = 0; i < 20; i++) {
-      demoPool.push({
-        id: `${t[0].toUpperCase()}${i}`,
-        type: t,
-        level: (i % 13) + 1,
-        color:
-          t === "fire"
-            ? "red"
-            : t === "ice"
-            ? "blue"
-            : t === "earth"
-            ? "green"
-            : t === "water"
-            ? "cyan"
-            : "gray",
-      });
-    }
-  }
-
-  // pick a random enemy type instead of hard-coding "fire"
-  const enemy = types[Math.floor(Math.random() * types.length)];
-  const deck = generateEnemyDeck(demoPool, enemy);
-
-  console.log(`Enemy type: ${enemy}`);
-  console.log("Deck size:", deck.length);
-
-  // count how many of each type appear in the deck
-  const counts = deck.reduce<Record<string, number>>((acc, c) => {
-    acc[c.type] = (acc[c.type] ?? 0) + 1;
-    return acc;
-  }, {});
-  console.log("Type counts:", counts);
-
-  // simulate drop
-  const [drop, card] = rollCardDrop(deck);
-  console.log("Dropped?", drop, "Card:", card);
-}

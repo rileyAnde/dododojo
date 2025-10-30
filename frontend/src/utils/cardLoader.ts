@@ -1,4 +1,6 @@
 import { Card } from '../game/battle';
+import { generateEnemyDeck as generateEnemyDeckFromPool } from '../game/deckGenerator';
+import { sampleWithoutReplacement } from '../game/deckGenerator';
 
 export async function loadCardsFromXML(): Promise<Card[]> {
   // this is where we will make a call to the backend to get all of the users cards 
@@ -24,46 +26,24 @@ export async function loadCardsFromXML(): Promise<Card[]> {
   return cards;
 }
 
-// TODO - this is where we will need to get the users actual deck 
-// right now it just creates an even deck for them
+//creates a shuffled 30-card deck for the player, will be changed to grabbing active deck
 export function createPlayerDeck(cards: Card[]): Card[] {
-  const types = ['fire', 'water', 'ice', 'air', 'earth'];
-  const colors = ['red', 'blue', 'white', 'yellow', 'green'];
-  const playerCards: Card[] = [];
-  
-  types.forEach((type, idx) => {
-    const matchingCards = cards.filter(c =>
-      c.type === type &&
-      c.color === colors[idx] &&
-      c.rank >= 4 && c.rank <= 8 &&
-      c.fx === ''
-    );
-    if (matchingCards.length > 0) {
-      playerCards.push(matchingCards[0]);
-    }
-  });
-  
-  return playerCards;
+  return sampleWithoutReplacement(cards, 30);
 }
 
-// creates enemy deck - depending on how we do the gyms this will need to get modified
-// right now this also just uses the cards loaded from cards.xml so that will have to change too
-export function createEnemyDeck(cards: Card[]): Card[] {
-  const types = ['fire', 'water', 'ice', 'air', 'earth'];
-  const enemyCards: Card[] = [];
-  
-  types.forEach((type) => {
-    const matchingCards = cards.filter(c =>
-      c.type === type &&
-      c.rank >= 2 && c.rank <= 4 &&
-      c.fx === ''
-    );
-    if (matchingCards.length > 0) {
-      enemyCards.push(matchingCards[0]);
+// creates enemy deck
+export function createEnemyDeck(cards: Card[], enemyType?: string, size = 5): Card[] {
+  // If an enemyType is provided, prefer a biased deck using generateEnemyDeckFromPool
+  if (enemyType) {
+    try {
+      const deck = generateEnemyDeckFromPool(cards, enemyType, size, 0.6);
+      return deck.slice(0, size);
+    } catch (e) {
+      // fall through to random selection
     }
-  });
-  
-  return enemyCards;
+  }
+  //return `size` random cards from the pool
+  return sampleWithoutReplacement(cards, size);
 }
 
 // in case loading the deck doesn't work it will fallback to this 

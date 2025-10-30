@@ -18,10 +18,9 @@ export class Battle {
     private blockedTypesNext: Set<string> = new Set();
     private modifyNext: { player: number; enemy: number } = { player: 0, enemy: 0 };
 
-    constructor(
-        private player: string,
-        private enemy: string
-    ) {
+    constructor(player: string, enemy: string) {
+        void player;
+        void enemy;
         this.player_won = [[], [], [], [], []];
         this.enemy_won = [[], [], [], [], []];
 
@@ -92,13 +91,6 @@ export class Battle {
 
         return null;
     }
-    
-    private fx_case(pCard: Card, eCard: Card): void {
-        // Deprecated: use parseFxForComparison which returns modifiers instead of mutating directly.
-        // Left for compatibility.
-        this.parseFxForComparison(pCard, eCard);
-    }
-
     // Parse FX strings on both cards and return immediate modifiers for this comparison.
     private parseFxForComparison(pCard: Card, eCard: Card) {
         // Result object with defaults
