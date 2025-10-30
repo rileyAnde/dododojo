@@ -26,14 +26,7 @@ const CardJitsuGame: React.FC = () => {
       alert('Please enter a username and password.');
       return;
     }
-    if (!username.trim()) { //pop up for no username entered -- works
-      alert('Please enter a username!');
-      return;
-    }
-    if (!password.trim()) {//pop up for no password entered -- works 
-      alert('Please enter a password!');
-      return;
-    }
+  
     const existingUser = accounts.find(
       (acc) =>
         acc.username === username.trim() &&
@@ -103,7 +96,53 @@ const CardJitsuGame: React.FC = () => {
     setConfirmPassword('');
     setCurrentPage('login'); //back to the beginning
   };
+const handleForgotPassword = () => {
+    if (!username.trim()) {
+      alert('Please enter your username to continue!.');
+      return;
+    }
 
+    const existingUser = accounts.find(acc => acc.username === username.trim());
+    if (!existingUser) {
+      alert('No user found!.');
+      return;
+    }
+
+    const newPassword = prompt('Enter a new password:');
+    if (!newPassword) {
+      alert('Password not reset!');
+      return;
+    }
+
+    setAccounts(
+      accounts.map(acc =>
+        acc.username === username.trim()
+          ? { ...acc, password: newPassword.trim() }
+          : acc
+      )
+    );
+
+    alert('Password successfully reset! Head back to the login to play!');
+    setPassword('');
+  };
+    const handleDeleteAccount = () => {
+    if (!user) return;
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete your account? Note: This action cannot be undone.`
+    );
+
+    if (!confirmDelete) return;
+
+    const updatedAccounts = accounts.filter(acc => acc.username !== user.username);
+    setAccounts(updatedAccounts);
+
+    alert('Account has been deleted.');
+    setUser(null);
+    setUsername('');
+    setPassword('');
+    setCurrentPage('login');
+  };
   if (currentPage === 'battle') {
     return (
       <BattleScreen onReturnHome={() => setCurrentPage('home')}
@@ -165,6 +204,7 @@ const CardJitsuGame: React.FC = () => {
             >
               Enter the Dojo
             </button>
+            
           </div>
 
           <div className="mt-6 text-center">
@@ -176,8 +216,19 @@ const CardJitsuGame: React.FC = () => {
               >
                 Sign up here!
               </button>
+              
             </p>
           </div>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+            Forgot your password?{''}
+              <button
+                onClick={handleForgotPassword}
+                className="text-sm text-blue-600 hover:text-blue-800 font-semibold">
+                Click here!
+              </button>
+               </p>
+            </div>
         </div>
       </div>
     );
@@ -285,6 +336,12 @@ const CardJitsuGame: React.FC = () => {
               className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
             >
               Logout
+            </button>
+            <button
+              onClick={handleDeleteAccount}
+              className="px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg transition"
+            >
+              Delete Account
             </button>
           </div>
         </div>
