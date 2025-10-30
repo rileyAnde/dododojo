@@ -8,6 +8,10 @@ use rusqlite::Connection;//keep Connection
 use std::sync::Mutex; //keep
 use data_structs::AppState;
 
+//TODO make create users routes and queries
+//TODO make update user data routes and queries
+//TODO make delete user data routes and queries
+//TODO make get current game state routes and queries
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -26,6 +30,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(app_state.clone())
             .service(routes::get_users_http)
             .service(routes::get_one_user_http)
+            .service(routes::upload_cards_http)
     })
     .bind("127.0.0.1:8080")?
     .run()
