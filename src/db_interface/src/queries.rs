@@ -1,14 +1,14 @@
 use rusqlite::{Connection, Result as SqlResult};
-use crate::data_structs::User;
+use crate::data_structs::GetUser;
 use serde_json;
 
 // Function to get all users from the database
-pub async fn get_all_users(conn: &Connection) -> SqlResult<Vec<User>> {
+pub async fn get_all_users(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     // Use explicit column names instead of SELECT *
     let mut stmt = conn.prepare("SELECT * FROM users")?;
     
     let users = stmt.query_map([], |row| {
-        Ok(User {
+        Ok(GetUser {
             id: row.get("id")?,
             username: row.get("Username")?,
             password: row.get("Password")?,
@@ -29,21 +29,27 @@ pub async fn get_all_users(conn: &Connection) -> SqlResult<Vec<User>> {
     Ok(user_list)
 }
 
-pub async fn get_one_user(conn: &Connection, username: String) -> SqlResult<User> {
+pub async fn get_one_user(conn: &Connection, username: String) -> SqlResult<GetUser> {
     let mut stmt = conn.prepare("SELECT * FROM users WHERE username = ?1")?;
     
     let user = stmt.query_row([username], |row| {
-        Ok(User {
-            //id: row.get("id")?,
+        Ok(GetUser {
+            id: row.get("id")?,
             username: row.get("Username")?,
             password: row.get("Password")?,
+            level: row.get("Level")?,
+            inventory: row.get("Inventory")?,
+            primary_deck: row.get("Primary_Deck")?,
+            gyms_owned: row.get("Gyms_Owned")?,
+            created_at: row.get("Created_At")?,
+            updated_at: row.get("Updated_At")?,
         })
     })?;
     
     Ok(user)
 }
 
-pub async fn upload_cards(conn: &mut Connection, cards_json: serde_json::Value) -> SqlResult<()> {
+pub async fn upload_cards(conn: &Connection, cards_json: serde_json::Value) -> SqlResult<()> {
     // println!("upload_cards called with json: {:?}", cards_json);
     // println!("JSON type: {}", match &cards_json {
     //     serde_json::Value::Array(_) => "Array",

@@ -1,6 +1,6 @@
-use actix_web::{get, web, HttpResponse, Responder};
+use actix_web::{post, get, web, HttpResponse, Responder};
 
-use crate::data_structs::AppState;
+use crate::data_structs::{AppState, GetUser, CreateUser};
 use crate::queries;
 use serde_json::Value;
 
@@ -30,14 +30,18 @@ async fn get_users_http(data: web::Data<AppState>) -> impl Responder {
 
 #[get("/upload_cards")]
 async fn upload_cards_http(data: web::Data<AppState>, json: web::Json<Value>) -> impl Responder {
-    let mut conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
+    let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
     //println!("Received upload_cards request with data: {:?}", json);
     let json_value = json.into_inner();
     //println!("json: {:?}", json_value);
-    match queries::upload_cards(&mut conn, json_value).await {
+    match queries::upload_cards(&conn, json_value).await {
         Ok(_) => HttpResponse::Ok().body("Cards uploaded successfully"),
         Err(e) => HttpResponse::InternalServerError()
             .body(format!("Database error: {}", e)),
     }
     
+}
+#[post("/create_user")]
+async fn create_user_http(data: web::Data<AppState>, user_data: web::Json<CreateUser>) -> impl Responder {
+    HttpResponse::Ok().body("Create user endpoint")
 }
