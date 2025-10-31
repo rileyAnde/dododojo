@@ -98,35 +98,36 @@ const CardJitsuGame: React.FC = () => {
   };
 
   //did you forget your password? click this button to do a simple reset!
-const handleForgotPassword = () => {
-    if (!username.trim()) {
-      alert('Please enter your username to continue!');
-      return;
-    }
+  // save til sprint 3
+// const handleForgotPassword = () => {
+//     if (!username.trim()) {
+//       alert('Please enter your username to continue!');
+//       return;
+//     }
 
-    const existingUser = accounts.find(acc => acc.username === username.trim());
-    if (!existingUser) { //user doesn't exist
-      alert('No user found!');
-      return;
-    }
+//     const existingUser = accounts.find(acc => acc.username === username.trim());
+//     if (!existingUser) { //user doesn't exist
+//       alert('No user found!');
+//       return;
+//     }
 
-    const newPassword = prompt('Enter a new password:');
-    if (!newPassword) { //no password entered
-      alert('Password not reset!');
-      return;
-    }
+//     const newPassword = prompt('Enter a new password:');
+//     if (!newPassword) { //no password entered
+//       alert('Password not reset!');
+//       return;
+//     }
 
-    setAccounts( //password reset!
-      accounts.map(acc =>
-        acc.username === username.trim()
-          ? { ...acc, password: newPassword.trim() }
-          : acc
-      )
-    );
+//     setAccounts( //password reset!
+//       accounts.map(acc =>
+//         acc.username === username.trim()
+//           ? { ...acc, password: newPassword.trim() }
+//           : acc
+//       )
+//     );
 
-    alert('Password successfully reset! Head back to the login to play!');
-    setPassword('');
-  };
+//     alert('Password successfully reset! Head back to the login to play!');
+//     setPassword('');
+//   };
     const handleDeleteAccount = () => {
     if (!user) return;
 
@@ -221,7 +222,7 @@ const handleForgotPassword = () => {
               
             </p>
           </div>
-          <div className="mt-6 text-center">
+          {/* <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
             Forgot your password?{''}
               <button
@@ -230,7 +231,7 @@ const handleForgotPassword = () => {
                 Click here!
               </button>
                </p>
-            </div>
+            </div> */}
         </div>
       </div>
     );
