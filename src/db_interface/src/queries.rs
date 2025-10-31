@@ -49,56 +49,21 @@ pub async fn get_one_user(conn: &Connection, username: String) -> SqlResult<GetU
     Ok(user)
 }
 
-pub async fn upload_cards(conn: &Connection, cards_json: serde_json::Value) -> SqlResult<()> {
-    // println!("upload_cards called with json: {:?}", cards_json);
-    // println!("JSON type: {}", match &cards_json {
-    //     serde_json::Value::Array(_) => "Array",
-    //     serde_json::Value::Object(_) => "Object",
-    //     serde_json::Value::String(_) => "String",
-    //     _ => "Other"
-    // });
+pub async fn create_user_query(conn: &Connection, user_json: serde_json::Value) -> SqlResult<()> {
+    let user: serde_json::Value = user_json;
     
-    // If it's a string, parse it first
-    let parsed_json = if let Some(json_str) = cards_json.as_str() {
-        println!("Parsing JSON string...");
-        serde_json::from_str(json_str).map_err(|_| rusqlite::Error::InvalidQuery)?
-    } else {
-        cards_json
-    };
+    let username = user["Username"].as_str().unwrap_or_default();
+    let password = user["Password"].as_str().unwrap_or_default();
+    let level = user["Level"].as_i64().unwrap_or(1) as i32;
+    let inventory = user["Inventory"].to_string();
+    let primary_deck = user["Primary_Deck"].to_string();
+    let gyms_owned = user["Gyms_Owned"].to_string();
     
-    // Handle if the JSON is a single object with a cards array inside
-    let cards = if let Some(arr) = parsed_json.as_array() {
-        arr
-    } else if let Some(obj) = parsed_json.as_object() {
-        // Try to find an array field in the object (common patterns: "cards", "data", etc.)
-        obj.get("cards")
-            .or_else(|| obj.get("data"))
-            .or_else(|| obj.get("items"))
-            .and_then(|v| v.as_array())
-            .ok_or(rusqlite::Error::InvalidQuery)?
-    } else {
-        return Err(rusqlite::Error::InvalidQuery);
-    };
+    conn.execute(
+        "INSERT INTO users (Username, Password, Level, Inventory, Primary_Deck, Gyms_Owned, Created_At, Updated_At) 
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, datetime('now'), datetime('now'))",
+        rusqlite::params![username, password, level, inventory, primary_deck, gyms_owned],
+    )?;
     
-    //println!("Found {} cards to upload", cards.len());
-    
-    for card in cards {
-        let card_obj = card.as_object().ok_or(rusqlite::Error::InvalidQuery)?;
-        println!("Processing card: {:?}", card_obj);
-        
-        let card_type = card_obj.get("Type").and_then(|v| v.as_str()).ok_or(rusqlite::Error::InvalidQuery)?;
-        let card_level = card_obj.get("Level").and_then(|v| v.as_i64()).ok_or(rusqlite::Error::InvalidQuery)? as i32;
-
-        let card_color = card_obj.get("Color").and_then(|v| v.as_str()).ok_or(rusqlite::Error::InvalidQuery)?;
-
-        let card_fx = card_obj.get("FX").and_then(|v| v.as_str()).or_else(|| Some("None")).ok_or(rusqlite::Error::InvalidQuery)?;
-
-        conn.execute(
-            "INSERT OR REPLACE INTO cards (Type, Level, Color, FX) VALUES (?1, ?2, ?3, ?4)",
-            rusqlite::params![card_type, card_level, card_color, card_fx],
-        )?;
-    }
-    
-    println!("Successfully uploaded {} cards", cards.len());
     Ok(())
 }
