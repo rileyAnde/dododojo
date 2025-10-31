@@ -21,9 +21,17 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   const [roundWinner, setRoundWinner] = useState<string | null>(null);
   const [gameWinner, setGameWinner] = useState<number>(0);
 
-  // Card data
-  const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
+  //card data
+  const [playerFullDeck, setPlayerFullDeck] = useState<Card[]>([]);
+  const [playerHand, setPlayerHand] = useState<Card[]>([]);
   const [enemyDeck, setEnemyDeck] = useState<Card[]>([]);
+
+  //draw cards from deck to hand
+  const drawCardsToHand = (deck: Card[], amount: number) => {
+    const newCards = deck.slice(0, amount);
+    const remainingDeck = deck.slice(amount);
+    return [newCards, remainingDeck] as const;
+  };
 
   // Load cards from XML
   useEffect(() => {
@@ -31,12 +39,17 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       try {
         // loads all the cards in cards.xml 
         const cards = await loadCardsFromXML();
-        setPlayerDeck(createPlayerDeck(cards));
+        const fullPlayerDeck = createPlayerDeck(cards); // create / pull deck
+        const [initialHand, remainingDeck] = drawCardsToHand(fullPlayerDeck, 5);
+        
+        setPlayerFullDeck(remainingDeck);
+        setPlayerHand(initialHand);
         setEnemyDeck(createEnemyDeck(cards));
         setGamePhase('selection');
       } catch (error) {
         console.error('Error loading cards:', error);
-        setPlayerDeck(FALLBACK_PLAYER_DECK);
+        setPlayerFullDeck([]);
+        setPlayerHand(FALLBACK_PLAYER_DECK);
         setEnemyDeck(FALLBACK_ENEMY_DECK);
         setGamePhase('selection');
       }
@@ -106,6 +119,19 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     if (gamePhase !== 'selection') {
       return;
     }
+    
+    //remove the selected card from hand
+    const newHand = playerHand.filter(c => c.id !== card.id);
+    
+    //draw a new card from the deck if available TODO: shuffle at end of deck or draw game?
+    if (playerFullDeck.length > 0) {
+      const [drawnCards, remainingDeck] = drawCardsToHand(playerFullDeck, 1);
+      setPlayerFullDeck(remainingDeck);
+      setPlayerHand([...newHand, ...drawnCards]);
+    } else {
+      setPlayerHand(newHand);
+    }
+
     setSelectedCard(card);
     const randomEnemy = enemyDeck[Math.floor(Math.random() * enemyDeck.length)];
     setEnemyCard(randomEnemy);
@@ -247,7 +273,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         <div className="max-w-6xl mx-auto">
           <h3 className="text-white font-bold text-xl mb-4 text-center">Choose Your Card</h3>
           <div className="flex gap-4 justify-center flex-wrap">
-            {playerDeck.map((card) => (
+            {playerHand.map((card: Card) => (
               <button
                 key={card.id}
                 onClick={() => handleCardSelect(card)}
