@@ -96,25 +96,27 @@ const CardJitsuGame: React.FC = () => {
     setConfirmPassword('');
     setCurrentPage('login'); //back to the beginning
   };
+
+  //did you forget your password? click this button to do a simple reset!
 const handleForgotPassword = () => {
     if (!username.trim()) {
-      alert('Please enter your username to continue!.');
+      alert('Please enter your username to continue!');
       return;
     }
 
     const existingUser = accounts.find(acc => acc.username === username.trim());
-    if (!existingUser) {
-      alert('No user found!.');
+    if (!existingUser) { //user doesn't exist
+      alert('No user found!');
       return;
     }
 
     const newPassword = prompt('Enter a new password:');
-    if (!newPassword) {
+    if (!newPassword) { //no password entered
       alert('Password not reset!');
       return;
     }
 
-    setAccounts(
+    setAccounts( //password reset!
       accounts.map(acc =>
         acc.username === username.trim()
           ? { ...acc, password: newPassword.trim() }
@@ -129,7 +131,7 @@ const handleForgotPassword = () => {
     if (!user) return;
 
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete your account? Note: This action cannot be undone.`
+      `Are you sure you want to delete your account? This action cannot be undone.`
     );
 
     if (!confirmDelete) return;
@@ -137,7 +139,7 @@ const handleForgotPassword = () => {
     const updatedAccounts = accounts.filter(acc => acc.username !== user.username);
     setAccounts(updatedAccounts);
 
-    alert('Account has been deleted.');
+    alert('Account deleted! Returning to the login page....');
     setUser(null);
     setUsername('');
     setPassword('');
