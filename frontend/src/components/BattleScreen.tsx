@@ -86,9 +86,65 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     const imagePath = `/cards/${card.id}.png`;
     const sizeClasses = size === 'large' ? 'w-48 h-64' : 'w-32 h-44';
 
+    // ripple effect on power cards
+    React.useEffect(() => {
+      if (!document.getElementById('card-ripple-styles')) {
+        const s = document.createElement('style');
+        s.id = 'card-ripple-styles';
+        s.innerHTML = `
+          @keyframes rippleUp {
+            0% { transform: translateY(60%); opacity: 0; }
+            20% { opacity: 0.7; }
+            60% { opacity: 0.85; }
+            100% { transform: translateY(-60%); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(s);
+      }
+    }, []);
+
+    const ripple = card.fx ? (() => {
+      const colorMap: Record<string, string> = {
+        fire: '255,99,71',
+        water: '59,130,246',
+        ice: '125,211,252',
+        air: '137,142,255',
+        earth: '34,197,94',
+        default: '250,204,21'
+      };
+      const rgb = colorMap[card.type] || colorMap.default;
+      const isSelected = selectedCard?.id === card.id;
+      const duration = isSelected ? '0.9s' : '1.6s';
+
+      return (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-visible">
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: '6%',
+              left: '-5%',
+              zIndex: 0,
+              width: '110%',
+              height: '72%',
+              borderRadius: '1.1rem',
+              background: `linear-gradient(180deg, rgba(${rgb},0.95), rgba(${rgb},0.35))`,
+              mixBlendMode: 'screen',
+              transform: 'translateZ(0)',
+              filter: 'blur(20px)',
+              animation: `rippleUp ${duration} ease-in-out infinite`
+            }}
+          />
+        </div>
+      );
+    })() : null;
+
+    const ringClass = '';
+
     if (imageError) {
       return (
-        <div className={`relative ${sizeClasses} bg-gradient-to-br ${getCardColor(card.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
+        <div className={`relative ${sizeClasses} ${ringClass} bg-gradient-to-br ${getCardColor(card.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
+          {ripple}
           <div className="flex justify-between items-start mb-2">
             <span className="text-white font-bold text-3xl">{card.rank}</span>
             <div className="text-white">{getCardIcon(card.type)}</div>
@@ -105,12 +161,16 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     }
 
     return (
-      <img
-        src={imagePath}
-        alt={`${card.type} card rank ${card.rank}`}
-        className={`${sizeClasses} rounded-2xl shadow-2xl border-4 border-white object-cover`}
-        onError={() => setImageError(true)}
-      />
+      <div title={card.fx || ''} className={`relative ${sizeClasses} ${ringClass}`}>
+        {ripple}
+        <img
+          src={imagePath}
+          alt={`${card.type} card rank ${card.rank}`}
+          style={{ zIndex: 10 }}
+          className={`rounded-2xl shadow-2xl border-4 border-white object-cover w-full h-full`}
+          onError={() => setImageError(true)}
+        />
+      </div>
     );
   };
 
