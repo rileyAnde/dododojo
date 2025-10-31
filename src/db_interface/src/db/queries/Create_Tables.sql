@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Users (
 	ID INTEGER PRIMARY KEY AUTOINCREMENT, 
 	Username TEXT UNIQUE NOT NULL, 
 	Password TEXT NOT NULL,
-	Level INT NOT NULL,
+	Level INT NOT NULL DEFAULT 1,
 	Inventory TEXT NOT NULL DEFAULT '{}',  -- JSON: {card_id: quantity, ...}
 	Primary_Deck TEXT NOT NULL DEFAULT '[]', -- JSON: [card_id, ...]
 	Gyms_Owned TEXT NOT NULL DEFAULT '[]',  -- JSON: ["fire", "water", ...]

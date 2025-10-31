@@ -23,14 +23,14 @@ async fn main() -> std::io::Result<()> {
         conn : Mutex::new(conn),
     });
 
-    let _ = HttpServer::new(move || {
+    HttpServer::new(move || {
         let cors = Cors::permissive(); //
         App::new()
             .wrap(cors)
             .app_data(app_state.clone())
             .service(routes::get_users_http)
             .service(routes::get_one_user_http)
-            .service(routes::upload_cards_http)
+            .service(routes::create_user_http)
     })
     .bind("127.0.0.1:8080")?
     .run()
