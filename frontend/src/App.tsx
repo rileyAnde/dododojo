@@ -405,16 +405,6 @@ const CardJitsuGame: React.FC = () => {
                 </div>
               </div>
             </button>
-
-            <button onClick={() => setCurrentPage('battle')} className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-purple-600 hover:to-pink-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
-              <div className="flex items-center justify-center gap-4">
-                <Map size={32} />
-                <div className="text-left">
-                  <div className="font-bold text-lg">Battle</div>
-                  <div className="text-sm text-red-100">Join a Battle</div>
-                </div>
-              </div>
-            </button>
           </div>
         </div>
       </div>
