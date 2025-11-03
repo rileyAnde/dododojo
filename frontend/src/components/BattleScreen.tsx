@@ -81,10 +81,11 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   };
 
   // reusable card display component
-  const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'large' }> = ({ card, size = 'large' }) => {
+  const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large' }> = ({ card, size = 'large' }) => {
     const [imageError, setImageError] = useState(false);
     const imagePath = `/cards/${card.id}.png`;
-    const sizeClasses = size === 'large' ? 'w-48 h-64' : 'w-32 h-44';
+    // if large, set to biggest size, if small, set to small, if xsmall, set to smallest
+    const sizeClasses = size === 'large' ? 'w-48 h-64' : size === 'small' ? 'w-24 h-32' : 'w-18 h-24';
 
     // ripple effect on power cards
     React.useEffect(() => {
@@ -148,13 +149,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
           <div className="flex justify-between items-start mb-2">
             <span className="text-white font-bold text-3xl">{card.rank}</span>
             <div className="text-white">{getCardIcon(card.type)}</div>
-          </div>
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-black bg-opacity-50 rounded-lg p-2">
-              <div className="text-white text-sm font-bold uppercase">{card.type}</div>
-              <div className="text-white text-xs capitalize">{card.color}</div>
-              {card.fx && <div className="text-yellow-300 text-xs mt-1">⚡ Power Card</div>}
-            </div>
           </div>
         </div>
       );
@@ -221,10 +215,19 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   };
 
   const state = battle.getState();
-  const playerWonCount = state.player_won.flat().length;
-  const enemyWonCount = state.enemy_won.flat().length;
 
-  // ui phases
+  //group won cards by type
+  const groupCardsByType = (cards: Card[][]): Record<string, Card[]> => {
+    const grouped: Record<string, Card[]> = {};
+    cards.flat().forEach((card) => {
+      if (!grouped[card.type]) grouped[card.type] = [];
+      grouped[card.type].push(card);
+    });
+    return grouped;
+  };
+
+  const playerWonStacks = groupCardsByType(state.player_won);
+  const enemyWonStacks = groupCardsByType(state.enemy_won);
 
   if (gamePhase === 'loading') {
     return (
@@ -259,29 +262,69 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     );
   }
 
+// rendering stacks
+const renderStacks = (stacks: Record<string, Card[]>) => {
+  const types = Object.keys(stacks);
+  if (types.length === 0) return null;
+
+  return (
+    <div className="flex gap-2">
+      {types.map((type) => (
+        <div key={type} className="flex flex-col items-center">
+          <div className="flex flex-col items-center">
+            {stacks[type].map((card, i) => (
+              <div
+                key={card.id}
+                className={i > 0 ? '-mt-20' : ''}
+                style={{ zIndex: stacks[type].length + i }}
+              >
+                <CardDisplay card={card} size="xsmall" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
       {/* header */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">{playerName[0]}</div>
-              <div>
-                <div className="text-white font-bold">{playerName}</div>
-                <div className="text-cyan-400 text-sm">{playerWonCount} cards won</div>
+          <div className="flex justify-between items-start">
+            {/* Player Info + Won Stacks */}
+            <div className="flex flex-col items-start gap-2">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                  {playerName[0]}
+                </div>
+                <div>
+                  <div className="text-white font-bold">{playerName}</div>
+                </div>
               </div>
+              {renderStacks(playerWonStacks)}
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-2 mt-4">
               <Swords className="text-yellow-400" size={32} />
               <span className="text-white text-2xl font-bold">VS</span>
             </div>
-            <div className="flex items-center gap-3">
-              <div>
-                <div className="text-white font-bold text-right">{enemyName}</div>
-                <div className="text-red-400 text-sm text-right">{enemyWonCount} cards won</div>
+
+            {/* Enemy Info + Won Stacks */}
+            <div className="flex flex-col items-end gap-2">
+              <div className="flex items-center gap-3">
+                <div>
+                  <div className="text-white font-bold text-right">
+                    {enemyName}
+                  </div>
+                </div>
+                <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
+                  {enemyName[0]}
+                </div>
               </div>
-              <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">{enemyName[0]}</div>
+              {renderStacks(enemyWonStacks)}
             </div>
           </div>
         </div>
