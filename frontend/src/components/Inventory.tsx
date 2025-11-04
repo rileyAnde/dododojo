@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Swords, Flame, Droplet, Snowflake, Filter, SortAsc } from 'lucide-react';
 import { Card } from '../game/battle';
 import { generateEnemyDeck } from '../game/deckGenerator';
 import { loadCardsFromXML } from '../utils/cardLoader';
@@ -10,14 +11,66 @@ interface Inventory {
 //temp for displaying
 const cards = await loadCardsFromXML();
 
-const InventoryManager: React.FC<Inventory> = ({ onReturnHome, playerName: propPlayerName }) => {
-    const [playerName] = useState(propPlayerName || 'Player1');
+const getCardIcon = (type: string) => {
+  switch (type) {
+    case 'fire': return <Flame className="w-8 h-8" />;
+    case 'water': return <Droplet className="w-8 h-8" />;
+    case 'ice': return <Snowflake className="w-8 h-8" />;
+    case 'air': return <span className="text-2xl">💨</span>;
+    case 'earth': return <span className="text-2xl">🌍</span>;
+    default: return <Swords className="w-8 h-8" />;
+  }
+};
 
-    const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large' }> = ({ card, size = 'large' }) => {
-        const [imageError, setImageError] = useState(false);
-        const imagePath = `/cards/${card.id}.png`;
-        // if large, set to biggest size, if small, set to small, if xsmall, set to smallest
-        const sizeClasses = size === 'large' ? 'w-48 h-64' : size === 'small' ? 'w-24 h-32' : 'w-18 h-24';
+const getCardColor = (type: string) => {
+  switch (type) {
+    case 'fire': return 'from-red-500 to-orange-500';
+    case 'water': return 'from-blue-500 to-cyan-500';
+    case 'ice': return 'from-cyan-300 to-blue-300';
+    case 'air': return 'from-gray-300 to-slate-400';
+    case 'earth': return 'from-green-600 to-emerald-700';
+    default: return 'from-gray-500 to-gray-700';
+  }
+};
+
+const InventoryManager: React.FC<Inventory> = ({ onReturnHome, playerName: propPlayerName }) => {
+  const [playerName] = useState(propPlayerName || 'Player1');
+  const [activeDeck, setActiveDeck] = useState<Card[]>(generateEnemyDeck(cards, 'fire', 10, 0.6));
+  const [inventory, setInventory] = useState<Card[]>(generateEnemyDeck(cards, 'water', 20, 0.6));
+  const [filterType, setFilterType] = useState<string>('all');
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
+
+  const handleDragStart = (card: Card, from: 'active' | 'inventory') => {
+    (event as DragEvent).dataTransfer?.setData('card', JSON.stringify({ card, from }));
+  };
+
+  const handleDrop = (to: 'active' | 'inventory') => (event: React.DragEvent) => {
+    event.preventDefault();
+    const data = event.dataTransfer.getData('card');
+    if (!data) return;
+    const { card, from } = JSON.parse(data);
+
+    if (from === to) return;
+    if (to === 'active' && activeDeck.length >= 30) return; // deck cap
+
+    // allow duplicates: don't filter by id, remove only first instance
+    if (from === 'active') {
+      const idx = activeDeck.findIndex((c) => c.id === card.id);
+      if (idx !== -1) activeDeck.splice(idx, 1);
+      setActiveDeck([...activeDeck]);
+      setInventory([...inventory, card]);
+    } else {
+      const idx = inventory.findIndex((c) => c.id === card.id);
+      if (idx !== -1) inventory.splice(idx, 1);
+      setInventory([...inventory]);
+      setActiveDeck([...activeDeck, card]);
+    }
+  };
+
+  const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large' }> = ({ card, size = 'large' }) => {
+    const [imageError, setImageError] = useState(false);
+    const imagePath = `/cards/${card.id}.png`;
+    const sizeClasses = size === 'large' ? 'w-48 h-64' : size === 'small' ? 'w-24 h-32' : 'w-18 h-24';
 
         // ripple effect on power cards
         React.useEffect(() => {
@@ -72,87 +125,101 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, playerName: propP
             );
         })() : null;
 
-        const ringClass = '';
-
-        if (imageError) {
-            return (
-                <div className={`relative ${sizeClasses} ${ringClass} bg-gradient-to-br ${getCardColor(card.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
-                    {ripple}
-                    <div className="flex justify-between items-start mb-2">
-                        <span className="text-white font-bold text-3xl">{card.rank}</span>
-                        <div className="text-white">{getCardIcon(card.type)}</div>
-                    </div>
-                </div>
-            );
-        }
-
-        return (
-            <div title={card.fx || ''} className={`relative ${sizeClasses} ${ringClass}`}>
-                {ripple}
-                <img
-                    src={imagePath}
-                    alt={`${card.type} card rank ${card.rank}`}
-                    style={{ zIndex: 10 }}
-                    className={`rounded-2xl shadow-2xl border-4 border-white object-cover w-full h-full`}
-                    onError={() => setImageError(true)}
-                />
-            </div>
-        );
-    };
-
-    const render_deck = (cards: Card[]) => {
-    
-        return (
-            <div className="flex gap-2">
-                <div className="flex flex-wrap items-center gap-4">
-                    {cards.map((card) => (
-                        <div key={card.id}>
-                            <CardDisplay card={card} size="small" />
-                        </div>
-                    ))}
-                </div>
-            </div>
-    )}
-        
-
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
-            {/* header */}
-            <div className="max-w-6xl mx-auto mb-6">
-                <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
-                    <div className="flex justify-between items-start">
-                        {/* Player Info + Won Stacks */}
-                        <div className="flex flex-col items-start gap-2">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                                    {playerName[0]}
-                                </div>
-                                <div>
-                                    <div className="text-white font-bold">{playerName}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <button onClick={onReturnHome || (() => window.location.reload())} className="px-8 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold text-xl hover:scale-105 transition">
-                            Return to Dojo
-                        </button>
-                    </div>
-                </div>
+      <div
+        draggable
+        onDragStart={() => handleDragStart(card, activeDeck.includes(card) ? 'active' : 'inventory')}
+        title={card.fx || ''}
+        className={`relative ${sizeClasses}`}
+      >
+        {ripple}
+        {imageError ? (
+          <div className={`relative ${sizeClasses} bg-gradient-to-br ${getCardColor(card.type)} rounded-2xl p-4 shadow-2xl border-4 border-white`}>
+            <div className="flex justify-between items-start mb-2">
+              <span className="text-white font-bold text-3xl">{card.rank}</span>
+              <div className="text-white">{getCardIcon(card.type)}</div>
             </div>
-            {/* currently equipped block */}
-            <div className="max-w-6xl mx-auto mb-6">
-                <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
-                    <div className="flex justify-between items-start">
-                        <div className="flex flex-col items-start gap-2">
-                            <div className="flex items-center gap-3">
-                                <div>
-                                    {render_deck(generateEnemyDeck(cards, 'fire', 30, 0.6))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+          </div>
+        ) : (
+          <img
+            src={imagePath}
+            alt={`${card.type} card rank ${card.rank}`}
+            onError={() => setImageError(true)}
+            className="rounded-2xl shadow-2xl border-2 border-white object-cover w-full h-full"
+          />
+        )}
+      </div>
     );
-}
+  };
+
+  const render_deck = (cards: Card[], onDropHandler: (e: React.DragEvent) => void) => (
+    <div
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={onDropHandler}
+      className="flex flex-wrap gap-3 min-h-[120px] p-3 rounded-xl bg-black/20 border border-white/10"
+    >
+      {cards.map((card, i) => (
+        <CardDisplay key={`${card.id}-${i}`} card={card} size="small" />
+      ))}
+    </div>
+  );
+
+  const filteredInventory = inventory
+    .filter(c => (filterType === 'all' ? true : c.type === filterType))
+    .sort((a, b) => sortAsc ? a.rank - b.rank : b.rank - a.rank);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6 text-white">
+      {/* Header */}
+      <div className="max-w-8xl mx-auto mb-6">
+        <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-4 border border-white/20 flex justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white">
+              {playerName[0]}
+            </div>
+            <div>
+              <div className="font-bold">{playerName}</div>
+            </div>
+          </div>
+          <button
+            onClick={onReturnHome || (() => window.location.reload())}
+            className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold hover:scale-105 transition"
+          >
+            Return to Dojo
+          </button>
+        </div>
+      </div>
+
+      {/* active Deck */}
+      <div className="max-w-8xl mx-auto mb-6">
+        <h2 className="text-2xl font-bold mb-2">⚔️ Equipped Deck ({activeDeck.length}/30)</h2>
+        {render_deck(activeDeck, handleDrop('active'))}
+      </div>
+
+      {/* filter/sort Bar */}
+      <div className="flex gap-4 mb-4 items-center">
+        <div className="flex items-center gap-2">
+          <Filter /> 
+          <select value={filterType} onChange={e => setFilterType(e.target.value)} className="bg-black/40 border border-white/10 rounded p-1">
+            <option value="all">All</option>
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="ice">Ice</option>
+            <option value="air">Air</option>
+            <option value="earth">Earth</option>
+          </select>
+        </div>
+        <button onClick={() => setSortAsc(!sortAsc)} className="flex items-center gap-1 bg-black/40 px-3 py-1 rounded border border-white/10">
+          <SortAsc /> Sort {sortAsc ? '↑' : '↓'}
+        </button>
+      </div>
+
+      {/* full Inventory */}
+      <div className="max-w-8xl mx-auto mb-6">
+        <h2 className="text-2xl font-bold mb-2">🎒 Remaining Inventory ({inventory.length})</h2>
+        {render_deck(filteredInventory, handleDrop('inventory'))}
+      </div>
+    </div>
+  );
+};
 export default InventoryManager;
