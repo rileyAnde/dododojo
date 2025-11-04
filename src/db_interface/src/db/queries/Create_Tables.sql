@@ -19,3 +19,5 @@ CREATE TABLE IF NOT EXISTS Cards (
 	Color TEXT NOT NULL,
 	FX TEXT
 );
+
+-- Create table for gyms to hold what players deck

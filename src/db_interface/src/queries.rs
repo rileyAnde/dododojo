@@ -3,7 +3,7 @@ use crate::data_structs::GetUser;
 use serde_json;
 
 // Function to get all users from the database
-pub async fn get_all_users(conn: &Connection) -> SqlResult<Vec<GetUser>> {
+pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     // Use explicit column names instead of SELECT *
     let mut stmt = conn.prepare("SELECT * FROM users")?;
     
@@ -29,7 +29,7 @@ pub async fn get_all_users(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     Ok(user_list)
 }
 
-pub async fn get_one_user(conn: &Connection, username: String) -> SqlResult<GetUser> {
+pub async fn get_one_user_query(conn: &Connection, username: String) -> SqlResult<GetUser> {
     let mut stmt = conn.prepare("SELECT * FROM users WHERE username = ?1")?;
     
     let user = stmt.query_row([username], |row| {
@@ -65,5 +65,39 @@ pub async fn create_user_query(conn: &Connection, user_json: serde_json::Value) 
         rusqlite::params![username, password, level, inventory, primary_deck, gyms_owned],
     )?;
     
+    Ok(())
+}
+
+//WIP
+pub async fn update_user_query(conn: &Connection, username: String, user_json: serde_json::Value) -> SqlResult<()> {
+    let user = user_json;
+    println!("\n Updating user in query: {:?}", user);
+
+    let password = user["password"].as_str().unwrap_or_default();
+    println!("Password: {}", password);
+    let level = user["level"].as_i64().unwrap_or(1) as i32;
+    println!("Level: {}", level);
+    let inventory = user["inventory"].as_str().unwrap_or_default();
+    println!("Inventory: {}", inventory);
+    let primary_deck = user["primary_deck"].as_str().unwrap_or_default();
+    println!("Primary Deck: {}", primary_deck);
+    let gyms_owned = user["gyms_owned"].as_str().unwrap_or_default();
+    println!("Gyms Owned: {}", gyms_owned);
+
+    conn.execute(
+        "UPDATE users 
+        SET Password = ?1, Level = ?2, Inventory = ?3, Primary_Deck = ?4, Gyms_Owned = ?5, Updated_At = datetime('now') 
+        WHERE Username = ?6",
+        rusqlite::params![password, level, inventory, primary_deck, gyms_owned, username],
+    )?;
+
+    Ok(())
+}
+
+pub async fn delete_user_query(conn: &Connection, username: String) -> SqlResult<()> {
+    conn.execute(
+        "DELETE FROM users WHERE Username = ?1",
+        rusqlite::params![username],
+    )?;
     Ok(())
 }
