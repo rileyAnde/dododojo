@@ -14,6 +14,7 @@ export class Battle {
     private enemy_won: Card[][];
     private types: Map<string, number>;
     private win_map: Map<string, [string, string]>;
+    private difficulty: number;
     // Persistent FX state (affects next turns)
     private blockedTypesNext: Set<string> = new Set();
     private modifyNext: { player: number; enemy: number } = { player: 0, enemy: 0 };
@@ -23,6 +24,8 @@ export class Battle {
         void enemy;
         this.player_won = [[], [], [], [], []];
         this.enemy_won = [[], [], [], [], []];
+
+        this.difficulty = 1.0; //1 is most optimal, 0 is always random
 
         // types indexes in win arrays
         this.types = new Map<string, number>();
@@ -335,4 +338,114 @@ export class Battle {
         // checkwin is invoked to update internal status; tests can call checkwin() and use getState()
         this.checkwin();
     }
+
+agent_turn(hand: Card[]): Card {
+    // random or optimal (1 highest, 0 always random)
+    const roll = Math.random();
+    if (roll <= (1 - this.difficulty)) {
+        // play random card
+        return hand[Math.floor(Math.random() * hand.length)];
+    }
+
+    // assess player and enemy state
+    const playerState = this.player_won.map(arr => arr.slice());
+    const enemyState = this.enemy_won.map(arr => arr.slice());
+
+    const playerTypeCounts = playerState.map(arr => arr.length);
+    const enemyTypeCounts = enemyState.map(arr => arr.length);
+
+    const highestCard = hand.reduce((a, b) => (a.rank > b.rank ? a : b));
+
+    // highest-level card of any of given types
+    const highestOfType = (types: string[]): Card | null => {
+        const filtered = hand.filter(c => types.includes(c.type));
+        if (filtered.length === 0) return null;
+        return filtered.reduce((a, b) => (a.rank > b.rank ? a : b));
+    };
+
+    // check if player has one type remaining or stack of 4 of same type
+    const playerTypesRemaining = playerTypeCounts.filter(c => c > 0).length;
+    const hasStackOf4 = playerTypeCounts.some(c => c >= 4);
+
+    if (playerTypesRemaining === 1 || hasStackOf4) {
+        // identify which type player is close to winning with
+        let targetType: string | null = null;
+        for (const [type, idx] of this.types.entries()) {
+            if (playerTypeCounts[idx] >= 4) {
+                targetType = type;
+                break;
+            }
+        }
+        if (!targetType) {
+            // fallback: the one remaining type
+            for (const [type, idx] of this.types.entries()) {
+                if (playerTypeCounts[idx] > 0) {
+                    targetType = type;
+                    break;
+                }
+            }
+        }
+
+        if (targetType) {
+            // get which types beat this type using win_map (reverse lookup)
+            const counters: string[] = [];
+            for (const [t, beats] of this.win_map.entries()) {
+                if (beats.includes(targetType)) counters.push(t);
+            }
+
+            // play highest counter-type card if available
+            const counterCard = highestOfType(counters);
+            if (counterCard) return counterCard;
+        }
+
+        // If no counter found, play highest level card
+        return highestCard;
+    }
+
+    // step 4: If player has >1 type remaining
+    // determine if bot is closer to multi-type or stacked-type win
+    const enemyTypeProgress = enemyTypeCounts.filter(c => c > 0).length;
+    const enemyHasStack = enemyTypeCounts.some(c => c >= 4);
+
+    let closerToTypeWin = false;
+    if (enemyHasStack) closerToTypeWin = false;
+    else if (enemyTypeProgress >= 3) closerToTypeWin = true;
+    else closerToTypeWin = Math.random() > 0.5; // tie-breaker
+
+    if (closerToTypeWin) {
+        //play highest level card of a needed type and color (new color)
+        const neededTypes = Array.from(this.types.keys()).filter(
+            t => enemyTypeCounts[this.types.get(t)!] < 5
+        );
+        const usedColors = new Set(enemyState.flat().map(c => c.color));
+        const filtered = hand.filter(
+            c => neededTypes.includes(c.type) && !usedColors.has(c.color)
+        );
+        if (filtered.length > 0)
+            return filtered.reduce((a, b) => (a.rank > b.rank ? a : b));
+    } else {
+        // closer to stacked win
+        // Find type with most unique colors so far
+        let bestType = '';
+        let bestColorCount = -1;
+        for (const [type, idx] of this.types.entries()) {
+            const colors = new Set(enemyState[idx].map(c => c.color));
+            if (colors.size > bestColorCount) {
+                bestColorCount = colors.size;
+                bestType = type;
+            }
+        }
+
+        // play highest level card of that type with a new color if possible
+        const existingColors = new Set(enemyState[this.types.get(bestType)!].map(c => c.color));
+        const candidates = hand.filter(
+            c => c.type === bestType && !existingColors.has(c.color)
+        );
+        if (candidates.length > 0)
+            return candidates.reduce((a, b) => (a.rank > b.rank ? a : b));
+    }
+
+    // fallback: play highest rank card
+    return highestCard;
+}
 }

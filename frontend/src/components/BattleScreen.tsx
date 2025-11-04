@@ -24,7 +24,8 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   //card data
   const [playerFullDeck, setPlayerFullDeck] = useState<Card[]>([]);
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
-  const [enemyDeck, setEnemyDeck] = useState<Card[]>([]);
+  const [enemyFullDeck, setEnemyDeck] = useState<Card[]>([]);
+  const [enemyHand, setEnemyHand] = useState<Card[]>([]);
 
   //draw cards from deck to hand
   const drawCardsToHand = (deck: Card[], amount: number) => {
@@ -42,9 +43,14 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         const fullPlayerDeck = createPlayerDeck(cards); // create / pull deck
         const [initialHand, remainingDeck] = drawCardsToHand(fullPlayerDeck, 5);
         
+        //make enemy hand / deck for bot
+        const EnemyDeck = createEnemyDeck(cards, 'fire', 30)
+        const [initEnemyHand, remEnemyDeck] = drawCardsToHand(EnemyDeck, 5);
+
         setPlayerFullDeck(remainingDeck);
         setPlayerHand(initialHand);
-        setEnemyDeck(createEnemyDeck(cards));
+        setEnemyDeck(remEnemyDeck);
+        setEnemyHand(initEnemyHand);
         setGamePhase('selection');
       } catch (error) {
         console.error('Error loading cards:', error);
@@ -187,7 +193,17 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     }
 
     setSelectedCard(card);
-    const randomEnemy = enemyDeck[Math.floor(Math.random() * enemyDeck.length)];
+    //RILEY
+    const randomEnemy = battle.agent_turn(enemyHand);
+    const EnemyNewHand = enemyHand.filter(c => c.id !== randomEnemy.id);
+    if (enemyFullDeck.length > 0) {
+      const [EdrawnCards, EremainingDeck] = drawCardsToHand(enemyFullDeck, 1);
+      setEnemyDeck(EremainingDeck);
+      setEnemyHand([...EnemyNewHand, ...EdrawnCards]);
+    } else {
+      setEnemyHand(EnemyNewHand);
+    }
+
     setEnemyCard(randomEnemy);
     setGamePhase('reveal');
     setTimeout(() => {
