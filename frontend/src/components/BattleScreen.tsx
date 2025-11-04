@@ -193,7 +193,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     }
 
     setSelectedCard(card);
-    //RILEY
     const randomEnemy = battle.agent_turn(enemyHand);
     const EnemyNewHand = enemyHand.filter(c => c.id !== randomEnemy.id);
     if (enemyFullDeck.length > 0) {

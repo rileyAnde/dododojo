@@ -3,8 +3,9 @@ import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
 import BattleScreen from './components/BattleScreen';
 import MapScreen from './components/MapScreen';
+import Inventory from './components/Inventory'
 
-type Page = 'login' | 'signup' | 'home' | 'battle' | 'map';
+type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
 
 interface User {
   username: string;
@@ -150,6 +151,13 @@ const CardJitsuGame: React.FC = () => {
   if (currentPage === 'battle') {
     return (
       <BattleScreen onReturnHome={() => setCurrentPage('home')}
+      playerName={user?.username} />
+    )
+  }
+
+  if (currentPage === 'inventory') {
+    return (
+      <Inventory onReturnHome={() => setCurrentPage('home')}
       playerName={user?.username} />
     )
   }
@@ -386,7 +394,7 @@ const CardJitsuGame: React.FC = () => {
 
           {/* Action buttons */}
           <div className="space-y-4">
-            <button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
+            <button onClick={() => setCurrentPage('inventory')} className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
               <div className="flex items-center justify-center gap-4">
                 <Swords size={32} />
                 <div className="text-left">
