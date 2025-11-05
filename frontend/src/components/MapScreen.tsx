@@ -16,7 +16,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-white flex items-center gap-3">
                     <Swords className="text-cyan-400" size={32} />
-                    Card Jitsu World Map
+                    Dodo Dojo World Map
                     </h1>
                     <button
                     onClick={onReturnHome}
@@ -36,7 +36,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
                     {/* Replace this div with your actual map image */}
                     <img 
                     src="/map.png" 
-                    alt="Card Jitsu World Map"
+                    alt="Dodo Dojo World Map"
                     className="w-full h-full object-cover"
                     onError={(e) => {
                         // Fallback if image doesn't exist
@@ -50,7 +50,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
                         <div className="absolute bottom-10 right-1/4 w-32 h-32 bg-green-500 rounded-full blur-3xl"></div>
                     </div>
                 </div>
-            <button onClick={onEnterBattle} >
+            <button className="bg-white" onClick={onEnterBattle} >
                 Enter Battle
             </button>
             </div>

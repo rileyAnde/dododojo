@@ -11,6 +11,7 @@ interface User {
   username: string;
   password: string;
   penguinColor: string;
+  dodoType: string;
 }
 
 const CardJitsuGame: React.FC = () => {
@@ -77,12 +78,15 @@ const CardJitsuGame: React.FC = () => {
     }
 
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
+    const types = ['fire', 'air', 'water', 'earth', 'ice', 'default', 'jay']
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomType = types[Math.floor(Math.random() * types.length)]
 
     const newUser = ({
       username: username.trim(),
       password: password.trim(),
       penguinColor: randomColor,
+      dodoType: randomType,
     });
     setAccounts([...accounts, newUser]);
     console.log("Users Registered:", [...accounts, newUser]);
@@ -191,7 +195,7 @@ const CardJitsuGame: React.FC = () => {
             <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-full mb-4">
               <Swords size={48} />
             </div>
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">Card Jitsu</h1>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">Dodo Dojo</h1>
           </div>
 
           <div className="space-y-6">
@@ -318,7 +322,7 @@ const CardJitsuGame: React.FC = () => {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account with Card Jitsu?{' '}
+              Already have an account with Dodo Dojo?{' '}
               <button
                 onClick={() => setCurrentPage('login')}
                 className="text-red-600 hover:text-blue-700 font-semibold"
@@ -345,10 +349,10 @@ const CardJitsuGame: React.FC = () => {
 
       {/* Top bar */}
       <div className="relative z-10 bg-black bg-opacity-30 backdrop-blur-sm border-b border-white border-opacity-20">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-6 py-2 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Swords className="text-cyan-400" size={32} />
-            <h1 className="text-2xl font-bold text-white">Card Jitsu Dojo</h1>
+            <h1 className="text-2xl font-bold text-white">Your Dojo</h1>
           </div>
           <div className="flex items-center gap-6">
             <div className="text-white">
@@ -376,17 +380,19 @@ const CardJitsuGame: React.FC = () => {
           {/* Character display */}
           <div className="lg:col-span-2">
             <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-20 shadow-2xl">
-              <h2 className="text-2xl font-bold text-white mb-6">Your Penguin</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Your Dodo</h2>
 
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="flex flex-col items-center justify-center py-12">
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center py-1">
                   <DodoCharacter
+                    type={user?.dodoType || 'default'}
                     color={user?.penguinColor || '#FF6B6B'}
                     size="large"
+                    flipped='n'
                   />
                 </div>
                 <div className="mt-6 text-center">
-                  <h3 className="text-xl font-bold text-white mb-2">{user?.username}</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">{user?.username}</h3>
                 </div>
               </div>
             </div>

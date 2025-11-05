@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
 import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
+import Character from './character';
 
 interface BattleScreenProps {
   onReturnHome?: () => void;
@@ -167,7 +168,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
           src={imagePath}
           alt={`${card.type} card rank ${card.rank}`}
           style={{ zIndex: 10 }}
-          className={`rounded-2xl shadow-2xl border-4 border-white object-cover w-full h-full`}
+          className={`rounded-2xl shadow-2xl object-cover w-full h-full`}
           onError={() => setImageError(true)}
         />
       </div>
@@ -291,7 +292,7 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
               <div
                 key={card.id}
                 className={i > 0 ? '-mt-20' : ''}
-                style={{ zIndex: stacks[type].length + i }}
+                style={{ zIndex: 10 + stacks[type].length + i }}
               >
                 <CardDisplay card={card} size="xsmall" />
               </div>
@@ -304,9 +305,9 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6 bg">
       {/* header */}
-      <div className="max-w-6xl mx-auto mb-6">
+      <div className="max-w-8xl mx-auto mb-6 z-10">
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
           <div className="flex justify-between items-start">
             {/* Player Info + Won Stacks */}
@@ -319,7 +320,6 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
                   <div className="text-white font-bold">{playerName}</div>
                 </div>
               </div>
-              {renderStacks(playerWonStacks)}
             </div>
 
             <div className="flex items-center gap-2 mt-4">
@@ -339,36 +339,71 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
                   {enemyName[0]}
                 </div>
               </div>
-              {renderStacks(enemyWonStacks)}
             </div>
           </div>
+          <div className="absolute top-24 left-2 z-100">
+            <div className="relative">
+              {renderStacks(playerWonStacks)}
+            </div>
+        </div>
+
+        <div className="absolute top-24 right-2 z-100">
+          <div className="relative">
+            {renderStacks(enemyWonStacks)}
+          </div>
+        </div>
         </div>
       </div>
 
       {/* battle Arena */}
-      <div className="max-w-6xl mx-auto mb-6">
-        <div className="grid grid-cols-2 gap-8">
+      <div className="max-w-2xl mx-auto mb-6">
+        <div className="grid grid-cols-3 column-gap-0">
           <div className="flex flex-col items-center">
-            <h3 className="text-cyan-400 font-bold text-xl mb-4">Your Card</h3>
+            {/* <h3 className="text-cyan-400 font-bold text-xl mb-4">Your Card</h3> */}
             {selectedCard ? (
-              <CardDisplay card={selectedCard} />
+              <div className='z-10'><CardDisplay card={selectedCard} /> </div>
             ) : (
-              <div className="w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
-                <span className="text-white text-opacity-50">Select a card</span>
+              <div>
               </div>
             )}
+            <div className="fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
+                <span className="text-white text-opacity-50">Select your card</span>
+            </div>
+            {/* row for character sprites */}
+          <div className="z-20 flex fixed bottom-20 left-40 flex-row items-center">
+            <Character
+              color='RED'
+              type='jay'
+                flipped='y'
+                size='large'
+              ></Character>
+          </div>
+          </div>
+          {/* placeholder for active effect icons */}
+          <div className="flex flex-col items-center">
+            <Character color='red' size='small' />
           </div>
 
           <div className="flex flex-col items-center">
-            <h3 className="text-red-400 font-bold text-xl mb-4">Opponent's Card</h3>
+            {/* <h3 className="text-red-400 font-bold text-xl mb-4">Opponent's Card</h3> */}
             {gamePhase === 'reveal' || gamePhase === 'result' ? (
-              enemyCard && <CardDisplay card={enemyCard} />
+              <div className='z-10'> <CardDisplay card={enemyCard} /> </div>
             ) : (
-              <div className="w-48 h-64 bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl shadow-2xl border-4 border-white flex items-center justify-center">
-                <span className="text-white text-6xl">?</span>
-              </div>
+              <div></div>
             )}
+              <div className="z-0 fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
+                <span className="text-white text-opacity-50">Opponent's card</span>
+              </div>
           </div>
+          {/* display enemy sprite */}
+          <div className="z-20 flex fixed bottom-20 right-40 flex-row items-center">
+            <Character
+              color='RED'
+              type='fire'
+              flipped='n'
+              size='large'
+            ></Character>
+            </div>
         </div>
 
         {gamePhase === 'result' && roundWinner && (
@@ -388,9 +423,9 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
 
       {/* player Hand */}
       {gamePhase === 'selection' && (
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-white font-bold text-xl mb-4 text-center">Choose Your Card</h3>
-          <div className="flex gap-4 justify-center flex-wrap">
+        <div className="flex flex-col max-w-3xl mx-auto fixed-bottom-center z-100 mb-4 bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
+          {/* <h3 className="text-white font-bold text-xl mb-4 text-center">Choose Your Card</h3> */}
+          <div className="flex gap-2 justify-center flex-wrap">
             {playerHand.map((card: Card) => (
               <button
                 key={card.id}

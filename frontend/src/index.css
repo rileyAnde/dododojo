@@ -63,6 +63,33 @@ button:focus-visible {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: transparent;
   }
+}
+
+img.flipped {
+    transform: scaleX(-1);
+}
+
+.fixed-bottom-center {
+  position: fixed;
+  bottom: 0;       
+  left: 0;         
+  right: 0;        
+  display: flex;   
+  justify-content: center; 
+  align-items: center;
+  z-index: 100;
+  /* padding: 10px; */
+}
+
+.bg {
+  background-image: url('../public/dojo.png');
+  background-repeat: no-repeat;
+  /* background-size: cover; */
+  background-position: center 100%;
+}
+
+.centerh {
+  left: 50%;
 }

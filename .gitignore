@@ -7,6 +7,7 @@ frontend/folder/
 /frontend/node_modules/
 /frontend/public/cards/
 /frontend/public/cards.xml
+/frontend/dist/
 /frontend/dist/cards/
 /frontend/dist/assets/
 .DS_Store
