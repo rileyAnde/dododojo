@@ -37,7 +37,7 @@ const Character: React.FC<DodoCharacterProps> = ({
     <img
       src={dodoImages[type] || 'dodo.png'} 
       alt="Dodo character"
-      className={`${sizeClasses[size]} object-contain drop-shadow-2xl ${flipped=='y' ? 'flipped' : ''} ${className}`}
+      className={`${sizeClasses[size]} bg-${color} object-contain drop-shadow-2xl ${flipped=='y' ? 'flipped' : ''} ${className}`}
     />
   );
 };

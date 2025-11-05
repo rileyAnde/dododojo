@@ -387,7 +387,7 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
           <div className="flex flex-col items-center">
             {/* <h3 className="text-red-400 font-bold text-xl mb-4">Opponent's Card</h3> */}
             {gamePhase === 'reveal' || gamePhase === 'result' ? (
-              <div className='z-10'> <CardDisplay card={enemyCard} /> </div>
+              <div className='z-10'> <CardDisplay card={enemyCard != null ? enemyCard : FALLBACK_ENEMY_DECK[0]} /> </div>
             ) : (
               <div></div>
             )}
