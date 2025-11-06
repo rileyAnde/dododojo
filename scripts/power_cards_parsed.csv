@@ -24,11 +24,11 @@ FX_BLOCK_TYPE_NEXT,water,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water card
 FX_BLOCK_TYPE_NEXT,ice,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
 FX_BLOCK_TYPE_NEXT,air,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
 FX_BLOCK_TYPE_NEXT,earth,1,BLOCK_TYPE_NEXT,water,,NEXT_TURN,ALL,Block water cards next turn
-FX_CHANGE_TYPE_ROUND,ice,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
-FX_CHANGE_TYPE_ROUND,fire,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
-FX_CHANGE_TYPE_ROUND,water,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
-FX_CHANGE_TYPE_ROUND,air,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
-FX_CHANGE_TYPE_ROUND,earth,1,CHANGE_TYPE,ice,water,ROUND,ALL,Snow/ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,ice,1,CHANGE_TYPE,ice,water,ROUND,ALL,ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,fire,1,CHANGE_TYPE,ice,water,ROUND,ALL,ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,water,1,CHANGE_TYPE,ice,water,ROUND,ALL,ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,air,1,CHANGE_TYPE,ice,water,ROUND,ALL,ice cards become water for this round
+FX_CHANGE_TYPE_ROUND,earth,1,CHANGE_TYPE,ice,water,ROUND,ALL,ice cards become water for this round
 FX_MODIFY_NEXT_OPPONENT,fire,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
 FX_MODIFY_NEXT_OPPONENT,water,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
 FX_MODIFY_NEXT_OPPONENT,ice,1,MODIFY_NEXT, -2,OPPONENT,NEXT_TURN,OPPONENT,Next played card -2 to opponent
@@ -49,11 +49,11 @@ FX_DISCARD_BLUE,water,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card 
 FX_DISCARD_BLUE,ice,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
 FX_DISCARD_BLUE,air,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
 FX_DISCARD_BLUE,earth,4,DISCARD_COLOR,blue,1,ROUND,OPPONENT,Discard a blue card from opponent
-FX_CHANGE_FIRE_TO_SNOW_ALL,water,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
-FX_CHANGE_FIRE_TO_SNOW_ALL,fire,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
-FX_CHANGE_FIRE_TO_SNOW_ALL,ice,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
-FX_CHANGE_FIRE_TO_SNOW_ALL,air,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
-FX_CHANGE_FIRE_TO_SNOW_ALL,earth,7,CHANGE_TYPE,fire,snow,ALL,ALL,Change fire -> snow (all fire cards become snow)
+FX_CHANGE_FIRE_TO_ICE_ALL,water,7,CHANGE_TYPE,fire,ice,ALL,ALL,Change fire ->ice (all fire cards becomeice)
+FX_CHANGE_FIRE_TO_ICE_ALL,fire,7,CHANGE_TYPE,fire,ice,ALL,ALL,Change fire ->ice (all fire cards become ice)
+FX_CHANGE_FIRE_TO_ICE_ALL,ice,7,CHANGE_TYPE,fire,ice,ALL,ALL,Change fire -> ice (all fire cards become ice)
+FX_CHANGE_FIRE_TO_ICE_ALL,air,7,CHANGE_TYPE,fire,ice,ALL,ALL,Change fire -> ice (all fire cards become ice)
+FX_CHANGE_FIRE_TO_ICE_ALL,earth,7,CHANGE_TYPE,fire,ice,ALL,ALL,Change fire -> ice (all fire cards become ice)
 FX_BLOCK_FIRE_NEXT,water,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
 FX_BLOCK_FIRE_NEXT,fire,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn
 FX_BLOCK_FIRE_NEXT,ice,7,BLOCK_TYPE_NEXT,fire,,NEXT_TURN,ALL,Block fire cards next turn

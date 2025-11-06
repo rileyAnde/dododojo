@@ -3,6 +3,7 @@ import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
 import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
 import Character from './character';
+import { url } from 'inspector';
 
 interface BattleScreenProps {
   onReturnHome?: () => void;
@@ -91,11 +92,11 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   // get element specific background
   const getBackgroundImage = () => {
     switch (propGymElement) {
-      case 'fire': return '/FireDojo.jpeg';
-      case 'water': return '/WaterDojo.jpeg';
-      case 'ice': return '/IceDojo.jpeg';
-      case 'air': return '/AirDojo.jpeg';
-      case 'earth': return '/EarthDojo.jpeg';
+      case 'fire': return '/FireDojo.png';
+      case 'water': return '/WaterDojo.png';
+      case 'ice': return '/IceDojo.png';
+      case 'air': return '/AirDojo.png';
+      case 'earth': return '/EarthDojo.png';
       default: return '/dojo.png';
     }
   };
@@ -104,11 +105,12 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     const url = getBackgroundImage();
     console.log('Setting background to:', url);
     // Set background image for entire page
-    document.body.style.backgroundImage = `url(${getBackgroundImage()})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundRepeat = 'no-repeat';
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundAttachment = 'fixed'; // optional, makes it stay still
+    document.body.style.backgroundImage = `url(${getBackgroundImage()}), url(${getBackgroundImage()})`;
+    document.body.style.backgroundSize = '100% auto, 100% 100%';
+    document.body.style.backgroundRepeat = 'no-repeat, no-repeat';
+    document.body.style.backgroundPosition = 'center center, 0 0';
+    document.body.style.backgroundAttachment = 'fixed, fixed'; // optional, makes it stay still
+    document.body.style.backdropFilter = 'blur(0px), blur(5px)';
 
     // Cleanup to prevent old background persisting
     return () => {
@@ -335,7 +337,15 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
 
 const renderfx = () => {
   const fxElements = [];
-  const effects = battle.previous_results;
+  const effects = { ...battle.previous_results};
+  if (gamePhase === 'selection') {
+    // we should use the results labeled "next" instead during selection phase
+    effects.typeChange = effects.typeChangeNext;
+    effects.blockedTypesActive = effects.blockedTypesNext;
+    effects.ruleLowerWins = effects.ruleLowerWinsNext;
+    effects.modifyPlayer = effects.modifyNext.player;
+    effects.modifyEnemy = effects.modifyNext.enemy;
+  }
   
   if (effects.typeChange.size !== 0) {
     fxElements.push(
@@ -370,7 +380,7 @@ const renderfx = () => {
 
   if (effects.modifyPlayer !== 0) {
     fxElements.push(
-      <div key="modifyPlayer" className="flex items-center justify-center gap-2 mb-2">
+      <div key="modifyPlayer" className="flex items-center justify-start gap-2 mb-2">
         <img src='/playerplus2.png' width='33%' height="33%" alt="Your card's rank is increased by 2 for this turn!" />
       </div>
     );
@@ -378,7 +388,7 @@ const renderfx = () => {
 
   if (effects.modifyEnemy !== 0) {
     fxElements.push(
-      <div key="modifyEnemy" className="flex items-center justify-center gap-2 mb-2">
+      <div key="modifyEnemy" className="flex items-center justify-end gap-2 mb-2">
         <img src='/enemyplus2.png'  width='33%' height="33%" alt="Your opponent's card's rank is increased by 2 for this turn!" />
       </div>
     );
@@ -386,8 +396,21 @@ const renderfx = () => {
 
   if (effects.ruleLowerWins) {
     fxElements.push(
-      <div key="ruleLowerWins" className="flex items-center gap-2 mb-2">
+      <div key="ruleLowerWins" className="flex items-center justify-center gap-2 mb-2">
         <img src='/lw.png'  width='33%' height="33%" alt="Golf rules! The lower card wins this round" />
+      </div>
+    );
+  }
+
+  if (effects.blockedTypesActive.size > 0) {
+    fxElements.push(
+      <div key="blockedTypes" className="flex items-center justify-center gap-2 mb-2">
+        {[...effects.blockedTypesActive].map((type) => (
+          <div key={type} className="flex flex-row items-center text-white justify-center text-xlg font-bold" alt-text={`Type ${type} is blocked for this round`}>
+            <img src={'/elementsymbols/'+type+'.png'} height='33%' width='33%'/>
+            <span className="ml-1">is Blocked</span>
+          </div>
+        ))}
       </div>
     );
   }
