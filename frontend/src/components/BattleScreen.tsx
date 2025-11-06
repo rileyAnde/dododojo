@@ -333,6 +333,68 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
   );
 };
 
+const renderfx = () => {
+  const fxElements = [];
+  const effects = battle.previous_results;
+  
+  if (effects.typeChange.size !== 0) {
+    fxElements.push(
+      <div key="typeChange" className="flex items-center gap-2 mb-2">
+        {[...effects.typeChange.entries()].map(([original, changed]) => (
+          <div key={original} className="flex flex-row items-center text-white justify-center text-xlg font-bold" alt-text={`Type changed from ${original} to ${changed} for this round`}>
+            <img src={'/elementsymbols/'+original+'.png'} height='33%' width='33%'/>
+            ➔
+            <img src={'/elementsymbols/'+changed+'.png'} height='33%' width='33%'/>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if (effects.discardOpponentColor) {
+    fxElements.push(
+      <div key="discardOpponentColor" className="flex items-center gap-2 mb-2">
+        <span className="text-white font-bold">Opponent Discarded:</span>
+        <span className="text-white">{effects.discardOpponentColor}</span>
+      </div>
+    );
+  }
+
+  if (effects.discardPlayerColor) {
+    fxElements.push(
+      <div key="discardPlayerColor" className="flex items-center gap-2 mb-2">
+        <span className="text-white font-bold">You Discarded:</span>
+        <span className="text-white">{effects.discardPlayerColor}</span>
+      </div>
+    );
+  }
+
+  if (effects.modifyPlayer !== 0) {
+    fxElements.push(
+      <div key="modifyPlayer" className="flex items-center justify-center gap-2 mb-2">
+        <img src='/playerplus2.png' width='33%' height="33%" alt="Your card's rank is increased by 2 for this turn!" />
+      </div>
+    );
+  }
+
+  if (effects.modifyEnemy !== 0) {
+    fxElements.push(
+      <div key="modifyEnemy" className="flex items-center justify-center gap-2 mb-2">
+        <img src='/enemyplus2.png'  width='33%' height="33%" alt="Your opponent's card's rank is increased by 2 for this turn!" />
+      </div>
+    );
+  }
+
+  if (effects.ruleLowerWins) {
+    fxElements.push(
+      <div key="ruleLowerWins" className="flex items-center gap-2 mb-2">
+        <img src='/lw.png'  width='33%' height="33%" alt="Golf rules! The lower card wins this round" />
+      </div>
+    );
+  }
+
+  return fxElements
+}
+
   return (
     <div className="min-h-screen p-6 bg-transparent">
       {/* header */}
@@ -410,7 +472,7 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
           </div>
           {/* placeholder for active effect icons */}
           <div className="flex flex-col items-center">
-            <Character color='red' size='small' />
+            {renderfx()}
           </div>
 
           <div className="flex flex-col items-center">

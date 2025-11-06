@@ -18,6 +18,14 @@ export class Battle {
     // Persistent FX state (affects next turns)
     private blockedTypesNext: Set<string> = new Set();
     private modifyNext: { player: number; enemy: number } = { player: 0, enemy: 0 };
+    previous_results = {
+                            typeChange: new Map<string, string>(), // temporary mapping for this comparison
+                            discardOpponentColor: '' as string | null,
+                            discardPlayerColor: '' as string | null,
+                            modifyPlayer: 0,
+                            modifyEnemy: 0,
+                            ruleLowerWins: false
+                        };
 
     constructor(player: string, enemy: string) {
         void player;
@@ -37,11 +45,11 @@ export class Battle {
 
         // map of key beats either in list
         this.win_map = new Map<string, [string, string]>();
-        this.win_map.set("water", ["air", "fire"]);
-        this.win_map.set("ice", ["water", "earth"]);
-        this.win_map.set("fire", ["ice", "air"]);
-        this.win_map.set("air", ["earth", "ice"]);
-        this.win_map.set("earth", ["water", "fire"]);
+        this.win_map.set("water", ["earth", "fire"]);
+        this.win_map.set("ice", ["water", "air"]);
+        this.win_map.set("fire", ["ice", "earth"]);
+        this.win_map.set("air", ["water", "fire"]);
+        this.win_map.set("earth", ["air", "ice"]);
     }
 
     winner(pCard: Card, eCard: Card): Card | null {
@@ -244,7 +252,7 @@ export class Battle {
             result.modifyEnemy += this.modifyNext.enemy;
             this.modifyNext.enemy = 0;
         }
-
+        this.previous_results = result;
         return result;
     }
 
