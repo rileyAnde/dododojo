@@ -21,6 +21,7 @@ const CardJitsuGame: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [accounts, setAccounts] = useState<User[]>([]);
+  const [selectedGym, setSelectedGym] = useState<string>('fire');
 
 
   // connect this to the backend 
@@ -155,7 +156,8 @@ const CardJitsuGame: React.FC = () => {
   if (currentPage === 'battle') {
     return (
       <BattleScreen onReturnHome={() => setCurrentPage('home')}
-      playerName={user?.username} />
+      playerName={user?.username} 
+      gymElement={selectedGym}/>
     )
   }
 
@@ -170,7 +172,8 @@ const CardJitsuGame: React.FC = () => {
       return (
       <MapScreen 
         onReturnHome={() => setCurrentPage('home')}
-        onEnterBattle={() => {
+        onEnterBattle={(gymName) => {
+          setSelectedGym(gymName);
           setCurrentPage('battle');
         }}
       />

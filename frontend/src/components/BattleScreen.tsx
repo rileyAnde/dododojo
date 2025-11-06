@@ -7,9 +7,10 @@ import Character from './character';
 interface BattleScreenProps {
   onReturnHome?: () => void;
   playerName?: string;
+  gymElement?: string;
 }
 
-const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName: propPlayerName }) => {
+const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName: propPlayerName, gymElement: propGymElement }) => {
   // Mock player data
   const [playerName] = useState(propPlayerName || 'Player1');
   const [enemyName] = useState('Sensei');
@@ -86,6 +87,34 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       default: return 'from-gray-500 to-gray-700';
     }
   };
+
+  // get element specific background
+  const getBackgroundImage = () => {
+    switch (propGymElement) {
+      case 'fire': return '/FireDojo.jpeg';
+      case 'water': return '/WaterDojo.jpeg';
+      case 'ice': return '/IceDojo.jpeg';
+      case 'air': return '/AirDojo.jpeg';
+      case 'earth': return '/EarthDojo.jpeg';
+      default: return '/dojo.png';
+    }
+  };
+
+  useEffect(() => {
+    const url = getBackgroundImage();
+    console.log('Setting background to:', url);
+    // Set background image for entire page
+    document.body.style.backgroundImage = `url(${getBackgroundImage()})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed'; // optional, makes it stay still
+
+    // Cleanup to prevent old background persisting
+    return () => {
+      document.body.style.backgroundImage = '';
+    };
+  }, [propGymElement]);
 
   // reusable card display component
   const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large' }> = ({ card, size = 'large' }) => {
@@ -305,7 +334,7 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6 bg">
+    <div className="min-h-screen p-6 bg-transparent">
       {/* header */}
       <div className="max-w-8xl mx-auto mb-6 z-10">
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
@@ -399,7 +428,7 @@ const renderStacks = (stacks: Record<string, Card[]>) => {
           <div className="z-20 flex fixed bottom-20 right-40 flex-row items-center">
             <Character
               color='RED'
-              type='fire'
+              type={propGymElement}
               flipped='n'
               size='large'
             ></Character>
