@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Swords, X } from 'lucide-react';
+import { Swords, X, BarChart3} from 'lucide-react';
 
 interface MapScreenProps {
   onReturnHome?: () => void;
   onEnterBattle?: (element: string) => void;
-}  
+}
 
 interface Gym {
   id: string;
@@ -15,11 +15,12 @@ interface Gym {
 }
 
 const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) => {
-    const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
+  const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
+  const [showAdvantage, setShowAdvantage] = useState(false);
 
-    //define gyms and locations 
-    //adjust x y coords as needed
-    const gyms: Gym[] = [
+  //define gyms and locations 
+  //adjust x y coords as needed
+  const gyms: Gym[] = [
     {
       id: 'fire-dojo',
       name: 'Fire Dojo',
@@ -67,17 +68,17 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
     }
   };
 
-    const handleGymClick = (gym: Gym) => {
-        setSelectedGym(gym);
-    };
+  const handleGymClick = (gym: Gym) => {
+    setSelectedGym(gym);
+  };
 
-    const handleEnterBattle = () => {
-        if (selectedGym && onEnterBattle) {
-        onEnterBattle(selectedGym.element);
-        }
-    };
+  const handleEnterBattle = () => {
+    if (selectedGym && onEnterBattle) {
+      onEnterBattle(selectedGym.element);
+    }
+  };
 
-return (
+  return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-6">
@@ -87,6 +88,15 @@ return (
               <Swords className="text-cyan-400" size={32} />
               Card Jitsu World Map
             </h1>
+              <div className="flex gap-3">
+              {/* Advantage Tab */}
+              <button
+                onClick={() => setShowAdvantage(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
+              >
+                <BarChart3 size={20} />
+                Advantage
+              </button>
             <button
               onClick={onReturnHome}
               className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition"
@@ -96,6 +106,7 @@ return (
           </div>
         </div>
       </div>
+      </div>
 
       {/* Map Container */}
       <div className="max-w-6xl mx-auto">
@@ -103,15 +114,15 @@ return (
           {/* Map Image - replace with your actual map */}
           <div className="relative w-full aspect-video bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 rounded-2xl overflow-hidden">
             {/* Replace this div with your actual map image */}
-            <img 
-              src="/map.png" 
+            <img
+              src="/map.png"
               alt="Card Jitsu World Map"
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
-            
+
             {/* fallback background */}
             <div className="absolute inset-0 opacity-20">
               <div className="absolute top-10 left-10 w-32 h-32 bg-red-500 rounded-full blur-3xl"></div>
@@ -128,7 +139,7 @@ return (
                 className={`absolute transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-gradient-to-br ${getElementColor(gym.element)} rounded-full border-4 border-white shadow-2xl hover:scale-125 transition duration-200 flex items-center justify-center cursor-pointer group`}
                 style={{ left: `${gym.x}%`, top: `${gym.y}%` }}
               >
-                
+
                 {/* on hover */}
                 <div className="absolute bottom-full mb-2 hidden group-hover:block">
                   <div className="bg-black bg-opacity-90 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap">
@@ -139,7 +150,7 @@ return (
             ))}
           </div>
 
-        {/*instructions*/}
+          {/*instructions*/}
           <div className="mt-6 text-center text-white">
             <p className="text-lg">Click on a gym to challenge its master!</p>
           </div>
@@ -159,7 +170,7 @@ return (
             </button>
 
             {/* Gym header */}
-            <div className={`w-24 h-24 mx-auto mb-6 bg-gradient-to-br ${getElementColor(selectedGym.element)} rounded-full flex items-center justify-center border-4 border-white shadow-xl`}/>
+            <div className={`w-24 h-24 mx-auto mb-6 bg-gradient-to-br ${getElementColor(selectedGym.element)} rounded-full flex items-center justify-center border-4 border-white shadow-xl`} />
 
             <h2 className="text-3xl font-bold text-white text-center mb-2">
               {selectedGym.name}
@@ -179,6 +190,31 @@ return (
               >
                 Enter Battle
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Advantage chart modal */}
+      {showAdvantage && (
+
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative">
+            <button
+              onClick={() => setShowAdvantage(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 transition"
+            >
+              <X size={32} />
+            </button>
+
+            <h2 className="text-3xl font-bold text-white text-center mb-4">Element Advantages</h2>
+
+            {/* Chart PNG */}
+            <div className="flex justify-center">
+              <img
+                src="/advantage.png"  // how to make this a transparent background
+                alt="Element Advantage Chart"
+                className="rounded-2xl border border-white border-opacity-30 shadow-lg max-h-[70vh] object-contain"
+              />
             </div>
           </div>
         </div>
