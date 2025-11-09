@@ -20,7 +20,7 @@ export const getUserServices = async (req: Request, res: Response) => {
     }
     const userId = req.params.userId;
     //fetch user data from Rust service
-    const rustResponse = await fetch(`http://localhost:8081/user/${userId}`);
+    const rustResponse = await fetch(`http://localhost:8080/user/${userId}`);
     //handle Rust service not ok response
     if (rustResponse.status == 401) {
         return res.status(401).json({ message: 'Username Not Found' });
@@ -62,7 +62,7 @@ export const addUserService = async (req: Request, res: Response) => {
     createdAt: new Date(),
     updatedAt: new Date(),
     }
-    const rustResponse = await fetch(`http://localhost:8081/createuser`,{
+    const rustResponse = await fetch(`http://localhost:8080/createuser`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(newAccount)
@@ -111,7 +111,7 @@ export const updateUserService = async (req: Request, res: Response) => {
         updatedAt: new Date(),
     }
     //send update to Rust service
-    const rustResponse = await fetch(`http://localhost:8081/updateuser/${req.params.userid}`,{
+    const rustResponse = await fetch(`http://localhost:8080/updateuser/${req.params.userid}`,{
         method: 'PUT',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData)
@@ -129,7 +129,7 @@ export const updateUserService = async (req: Request, res: Response) => {
 export const deleteUserService = async (req: Request, res: Response) => {
     if (req.params.userId ) {
         console.log('Deleting user with ID:', req.params.userId);
-        const rustResponse = await fetch(`http://localhost:8081/deleteuser/${req.params.userId}`,{
+        const rustResponse = await fetch(`http://localhost:8080/deleteuser/${req.params.userId}`,{
             method: 'DELETE',
         });
         console.log('rustResponse:', rustResponse);
