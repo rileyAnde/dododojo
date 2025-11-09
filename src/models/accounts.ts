@@ -1,25 +1,36 @@
 //file for models that can be passed between frontend and backend
 
-export interface Account {
-    id: Int32Array;
+export interface existing_Account {
+    id: number|null;
     username: string;
     passwordHash: string;
-    level: Int32Array;
-    inventory: Map<string, number>;
-    primaryDeck: Deck;
-    gymsOwned: string[];
+    level: number;
+    inventory: backend_Card[];  
+    primaryDeck: backend_Card[]; 
+    gymsOwned: string[]; 
     createdAt: Date;
     updatedAt: Date;
-    deck: Deck;
-    GymsWon: string[];
+}
+export interface new_Account {
+    username: string;
+    passwordHash: string;
+    level: number;
+    inventory: backend_Card[];  
+    primaryDeck: backend_Card[]; 
+    gymsOwned: string[]; 
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-interface Deck {
-    cards: Card[];
+export interface backend_Card {
+    id: number,
+    quantity: number,
 }
 
-interface Card {
-    id: string;
-    element: string;
-    isPowerCard: boolean;
+export interface frontend_Card {
+    id: number,
+    type: string,
+    rank: number,
+    color: string,
+    fx: string,
 }
