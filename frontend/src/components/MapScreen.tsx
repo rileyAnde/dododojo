@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Swords, X, BarChart3} from 'lucide-react';
+import { Swords, X} from 'lucide-react';
 
 interface MapScreenProps {
   onReturnHome?: () => void;
@@ -94,8 +94,8 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
                 onClick={() => setShowAdvantage(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
               >
-                <BarChart3 size={20} />
-                Advantage
+ 
+                Element Advantage
               </button>
             <button
               onClick={onReturnHome}
@@ -197,14 +197,15 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
       {/* Advantage chart modal */}
       {showAdvantage && (
 
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative">
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-blue-900 via-gray-600 to-red-900 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative backdrop-blur-sm">
             <button
               onClick={() => setShowAdvantage(false)}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition"
+              className="absolute top-4 right-4 text-white hover:text-red-300 transition"
             >
-              <X size={32} />
+              <X size={24} />
             </button>
+
 
             <h2 className="text-3xl font-bold text-white text-center mb-4">Element Advantages</h2>
 
