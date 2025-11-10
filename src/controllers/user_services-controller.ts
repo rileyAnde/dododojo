@@ -67,11 +67,14 @@ export const addUserService = async (req: Request, res: Response) => {
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(newAccount)
     });
+    console.log('New account created:', newAccount);
+    const text = await rustResponse.text();
+    console.log(text);
+    console.log('rustResponse:', rustResponse);
+
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error with processing, try again' });
     }
-    console.log('New account created:', newAccount);
-    console.log('rustResponse:', rustResponse);
     return res.status(200).json({ message: 'Account created successfully' });
     
 };
