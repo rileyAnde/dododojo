@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Swords, X, BarChart3 } from 'lucide-react';
+import { Swords, X} from 'lucide-react';
 
 interface MapScreenProps {
   onReturnHome?: () => void;
@@ -23,11 +23,11 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
   // - FIRE is lined up on the lava section near the bottom-center.
   // Adjust numbers live if you want finer placement.
   const gyms: Gym[] = [
-    { id: 'fire-dojo',   name: 'Fire Dojo',   element: 'fire',  x: 58, y: 78, icon: '/fire_placeholder.png' },
-    { id: 'water-temple',name: 'Water Temple',element: 'water', x: 55, y: 18, icon: '/water_placeholder.png' },
-    { id: 'ice-fortress',name: 'Ice Fortress',element: 'ice',   x: 88, y: 48, icon: '/ice_placeholder.png' },
-    { id: 'earth-shrine',name: 'Earth Shrine',element: 'earth', x: 23, y: 62, icon: '/earth_placeholder.png' },
-    { id: 'air-peak',    name: 'Air Peak',    element: 'air',   x: 30, y: 18, icon: '/air_placeholder.png' },
+    { id: 'fire-dojo', name: 'Fire Dojo', element: 'fire', x: 58, y: 78, icon: '/fire_placeholder.png' },
+    { id: 'water-temple', name: 'Water Temple', element: 'water', x: 55, y: 18, icon: '/water_placeholder.png' },
+    { id: 'ice-fortress', name: 'Ice Fortress', element: 'ice', x: 88, y: 48, icon: '/ice_placeholder.png' },
+    { id: 'earth-shrine', name: 'Earth Shrine', element: 'earth', x: 23, y: 62, icon: '/earth_placeholder.png' },
+    { id: 'air-peak', name: 'Air Peak', element: 'air', x: 30, y: 18, icon: '/air_placeholder.png' },
   ];
 
   const handleGymClick = (gym: Gym) => setSelectedGym(gym);
@@ -51,8 +51,8 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
                 onClick={() => setShowAdvantage(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
               >
-                <BarChart3 size={20} />
-                Advantage
+                
+                Element Advantages
               </button>
               <button
                 onClick={onReturnHome}
@@ -151,13 +151,13 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
 
       {/* Advantage chart modal */}
       {showAdvantage && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-blue-900 via-gray-600 to-red-900 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative backdrop-blur-sm">
             <button
               onClick={() => setShowAdvantage(false)}
               className="absolute top-4 right-4 text-white hover:text-gray-300 transition"
             >
-              <X size={32} />
+              <X size={28} />
             </button>
             <h2 className="text-3xl font-bold text-white text-center mb-4">Element Advantages</h2>
             <div className="flex justify-center">

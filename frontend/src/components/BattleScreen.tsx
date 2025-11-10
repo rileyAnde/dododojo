@@ -15,7 +15,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   // Mock player data
   const [playerName] = useState(propPlayerName || 'Player1');
   const [enemyName] = useState('Sensei');
-  
+
   // Game state
   const [battle] = useState(() => new Battle(playerName, enemyName));
   const [gamePhase, setGamePhase] = useState<'loading' | 'selection' | 'reveal' | 'result'>('loading');
@@ -29,6 +29,8 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
   const [enemyFullDeck, setEnemyDeck] = useState<Card[]>([]);
   const [enemyHand, setEnemyHand] = useState<Card[]>([]);
+  const [showAdvantage, setShowAdvantage] = useState(false);
+
 
   //draw cards from deck to hand
   const drawCardsToHand = (deck: Card[], amount: number) => {
@@ -45,7 +47,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         const cards = await loadCardsFromXML();
         const fullPlayerDeck = createPlayerDeck(cards); // create / pull deck
         const [initialHand, remainingDeck] = drawCardsToHand(fullPlayerDeck, 5);
-        
+
         //make enemy hand / deck for bot
         const EnemyDeck = createEnemyDeck(cards, 'fire', 30)
         const [initEnemyHand, remEnemyDeck] = drawCardsToHand(EnemyDeck, 5);
@@ -99,6 +101,16 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       case 'earth': return '/EarthDojo.png';
       default: return '/dojo.png';
     }
+  };
+  const toggleAdvantageTable = () => {
+    setShowAdvantage(!showAdvantage);
+  };
+  const dojoGradients = {
+    fire: "from-red-900 via-orange-600 to-yellow-500",
+    water: "from-blue-900 via-cyan-700 to-sky-500",
+    earth: "from-green-500 via-yellow-500 to-brown-500",
+    air: "from-gray-930 via-blue-200 to-gray-500",
+    ice: "from-blue-500 via-blue-300 to-blue-500"
   };
 
   useEffect(() => {
@@ -211,10 +223,10 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     if (gamePhase !== 'selection') {
       return;
     }
-    
+
     //remove the selected card from hand
     const newHand = playerHand.filter(c => c.id !== card.id);
-    
+
     //draw a new card from the deck if available TODO: shuffle at end of deck or draw game?
     if (playerFullDeck.length > 0) {
       const [drawnCards, remainingDeck] = drawCardsToHand(playerFullDeck, 1);
@@ -309,114 +321,114 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     );
   }
 
-// rendering stacks
-const renderStacks = (stacks: Record<string, Card[]>) => {
-  const types = Object.keys(stacks);
-  if (types.length === 0) return null;
+  // rendering stacks
+  const renderStacks = (stacks: Record<string, Card[]>) => {
+    const types = Object.keys(stacks);
+    if (types.length === 0) return null;
 
-  return (
-    <div className="flex gap-2">
-      {types.map((type) => (
-        <div key={type} className="flex flex-col items-center">
-          <div className="flex flex-col items-center">
-            {stacks[type].map((card, i) => (
-              <div
-                key={card.id}
-                className={i > 0 ? '-mt-20' : ''}
-                style={{ zIndex: 10 + stacks[type].length + i }}
-              >
-                <CardDisplay card={card} size="xsmall" />
-              </div>
-            ))}
+    return (
+      <div className="flex gap-2">
+        {types.map((type) => (
+          <div key={type} className="flex flex-col items-center">
+            <div className="flex flex-col items-center">
+              {stacks[type].map((card, i) => (
+                <div
+                  key={card.id}
+                  className={i > 0 ? '-mt-20' : ''}
+                  style={{ zIndex: 10 + stacks[type].length + i }}
+                >
+                  <CardDisplay card={card} size="xsmall" />
+                </div>
+              ))}
+            </div>
           </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderfx = () => {
+    const fxElements = [];
+    const effects = { ...battle.previous_results };
+    if (gamePhase === 'selection') {
+      // we should use the results labeled "next" instead during selection phase
+      effects.typeChange = effects.typeChangeNext;
+      effects.blockedTypesActive = effects.blockedTypesNext;
+      effects.ruleLowerWins = effects.ruleLowerWinsNext;
+      effects.modifyPlayer = effects.modifyNext.player;
+      effects.modifyEnemy = effects.modifyNext.enemy;
+    }
+
+    if (effects.typeChange.size !== 0) {
+      fxElements.push(
+        <div key="typeChange" className="flex items-center gap-2 mb-2">
+          {[...effects.typeChange.entries()].map(([original, changed]) => (
+            <div key={original} className="flex flex-row items-center text-white justify-center text-xlg font-bold" alt-text={`Type changed from ${original} to ${changed} for this round`}>
+              <img src={'/elementsymbols/' + original + '.png'} height='33%' width='33%' />
+              ➔
+              <img src={'/elementsymbols/' + changed + '.png'} height='33%' width='33%' />
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  );
-};
+      );
+    }
+    if (effects.discardOpponentColor) {
+      fxElements.push(
+        <div key="discardOpponentColor" className="flex items-center gap-2 mb-2">
+          <span className="text-white font-bold">Opponent Discarded:</span>
+          <span className="text-white">{effects.discardOpponentColor}</span>
+        </div>
+      );
+    }
 
-const renderfx = () => {
-  const fxElements = [];
-  const effects = { ...battle.previous_results};
-  if (gamePhase === 'selection') {
-    // we should use the results labeled "next" instead during selection phase
-    effects.typeChange = effects.typeChangeNext;
-    effects.blockedTypesActive = effects.blockedTypesNext;
-    effects.ruleLowerWins = effects.ruleLowerWinsNext;
-    effects.modifyPlayer = effects.modifyNext.player;
-    effects.modifyEnemy = effects.modifyNext.enemy;
-  }
-  
-  if (effects.typeChange.size !== 0) {
-    fxElements.push(
-      <div key="typeChange" className="flex items-center gap-2 mb-2">
-        {[...effects.typeChange.entries()].map(([original, changed]) => (
-          <div key={original} className="flex flex-row items-center text-white justify-center text-xlg font-bold" alt-text={`Type changed from ${original} to ${changed} for this round`}>
-            <img src={'/elementsymbols/'+original+'.png'} height='33%' width='33%'/>
-            ➔
-            <img src={'/elementsymbols/'+changed+'.png'} height='33%' width='33%'/>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  if (effects.discardOpponentColor) {
-    fxElements.push(
-      <div key="discardOpponentColor" className="flex items-center gap-2 mb-2">
-        <span className="text-white font-bold">Opponent Discarded:</span>
-        <span className="text-white">{effects.discardOpponentColor}</span>
-      </div>
-    );
-  }
+    if (effects.discardPlayerColor) {
+      fxElements.push(
+        <div key="discardPlayerColor" className="flex items-center gap-2 mb-2">
+          <span className="text-white font-bold">You Discarded:</span>
+          <span className="text-white">{effects.discardPlayerColor}</span>
+        </div>
+      );
+    }
 
-  if (effects.discardPlayerColor) {
-    fxElements.push(
-      <div key="discardPlayerColor" className="flex items-center gap-2 mb-2">
-        <span className="text-white font-bold">You Discarded:</span>
-        <span className="text-white">{effects.discardPlayerColor}</span>
-      </div>
-    );
-  }
+    if (effects.modifyPlayer !== 0) {
+      fxElements.push(
+        <div key="modifyPlayer" className="flex items-center justify-start gap-2 mb-2">
+          <img src='/playerplus2.png' width='33%' height="33%" alt="Your card's rank is increased by 2 for this turn!" />
+        </div>
+      );
+    }
 
-  if (effects.modifyPlayer !== 0) {
-    fxElements.push(
-      <div key="modifyPlayer" className="flex items-center justify-start gap-2 mb-2">
-        <img src='/playerplus2.png' width='33%' height="33%" alt="Your card's rank is increased by 2 for this turn!" />
-      </div>
-    );
-  }
+    if (effects.modifyEnemy !== 0) {
+      fxElements.push(
+        <div key="modifyEnemy" className="flex items-center justify-end gap-2 mb-2">
+          <img src='/enemyplus2.png' width='33%' height="33%" alt="Your opponent's card's rank is increased by 2 for this turn!" />
+        </div>
+      );
+    }
 
-  if (effects.modifyEnemy !== 0) {
-    fxElements.push(
-      <div key="modifyEnemy" className="flex items-center justify-end gap-2 mb-2">
-        <img src='/enemyplus2.png'  width='33%' height="33%" alt="Your opponent's card's rank is increased by 2 for this turn!" />
-      </div>
-    );
-  }
+    if (effects.ruleLowerWins) {
+      fxElements.push(
+        <div key="ruleLowerWins" className="flex items-center justify-center gap-2 mb-2">
+          <img src='/lw.png' width='33%' height="33%" alt="Golf rules! The lower card wins this round" />
+        </div>
+      );
+    }
 
-  if (effects.ruleLowerWins) {
-    fxElements.push(
-      <div key="ruleLowerWins" className="flex items-center justify-center gap-2 mb-2">
-        <img src='/lw.png'  width='33%' height="33%" alt="Golf rules! The lower card wins this round" />
-      </div>
-    );
-  }
+    if (effects.blockedTypesActive.size > 0) {
+      fxElements.push(
+        <div key="blockedTypes" className="flex items-center justify-center gap-2 mb-2">
+          {[...effects.blockedTypesActive].map((type) => (
+            <div key={type} className="flex flex-row items-center text-white justify-center text-xlg font-bold" alt-text={`Type ${type} is blocked for this round`}>
+              <img src={'/elementsymbols/' + type + '.png'} height='33%' width='33%' />
+              <span className="ml-1">is Blocked</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
 
-  if (effects.blockedTypesActive.size > 0) {
-    fxElements.push(
-      <div key="blockedTypes" className="flex items-center justify-center gap-2 mb-2">
-        {[...effects.blockedTypesActive].map((type) => (
-          <div key={type} className="flex flex-row items-center text-white justify-center text-xlg font-bold" alt-text={`Type ${type} is blocked for this round`}>
-            <img src={'/elementsymbols/'+type+'.png'} height='33%' width='33%'/>
-            <span className="ml-1">is Blocked</span>
-          </div>
-        ))}
-      </div>
-    );
+    return fxElements
   }
-
-  return fxElements
-}
 
   return (
     <div className="min-h-screen p-6 bg-transparent">
@@ -459,13 +471,13 @@ const renderfx = () => {
             <div className="relative">
               {renderStacks(playerWonStacks)}
             </div>
-        </div>
-
-        <div className="absolute top-24 right-2 z-100">
-          <div className="relative">
-            {renderStacks(enemyWonStacks)}
           </div>
-        </div>
+
+          <div className="absolute top-24 right-2 z-100">
+            <div className="relative">
+              {renderStacks(enemyWonStacks)}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -481,17 +493,17 @@ const renderfx = () => {
               </div>
             )}
             <div className="fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
-                <span className="text-white text-opacity-50">Select your card</span>
+              <span className="text-white text-opacity-50">Select your card</span>
             </div>
             {/* row for character sprites */}
-          <div className="z-20 flex fixed bottom-20 left-40 flex-row items-center">
-            <Character
-              color='RED'
-              type='jay'
+            <div className="z-20 flex fixed bottom-20 left-40 flex-row items-center">
+              <Character
+                color='RED'
+                type='jay'
                 flipped='y'
                 size='large'
               ></Character>
-          </div>
+            </div>
           </div>
           {/* placeholder for active effect icons */}
           <div className="flex flex-col items-center">
@@ -505,9 +517,9 @@ const renderfx = () => {
             ) : (
               <div></div>
             )}
-              <div className="z-0 fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
-                <span className="text-white text-opacity-50">Opponent's card</span>
-              </div>
+            <div className="z-0 fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
+              <span className="text-white text-opacity-50">Opponent's card</span>
+            </div>
           </div>
           {/* display enemy sprite */}
           <div className="z-20 flex fixed bottom-20 right-40 flex-row items-center">
@@ -517,7 +529,7 @@ const renderfx = () => {
               flipped='n'
               size='large'
             ></Character>
-            </div>
+          </div>
         </div>
 
         {gamePhase === 'result' && roundWinner && (
@@ -551,9 +563,43 @@ const renderfx = () => {
             ))}
           </div>
         </div>
+      )} {/* Advantage Table Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button
+          onClick={toggleAdvantageTable}
+          className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold shadow-lg hover:scale-105 transition"
+        >
+          Element Advantage Chart
+        </button>
+      </div>
+      {/* pop up display */}
+      {showAdvantage && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-sm"
+          onClick={toggleAdvantageTable} // closes popup when clicking outside
+        >
+          <div
+            className={`relative p-6 rounded-3xl shadow-2xl border border-white/20 bg-gradient-to-br ${dojoGradients[propGymElement as keyof typeof dojoGradients] || 'from-slate-800 to-slate-900'
+              }`}
+            onClick={(e) => e.stopPropagation()} // prevent close when clicking on image
+          >
+            <img
+              src="/advantage.png" // replace with your actual PNG file name
+              alt="Element Advantage Table"
+              className="w-[600px] max-w-full rounded-2xl shadow-lg border-2 border-white/30"
+            />
+            <button
+              onClick={toggleAdvantageTable}
+              className="absolute top-3 right-3 text-white text-2xl font-bold hover:text-red-400 transition"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
+
 };
 
 export default CardJitsuBattle;
