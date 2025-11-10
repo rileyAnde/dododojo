@@ -1,7 +1,6 @@
 use rusqlite::{Connection, Result as SqlResult};
 use crate::data_structs::{GetUser, CreateUser};
-use serde_json;
-
+use std::panic::Location;
 // Function to get all users from the database
 pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     // Use explicit column names instead of SELECT *
@@ -25,7 +24,7 @@ pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     for user in users {
         user_list.push(user?);
     }
-    
+    //println!("userlist: {:?}", user_list);
     Ok(user_list)
 }
 
@@ -68,6 +67,7 @@ pub async fn create_user_query(conn: &Connection, user: CreateUser) -> SqlResult
 
 
 pub async fn update_user_query(conn: &Connection, user: GetUser) -> SqlResult<()> {
+    println!("\nUpdating user in queries: {:?}", user);
     let id = user.id;
     let username = user.username;
     let password = user.password;
@@ -78,9 +78,9 @@ pub async fn update_user_query(conn: &Connection, user: GetUser) -> SqlResult<()
 
     conn.execute(
         "UPDATE users 
-        SET Password = ?1, Level = ?2, Inventory = ?3, Primary_Deck = ?4, Gyms_Owned = ?5, Updated_At = datetime('now') 
-        WHERE Username = ?6",
-        rusqlite::params![password, level, inventory, primary_deck, gyms_owned, username],
+        SET Username = ?1, Password = ?2, Level = ?3, Inventory = ?4, Primary_Deck = ?5, Gyms_Owned = ?6, Updated_At = datetime('now') 
+        WHERE ID = ?7",
+        rusqlite::params![username, password, level, inventory, primary_deck, gyms_owned, id],
     )?;
 
     Ok(())
