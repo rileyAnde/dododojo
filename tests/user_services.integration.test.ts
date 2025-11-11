@@ -20,10 +20,7 @@ describe('User Services Routes - Integration Tests (real Rust server)', () => {
     // POST /users
     //
     it('should create a user successfully', async () => {
-        mockHash.mockReturnValue('hashedpassword');
-
         const newAccount = { username: 'han101', passwordHash: 'plaintextpassword' };
-
         const res = await request(app).post('/users').send({ account: newAccount });
         expect(res.status).toBe(200);
         expect(res.body.message).toBe('Account created successfully');
@@ -35,23 +32,22 @@ describe('User Services Routes - Integration Tests (real Rust server)', () => {
     //
     it('should return user data from Rust server', async () => {
         mockCompare.mockReturnValue(true);
-
-        const res = await request(app).get('/user/1').send({});
+        const res = await request(app).get('/user/11').send({});
         expect(res.status).toBe(200);
-        expect(res.body.account.username).toBe('seeduser');
+        expect(res.body.account.username).toBe('han101');
     });
 
     //
-    // PUT /user/:username
+    // PUT /user/:userid 
     //
     it('should update successfully', async () => {
         const res = await request(app)
-            .put('/user/seeduser')
+            .put('/user/11')
             .send({
                 updateData: {
-                    id: 1,
-                    user_name: 'seeduser',
-                    password: "hashedpassword",
+                    id: 11,
+                    username: 'han101',
+                    password: "plaintextpassword",
                     level: 10,
                     inventory: [
                         { id: 1, type: "attack", rank: 1, color: "red", fx: "fire" }

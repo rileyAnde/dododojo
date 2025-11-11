@@ -15,20 +15,25 @@ const hashPassword = (password: string): string => {
 //GET /user/:username - retrieve existing user data
 export const getUserServices = async (req: Request, res: Response) => {
     //check for required data
-    if (!req.params.userId) {
+    if (!req.params.username) {
         return res.status(400).json({ message: 'Username is required' });
     }
-    const userId = req.params.userId;
+    const username = req.params.username;
     //fetch user data from Rust service
-    const rustResponse = await fetch(`http://localhost:8080/user/${userId}`);
+    const rustResponse = await fetch(`http://localhost:8080/user/${username}`);
     //handle Rust service not ok response
+    console.log('Hi Hannah from getUserServices');
+    console.log('Rust service response:', rustResponse);
+    const rustData = await rustResponse.json();
+    console.log('Rust service response:', rustData);
     if (rustResponse.status == 401) {
         return res.status(401).json({ message: 'Username Not Found' });
     } if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
-    const rustData = await rustResponse.json();
-    console.log('Rust service response:', rustData);
+    if (bcrypt.compareSync(req.body?.account?.passwordHash || '', rustData.password) === false) {
+        return res.status(401).json({ message: 'Incorrect Password' });
+    }
     //TODO: Confirm we don't need to process inventory and deck data further
     const accountData: existing_Account = {
         id: rustData.id,
@@ -38,8 +43,6 @@ export const getUserServices = async (req: Request, res: Response) => {
         inventory: rustData.inventory,
         primaryDeck: rustData.primary_deck,
         gymsOwned: JSON.parse(rustData.gyms_owned),
-        createdAt: new Date(rustData.created_at),
-        updatedAt: new Date(rustData.updated_at),
     };
     return res.status(200).json({ account: accountData });
 };
@@ -51,16 +54,14 @@ export const addUserService = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Username and password are required' });
     }
     let passedInfo = req.body.account;
-    const newAccount:new_Account = {
-    username: passedInfo.username,
-    passwordHash: hashPassword(passedInfo.passwordHash),
-    level: 1,
-    //TODO: initialize inventory and deck properly
-    inventory: [],
-    primaryDeck: [],
-    gymsOwned: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+
+    const newAccount :new_Account = {
+        Username: passedInfo.username,
+        Password: hashPassword(passedInfo.passwordHash),
+        // level: 1,
+        // inventory: [],
+        // primaryDeck: [],
+        // gymsOwned: [],
     }
     const rustResponse = await fetch(`http://localhost:8080/createuser`,{
         method: 'POST',
@@ -102,23 +103,21 @@ export const updateUserService = async (req: Request, res: Response) => {
     const newInventory: backend_Card[] = compressCards(req.body.updateData.inventory);
     const newPrimaryDeck: backend_Card[] = compressCards(req.body.updateData.primaryDeck);
     //construct updated account data
-    const updateData: existing_Account = {
-        id: Number(req.params.userId),
-        username: req.body.updateData.username,
-        passwordHash: req.body.updateData.passwordHash,
-        level: Number(req.body.updateData.level),
-        inventory: newInventory,
-        primaryDeck: newPrimaryDeck,
-        gymsOwned: req.body.updateData.gymsOwned,
-        createdAt: new Date(req.body.updateData.createdAt),
-        updatedAt: new Date(),
+    const updateData: new_Account = {
+        Username: req.body.updateData.username,
+        Password: req.body.updateData.passwordHash,
+        Level: Number(req.body.updateData.level),
+        Inventory: newInventory,
+        primary_deck: newPrimaryDeck,
+        gyms_owned: req.body.updateData.gymsOwned,
     }
     //send update to Rust service
-    const rustResponse = await fetch(`http://localhost:8080/updateuser/${req.params.userid}`,{
+    const rustResponse = await fetch(`http://localhost:8080/updateuser/${req.params.userId}`,{
         method: 'PUT',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData)
     });
+    console.log('HANNAH LOOK:', rustResponse);
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error updating account' });
     }
