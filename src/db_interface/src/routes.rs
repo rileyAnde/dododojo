@@ -9,12 +9,12 @@ use serde_json::Value;
 //TODO change from passing the json value to the queries to transoforming
 // the json into the CreateUser and GetUser structs and passing those to the queries
 
-#[get("/user/{id}")]
-async fn get_one_user_http(data: web::Data<AppState>, path: web::Path<i32>) -> impl Responder {
+#[get("/user/{username}")]
+async fn get_one_user_http(data: web::Data<AppState>, path: web::Path<String>) -> impl Responder {
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
-    let id = path.into_inner();
+    let username = path.into_inner();
 
-    match queries::get_one_user_query(&conn, id).await {
+    match queries::get_one_user_query(&conn, username).await {
         Ok(user) => HttpResponse::Ok().json(user),
         Err(e) => HttpResponse::InternalServerError()
             .body(format!("Database error: {}", e)),
@@ -86,7 +86,6 @@ async fn update_user_http(data: web::Data<AppState>, path: web::Path<i32>, new_u
 }
 
 
-
 #[delete("/deleteuser/{id}")]
 async fn delete_user_http(data: web::Data<AppState>, path: web::Path<i32>) -> impl Responder {
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
@@ -111,24 +110,7 @@ async fn get_users_http(data: web::Data<AppState>) -> impl Responder {
     }
 }
 
-#[get("/login")]
-async fn login_http(data: web::Data<AppState>, json: web::Json<Value>) -> impl Responder {
-    let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
-    let json_value = json.into_inner();
 
-    let current_user = queries::get_one_user_query(&conn, json_value["username"].as_i64().unwrap_or(0) as i32).await;
-
-    //data from frontend of what user put in form
-    let user = LoginInfo {
-        username: json_value["username"].as_str().unwrap_or_default().to_string(),
-        password: json_value["password"].as_str().unwrap_or_default().to_string(),
-    };
-    match queries::login_query(&conn).await {
-        Ok(_) => HttpResponse::Ok().body("Login successful"),
-        Err(e) => HttpResponse::InternalServerError()
-            .body(format!("Database error: {}", e)),
-    }
-}
 // #[get("/upload_cards")]
 // async fn upload_cards_http(data: web::Data<AppState>, json: web::Json<Value>) -> impl Responder {
 //     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection

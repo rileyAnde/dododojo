@@ -28,10 +28,10 @@ pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     Ok(user_list)
 }
 
-pub async fn get_one_user_query(conn: &Connection, id: i32) -> SqlResult<GetUser> {
-    let mut stmt = conn.prepare("SELECT * FROM users WHERE id = ?1")?;
+pub async fn get_one_user_query(conn: &Connection, username: String) -> SqlResult<GetUser> {
+    let mut stmt = conn.prepare("SELECT * FROM users WHERE Username = ?1")?;
 
-    let user = stmt.query_row([id], |row| {
+    let user = stmt.query_row([username], |row| {
         Ok(GetUser {
             id: row.get("id")?,
             username: row.get("Username")?,
@@ -91,10 +91,5 @@ pub async fn delete_user_query(conn: &Connection, id: i32) -> SqlResult<()> {
         "DELETE FROM users WHERE id = ?1",
         rusqlite::params![id],
     )?;
-    Ok(())
-}
-
-pub async fn login_query(conn: &Connection) -> SqlResult<()> {
-    // Implement login logic here
     Ok(())
 }

@@ -40,11 +40,6 @@ pub struct UpdateUser {
     pub gyms_owned: String, // Array<String> JSON array of Gym names
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct LoginInfo {
-    pub username: String,
-    pub password: String,
-}
 
 // #[derive(Debug, Serialize, Deserialize)]
 // pub struct UpdateUser {
