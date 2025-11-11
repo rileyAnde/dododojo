@@ -3,7 +3,6 @@ import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
 import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
 import Character from './character';
-import { url } from 'inspector';
 
 interface BattleScreenProps {
   onReturnHome?: () => void;

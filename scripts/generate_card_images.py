@@ -189,7 +189,7 @@ def generate_image_for_card(card, base_img, masks, symbols_cache, font_path):
             symbols_cache[card.get('type')] = sym
 
         # resize symbol to 70% of card width (keeps earlier larger-symbol preference)
-        sw = int(w * 0.7)
+        sw = int(w * 0.80)
         sh = int(sw * sym.height / max(1, sym.width))
         symr = sym.resize((sw, sh), Image.LANCZOS)
         out.paste(symr, ((w - sw) // 2, (h - sh) // 2), symr)
