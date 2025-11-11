@@ -1,6 +1,5 @@
 use rusqlite::{Connection, Result as SqlResult};
 use crate::data_structs::{GetUser, CreateUser};
-use std::panic::Location;
 // Function to get all users from the database
 pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     // Use explicit column names instead of SELECT *

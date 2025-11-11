@@ -1,8 +1,6 @@
-use std::panic::Location;
-
 use actix_web::{post, put, delete, get, web, HttpResponse, Responder};
 
-use crate::data_structs::{AppState, GetUser, CreateUser, LoginInfo};
+use crate::data_structs::{AppState, GetUser, CreateUser};
 use crate::queries;
 use serde_json::Value;
 
@@ -27,7 +25,7 @@ async fn create_user_http(data: web::Data<AppState>, user_data: web::Json<Value>
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
     let json_value = user_data.into_inner();
 
-    println!("Received create_user request with data: {:?}", json_value);
+    //println!("Received create_user request with data: {:?}", json_value);
     
     let user = CreateUser { 
         username: json_value["Username"].as_str().unwrap_or_default().to_string(),
@@ -52,12 +50,12 @@ async fn update_user_http(data: web::Data<AppState>, path: web::Path<i32>, new_u
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
     let id = path.into_inner();
 
-    let existing_user = match queries::get_one_user_query(&conn, id).await {
+    let existing_user = match queries::get_one_user_query(&conn, 
+        new_user_data["Username"].as_str().unwrap_or_default().to_string()).await {
         Ok(user) => user,
         Err(e) => return HttpResponse::InternalServerError()
             .body(format!("Database error: {}", e)),
     };
-    println!("\nExisting user data: {:?}", existing_user);
 
     let json_value = new_user_data;
     println!("\njson_value : {:?}", json_value);
