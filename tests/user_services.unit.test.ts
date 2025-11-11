@@ -47,14 +47,13 @@ describe('User Services Routes - Unit Tests (fetch mocked)', () => {
     });
 
     //
-    // GET /user/:userid
+    // GET /user/:username
     //
-    describe('GET /user/:userid', () => {
-        it('should return 404 if userid is missing', async () => {
+    describe('GET /user/:username', () => {
+        it('should return 404 if username is missing', async () => {
             const res = await request(app).get('/user/').send({});
             expect(res.status).toBe(404);
         });
-
         it('should return 200 when data correct', async () => {
             mockCompare.mockReturnValue(true);
             (global.fetch as jest.Mock).mockResolvedValue({
@@ -72,12 +71,26 @@ describe('User Services Routes - Unit Tests (fetch mocked)', () => {
                     updated_at: new Date().toISOString()
                 })
             });
-
             const res = await request(app).get('/user/1').send({});
             expect(res.status).toBe(200);
             expect(res.body.account.username).toBe('seeduser');
         });
+        it('should return 401 when password is wrong', async () => {
+            mockCompare.mockReturnValue(false);
 
+            (global.fetch as jest.Mock).mockResolvedValue({
+            ok: true,
+            status: 200,
+            json: async () => ({ password: 'hashedpassword' })
+            });
+
+            const res = await request(app)
+            .get('/user/seeduser')
+            .send({ password: 'wrongpass' });
+            
+            expect(res.status).toBe(401);
+            expect(res.body.message).toBe('Incorrect Password');
+        });
         it('should return 401 when username not found', async () => {
             (global.fetch as jest.Mock).mockResolvedValue({ ok: false, status: 401 });
 
