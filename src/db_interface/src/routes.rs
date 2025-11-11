@@ -49,13 +49,16 @@ async fn create_user_http(data: web::Data<AppState>, user_data: web::Json<Value>
 async fn update_user_http(data: web::Data<AppState>, path: web::Path<i32>, new_user_data: web::Json<Value>) -> impl Responder {
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
     let id = path.into_inner();
+    let existing_user_data = new_user_data.clone();
 
-    let existing_user = match queries::get_one_user_query(&conn, 
-        new_user_data["Username"].as_str().unwrap_or_default().to_string()).await {
+    println!("\n existing user {:?}", existing_user_data);
+    let existing_user = match queries::get_one_user_query(&conn,
+        existing_user_data["Username"].as_str().unwrap_or_default().to_string()).await {
         Ok(user) => user,
         Err(e) => return HttpResponse::InternalServerError()
             .body(format!("Database error: {}", e)),
     };
+    println!("\n existing user from db {:?}", existing_user);
 
     let json_value = new_user_data;
     println!("\njson_value : {:?}", json_value);
@@ -73,6 +76,7 @@ async fn update_user_http(data: web::Data<AppState>, path: web::Path<i32>, new_u
 
     println!("\nReceived update_user request with data: {:?}", user);
     if existing_user == user {
+        //println!("\nNo changes detected, user not updated");
         HttpResponse::Ok().body("No changes detected, user not updated")
     } else {
         match queries::update_user_query(&conn, user).await {
