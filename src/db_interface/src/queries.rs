@@ -7,7 +7,7 @@ pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     
     let users = stmt.query_map([], |row| {
         Ok(GetUser {
-            id: row.get("id")?,
+            id: row.get("ID")?,
             username: row.get("Username")?,
             password: row.get("Password")?,
             level: row.get("Level")?,
@@ -84,6 +84,27 @@ pub async fn update_user_query(conn: &Connection, user: GetUser) -> SqlResult<()
 
     Ok(())
 }
+
+pub async fn delete_user_check_username_query(conn: &Connection, id: i32) -> SqlResult<GetUser> {
+    let mut stmt = conn.prepare("SELECT * FROM users WHERE ID = ?1")?;
+
+    let user = stmt.query_row([id], |row| {
+        Ok(GetUser {
+            id: row.get("ID")?,
+            username: row.get("Username")?,
+            password: row.get("Password")?,
+            level: row.get("Level")?,
+            inventory: row.get("Inventory")?,
+            primary_deck: row.get("Primary_Deck")?,
+            gyms_owned: row.get("Gyms_Owned")?,
+            created_at: row.get("Created_At")?,
+            updated_at: row.get("Updated_At")?,
+        })
+    })?;
+    
+    Ok(user)
+}
+
 
 pub async fn delete_user_query(conn: &Connection, id: i32) -> SqlResult<()> {
     conn.execute(

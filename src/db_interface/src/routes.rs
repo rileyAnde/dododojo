@@ -93,6 +93,11 @@ async fn delete_user_http(data: web::Data<AppState>, path: web::Path<i32>) -> im
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
     let id = path.into_inner();
 
+    let user = match queries::delete_user_check_username_query(&conn, id).await {
+        Ok(user) => user,
+        Err(_) => return HttpResponse::Ok().body("User not found"),
+    };
+
     match queries::delete_user_query(&conn, id).await {
         Ok(_) => HttpResponse::Ok().body("User successfully deleted"),
         Err(e) => HttpResponse::InternalServerError()
