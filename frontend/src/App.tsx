@@ -22,7 +22,7 @@ const CardJitsuGame: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [accounts, setAccounts] = useState<User[]>([]);
   const [selectedGym, setSelectedGym] = useState<string>('fire');
-
+  const [conqueredGyms, setConqueredGyms] = useState<Set<string>>(new Set());
 
   // connect this to the backend 
   const handleLogin = () => {
@@ -153,12 +153,18 @@ const CardJitsuGame: React.FC = () => {
     setPassword('');
     setCurrentPage('login');
   };
+
   if (currentPage === 'battle') {
     return (
-      <BattleScreen onReturnHome={() => setCurrentPage('home')}
-      playerName={user?.username} 
-      gymElement={selectedGym}/>
-    )
+      <BattleScreen 
+        onReturnHome={() => setCurrentPage('home')}
+        playerName={user?.username} 
+        gymElement={selectedGym}
+        onVictory={(element) => {
+          setConqueredGyms(prev => new Set(prev).add(element));
+          }}
+        />
+    );
   }
 
   if (currentPage === 'inventory') {
@@ -169,15 +175,17 @@ const CardJitsuGame: React.FC = () => {
   }
 
   if (currentPage === 'map') {
-      return (
+    return (
       <MapScreen 
         onReturnHome={() => setCurrentPage('home')}
-        onEnterBattle={(gymName) => {
-          setSelectedGym(gymName);
+        onEnterBattle={(element) => {
+          setSelectedGym(element);
           setCurrentPage('battle');
         }}
+        playerName={user?.username}
+        conqueredGyms={conqueredGyms}
       />
-  );
+    );
   }
 
   // may need a way to log what user logins have been made!
