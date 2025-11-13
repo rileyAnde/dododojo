@@ -25,11 +25,11 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
   // - FIRE is lined up on the lava section near the bottom-center.
   // Adjust numbers live if you want finer placement.
   const gyms: Gym[] = [
-    { id: 'fire-dojo', name: 'Fire Dojo', element: 'fire', x: 58, y: 78, icon: '/fire_placeholder.png' },
+    { id: 'fire-dojo', name: 'Fire Dojo', element: 'fire', x: 55, y: 76, icon: '/fire_placeholder.png' },
     { id: 'water-temple', name: 'Water Temple', element: 'water', x: 55, y: 18, icon: '/water_placeholder.png' },
-    { id: 'ice-fortress', name: 'Ice Fortress', element: 'ice', x: 88, y: 48, icon: '/ice_placeholder.png' },
-    { id: 'earth-shrine', name: 'Earth Shrine', element: 'earth', x: 23, y: 62, icon: '/earth_placeholder.png' },
-    { id: 'air-peak', name: 'Air Peak', element: 'air', x: 30, y: 18, icon: '/air_placeholder.png' },
+    { id: 'ice-fortress', name: 'Ice Fortress', element: 'ice', x: 84, y: 48, icon: '/ice_placeholder.png' },
+    { id: 'earth-shrine', name: 'Earth Shrine', element: 'earth', x: 22, y: 57, icon: '/earth_placeholder.png' },
+    { id: 'air-peak', name: 'Air Peak', element: 'air', x: 25, y: 18, icon: '/air_placeholder.png' },
   ];
 
   const handleGymClick = (gym: Gym) => setSelectedGym(gym);
@@ -163,7 +163,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
       {/* Advantage chart modal */}
       {showAdvantage && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-blue-900 via-gray-600 to-red-900 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-blue-600 via-gray-400 to-red-500 rounded-3xl p-6 max-w-2xl w-full border-4 border-white shadow-2xl relative backdrop-blur-sm">
             <button
               onClick={() => setShowAdvantage(false)}
               className="absolute top-4 right-4 text-white hover:text-gray-300 transition"
