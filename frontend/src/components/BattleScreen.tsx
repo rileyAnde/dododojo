@@ -574,16 +574,16 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       {/* pop up display */}
       {showAdvantage && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-sm"
+          className="fixed inset-0 flex items-center justify-center z-[500] bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-sm"
           onClick={toggleAdvantageTable} // closes popup when clicking outside
         >
           <div
-            className={`relative p-6 rounded-3xl shadow-2xl border border-white/20 bg-gradient-to-br ${dojoGradients[propGymElement as keyof typeof dojoGradients] || 'from-slate-800 to-slate-900'
+            className={`relative p-6 rounded-3xl shadow-2xl border border-black/20 bg-gradient-to-br ${dojoGradients[propGymElement as keyof typeof dojoGradients] || 'from-slate-800 to-slate-900'
               }`}
-            onClick={(e) => e.stopPropagation()} // prevent close when clicking on image
+            onClick={(e) => e.stopPropagation()} // prevents close when clicking on image
           >
             <img
-              src="/advantage.png" // replace with your actual PNG file name
+              src="/advantage.png"
               alt="Element Advantage Table"
               className="w-[600px] max-w-full rounded-2xl shadow-lg border-2 border-white/30"
             />
