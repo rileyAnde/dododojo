@@ -20,4 +20,10 @@ CREATE TABLE IF NOT EXISTS Cards (
 	FX TEXT
 );
 
+CREATE TABLE IF NOT EXISTS Gyms (
+	Name TEXT PRIMARY KEY,
+	Owner_Username TEXT DEFAULT '',
+	Deck TEXT NOT NULL DEFAULT '[]' -- JSON: [card_id, ...]
+);
+
 -- Create table for gyms to hold what players deck

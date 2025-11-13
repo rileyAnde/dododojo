@@ -1,6 +1,6 @@
 use actix_web::{post, put, delete, get, web, HttpResponse, Responder};
 
-use crate::data_structs::{AppState, GetUser, CreateUser};
+use crate::data_structs::{AppState, GetUser, CreateUser, Gym};
 use crate::queries;
 use serde_json::Value;
 
@@ -93,7 +93,7 @@ async fn delete_user_http(data: web::Data<AppState>, path: web::Path<i32>) -> im
     let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
     let id = path.into_inner();
 
-    let user = match queries::delete_user_check_username_query(&conn, id).await {
+    let _user = match queries::delete_user_check_username_query(&conn, id).await {
         Ok(user) => user,
         Err(_) => return HttpResponse::Ok().body("User not found"),
     };
@@ -117,6 +117,42 @@ async fn get_users_http(data: web::Data<AppState>) -> impl Responder {
     }
 }
 
+#[get("/gyms")]
+async fn get_gyms_http(data: web::Data<AppState>) -> impl Responder {
+    let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
+
+    match queries::get_all_gyms_query(&conn).await {
+        Ok(gyms) => HttpResponse::Ok().json(gyms),
+        Err(e) => HttpResponse::InternalServerError()
+            .body(format!("Database error: {}", e)),
+    }
+}
+
+#[put("/gyms/{name}")]
+async fn update_gym_http(data: web::Data<AppState>, path: web::Path<String>, json: web::Json<Value>) -> impl Responder {
+    let conn = data.conn.lock().unwrap(); // Lock the mutex to get the connection
+    let name = path.into_inner();
+    let json_value = json.into_inner();
+
+    // Get the existing gym data
+    let existing_gym = match queries::get_one_gym_query(&conn, name.clone()).await {
+        Ok(gym) => gym,
+        Err(_) => return HttpResponse::NotFound().body("Gym not found"),
+    };
+
+    // Update the gym data with new values
+    let updated_gym = Gym {
+        name: existing_gym.name,
+        owner_username: json_value["Owner_Username"].as_str().unwrap_or_default().to_string(),
+        deck: json_value["Deck"].to_string(),
+    };
+
+    match queries::update_gym_query(&conn, updated_gym).await {
+        Ok(_) => HttpResponse::Ok().body("Gym updated successfully"),
+        Err(e) => HttpResponse::InternalServerError()
+            .body(format!("Database error: {}", e)),
+    }
+}
 
 // #[get("/upload_cards")]
 // async fn upload_cards_http(data: web::Data<AppState>, json: web::Json<Value>) -> impl Responder {

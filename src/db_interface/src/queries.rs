@@ -1,5 +1,5 @@
 use rusqlite::{Connection, Result as SqlResult};
-use crate::data_structs::{GetUser, CreateUser};
+use crate::data_structs::{GetUser, CreateUser, Gym};
 // Function to get all users from the database
 pub async fn get_all_users_query(conn: &Connection) -> SqlResult<Vec<GetUser>> {
     // Use explicit column names instead of SELECT *
@@ -111,5 +111,53 @@ pub async fn delete_user_query(conn: &Connection, id: i32) -> SqlResult<()> {
         "DELETE FROM users WHERE id = ?1",
         rusqlite::params![id],
     )?;
+    Ok(())
+}
+
+pub async fn get_all_gyms_query(conn: &Connection) -> SqlResult<Vec<Gym>> {
+    let mut stmt = conn.prepare("SELECT * FROM Gyms")?;
+    
+    let gyms = stmt.query_map([], |row| {
+        Ok(Gym {
+            name: row.get("Name")?,
+            owner_username: row.get("Owner_Username")?,
+            deck: row.get("Deck")?,
+        })
+    })?;
+    
+    let mut gym_list = Vec::new();
+    for gym in gyms {
+        gym_list.push(gym?);
+    }
+    Ok(gym_list)
+}
+
+
+pub async fn get_one_gym_query(conn: &Connection, name: String) -> SqlResult<Gym> {
+    let mut stmt = conn.prepare("SELECT * FROM Gyms WHERE Name = ?1")?;
+
+    let gym = stmt.query_row([name], |row| {
+        Ok(Gym {
+            name: row.get("Name")?,
+            owner_username: row.get("Owner_Username")?,
+            deck: row.get("Deck")?,
+        })
+    })?;
+    
+    Ok(gym)
+}
+
+pub async fn update_gym_query(conn: &Connection, gym: Gym) -> SqlResult<()> {
+    let name = gym.name;
+    let owner_username = gym.owner_username;
+    let deck = gym.deck;
+
+    conn.execute(
+        "UPDATE Gyms 
+        SET Owner_Username = ?1, Deck = ?2
+        WHERE Name = ?3",
+        rusqlite::params![owner_username, deck, name],
+    )?;
+
     Ok(())
 }
