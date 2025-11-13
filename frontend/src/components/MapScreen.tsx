@@ -4,6 +4,8 @@ import { Swords, X} from 'lucide-react';
 interface MapScreenProps {
   onReturnHome?: () => void;
   onEnterBattle?: (element: string) => void;
+  playerName?: string;
+  conqueredGyms?: Set<string>;
 }
 
 interface Gym {
@@ -15,7 +17,7 @@ interface Gym {
   icon: string; // public path to placeholder image
 }
 
-const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) => {
+const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, playerName='Player', conqueredGyms = new Set() }) => {
   const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
   const [showAdvantage, setShowAdvantage] = useState(false);
 
@@ -112,6 +114,15 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
       {selectedGym && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 max-w-md w-full border-4 border-white shadow-2xl relative">
+            
+            <p className="text-center text-cyan-300 mb-4">
+              Defended by: <span className="font-bold text-yellow-400">
+                {conqueredGyms.has(selectedGym.element) 
+                  ? playerName 
+                  : `Sensei ${selectedGym.element.charAt(0).toUpperCase() + selectedGym.element.slice(1)}`}
+              </span>
+            </p>
+
             <button
               onClick={() => setSelectedGym(null)}
               className="absolute top-4 right-4 text-white hover:text-gray-300 transition"

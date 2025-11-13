@@ -7,10 +7,13 @@ import Character from './character';
 interface BattleScreenProps {
   onReturnHome?: () => void;
   playerName?: string;
+  gymName?: string;
+  element?: string;
   gymElement?: string;
+  onVictory?: (element: string) => void;
 }
 
-const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName: propPlayerName, gymElement: propGymElement }) => {
+const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName: propPlayerName, gymElement: propGymElement, onVictory }) => {
   // Mock player data
   const [playerName] = useState(propPlayerName || 'Player1');
   const [enemyName] = useState('Sensei');
@@ -260,7 +263,11 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       else {
         setRoundWinner('Tie');
       }
-      setGameWinner(battle.checkwin());
+      const result = battle.checkwin();
+      setGameWinner(result);
+      if (result === 1 && onVictory && propGymElement) {
+        onVictory(propGymElement);
+      }
       setGamePhase('result');
     }, 2000);
   };
