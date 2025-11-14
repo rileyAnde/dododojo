@@ -63,6 +63,7 @@ export class Battle {
 
         this.globalTypeChangesActive = new Map(this.globalTypeChangesNext);
         this.globalTypeChangesNext.clear();
+        console.log(this.globalTypeChangesActive)
         
         this.lowerWinsActive = this.lowerWinsNext;
         this.lowerWinsNext = false;
@@ -80,12 +81,16 @@ export class Battle {
             eType = this.globalTypeChangesActive.get(eType)!;
 
         // apply temporary type conversions for this comparison
-        if (fxModifiers.typeChange.has(pType))
-            pType = fxModifiers.typeChange.get(pType)!;
-        if (fxModifiers.typeChange.has(eType))
-            eType = fxModifiers.typeChange.get(eType)!;
+        // if (fxModifiers.typeChange.has(pType))
+        //     pType = fxModifiers.typeChange.get(pType)!;
+        // if (fxModifiers.typeChange.has(eType))
+        //     eType = fxModifiers.typeChange.get(eType)!;
 
         // handle discard (more like a block currently) by color
+        //both played discarded, draw
+        if ((fxModifiers.discardOpponentColor && eCard.color === fxModifiers.discardOpponentColor) && (fxModifiers.discardPlayerColor && pCard.color === fxModifiers.discardPlayerColor)) {
+            return null
+        }
         if (fxModifiers.discardOpponentColor && eCard.color === fxModifiers.discardOpponentColor) {
             return pCard;
         }
@@ -94,12 +99,21 @@ export class Battle {
         }
 
         // handle played blocked types
+        if (this.blockedTypesThisTurn.has(pType) && this.blockedTypesThisTurn.has(eType)) {
+            this.blockedTypesThisTurn.delete(pType);
+            //draw
+            console.log('both played blocked')
+            return null;
+        }
+
         if (this.blockedTypesThisTurn.has(pType)) {
             this.blockedTypesThisTurn.delete(pType);
+            //player played a blocked type, enemy wins
             return eCard;
         }
         if (this.blockedTypesThisTurn.has(eType)) {
             this.blockedTypesThisTurn.delete(eType);
+            //enemy played a blocked type, player wins
             return pCard;
         }
 
@@ -279,18 +293,21 @@ export class Battle {
         return types.size >= 5 && colors.size >= 5;
     }
 
-    turn(pCard: Card, eCard: Card): void {
+    turn(pCard: Card, eCard: Card): Card | null {
         const won = this.winner(pCard, eCard);
         if (won) {
             if (won.id === pCard.id) {
                 const idx = this.types.get(pCard.type);
                 if (idx !== undefined) this.player_won[idx].push(pCard);
+                return pCard
             } else {
                 const idx = this.types.get(eCard.type);
                 if (idx !== undefined) this.enemy_won[idx].push(eCard);
+                return eCard
             }
         }
         this.checkwin();
+        return won
     }
 
     agent_turn(hand: Card[]): Card {

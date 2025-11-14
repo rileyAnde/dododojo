@@ -133,7 +133,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   }, [propGymElement]);
 
   // reusable card display component
-  const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large' }> = ({ card, size = 'large' }) => {
+  const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large'; blocked?: boolean }> = ({ card, size = 'large', blocked = false }) => {
     const [imageError, setImageError] = useState(false);
     const imagePath = `/cards/${card.id}.png`;
     // if large, set to biggest size, if small, set to small, if xsmall, set to smallest
@@ -155,6 +155,14 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         document.head.appendChild(s);
       }
     }, []);
+
+    const XOverlay = blocked ? (() => {
+      return (
+        <div className="flex justify-center" style={{position: 'absolute', width: '100%', height: '100%', border: '0.5rem solid red'}}>
+          <div className="flex" style={{position: 'absolute', top: '47.25%', backgroundColor: 'red', height: '0.5rem', color: 'red', width: '171%', transform: 'rotate(56.46deg)'}}></div>
+        </div>
+      );
+    })() : null;
 
     const ripple = card.fx ? (() => {
       const colorMap: Record<string, string> = {
@@ -209,6 +217,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     return (
       <div title={card.fx || ''} className={`relative ${sizeClasses} ${ringClass}`}>
         {ripple}
+        {XOverlay}
         <img
           src={imagePath}
           alt={`${card.type} card rank ${card.rank}`}
@@ -252,8 +261,8 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     setEnemyCard(randomEnemy);
     setGamePhase('reveal');
     setTimeout(() => {
-      battle.turn(card, randomEnemy);
-      const winner = battle.winner(card, randomEnemy);
+      // battle.turn(card, randomEnemy);
+      const winner = battle.turn(card, randomEnemy);
       if (winner?.id === card.id) {
         setRoundWinner(playerName);
       }
@@ -356,7 +365,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   const renderfx = () => {
     const fxElements = [];
     const effects = { ...battle.previous_results };
-    if (gamePhase === 'selection') {
+    if (gamePhase === 'selection' || gamePhase === 'reveal') {
       // we should use the results labeled "next" instead during selection phase
       effects.typeChange = effects.typeChangeNext;
       effects.blockedTypesActive = effects.blockedTypesNext;
@@ -396,7 +405,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       );
     }
 
-    if (effects.modifyPlayer !== 0) {
+    if (effects.modifyPlayer > 0) {
       fxElements.push(
         <div key="modifyPlayer" className="flex items-center justify-start gap-2 mb-2">
           <img src='/playerplus2.png' width='33%' height="33%" alt="Your card's rank is increased by 2 for this turn!" />
@@ -404,10 +413,26 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
       );
     }
 
-    if (effects.modifyEnemy !== 0) {
+    if (effects.modifyPlayer < 0) {
+      fxElements.push(
+        <div key="modifyPlayer" className="flex items-center justify-start gap-2 mb-2">
+          <img src='/playerneg2.png' width='33%' height="33%" alt="Your card's rank is decreased by 2 for this turn!" />
+        </div>
+      );
+    }
+
+    if (effects.modifyEnemy > 0) {
       fxElements.push(
         <div key="modifyEnemy" className="flex items-center justify-end gap-2 mb-2">
           <img src='/enemyplus2.png' width='33%' height="33%" alt="Your opponent's card's rank is increased by 2 for this turn!" />
+        </div>
+      );
+    }
+
+    if (effects.modifyEnemy < 0) {
+      fxElements.push(
+        <div key="modifyEnemy" className="flex items-center justify-end gap-2 mb-2">
+          <img src='/enemyneg2.png' width='33%' height="33%" alt="Your opponent's card's rank is decreased by 2 for this turn!" />
         </div>
       );
     }
@@ -438,6 +463,27 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
 
   return (
     <div className="min-h-screen p-6 bg-transparent">
+      {/* display dodo sprites */}
+          <div className='z-20 flex fixed w-[calc(100%-3rem)] h-auto flex-row justify-center pt-60 pointer-events-none'>
+            <div className="flex flex-row w-[calc(75%)] h-auto justify-between">
+              <div className='flex'>
+                <Character
+                  color='RED'
+                  type='jay'
+                  flipped='y'
+                  size='large'
+                ></Character>
+          </div>
+          <div className='flex'>
+              <Character
+                color='RED'
+                type={propGymElement}
+                flipped='n'
+                size='large'
+            ></Character>
+          </div>
+            </div>
+          </div>
       {/* header */}
       <div className="max-w-8xl mx-auto mb-6 z-10">
         <div className="bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
@@ -501,15 +547,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
             <div className="fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
               <span className="text-white text-opacity-50">Select your card</span>
             </div>
-            {/* row for character sprites */}
-            <div className="z-20 flex fixed bottom-20 left-40 flex-row items-center">
-              <Character
-                color='RED'
-                type='jay'
-                flipped='y'
-                size='large'
-              ></Character>
-            </div>
           </div>
           {/* placeholder for active effect icons */}
           <div className="flex flex-col items-center">
@@ -526,15 +563,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
             <div className="z-0 fixed w-48 h-64 bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl border-2 border-dashed border-white border-opacity-30 flex items-center justify-center">
               <span className="text-white text-opacity-50">Opponent's card</span>
             </div>
-          </div>
-          {/* display enemy sprite */}
-          <div className="z-20 flex fixed bottom-20 right-40 flex-row items-center">
-            <Character
-              color='RED'
-              type={propGymElement}
-              flipped='n'
-              size='large'
-            ></Character>
           </div>
         </div>
 
@@ -564,7 +592,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
                 onClick={() => handleCardSelect(card)}
                 className="hover:scale-110 hover:-translate-y-2 transition duration-200"
               >
-                <CardDisplay card={card} size="small" />
+                <CardDisplay card={card} size="small" blocked={battle.previous_results.blockedTypesNext.has(card.type)} />
               </button>
             ))}
           </div>
