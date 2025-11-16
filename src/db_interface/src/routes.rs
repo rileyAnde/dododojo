@@ -134,24 +134,31 @@ async fn update_gym_http(data: web::Data<AppState>, path: web::Path<String>, jso
     let name = path.into_inner();
     let json_value = json.into_inner();
 
+    println!("\n json_value for update gym: {:?}", json_value);
     // Get the existing gym data
     let existing_gym = match queries::get_one_gym_query(&conn, name.clone()).await {
         Ok(gym) => gym,
         Err(_) => return HttpResponse::NotFound().body("Gym not found"),
     };
+    println!("\n existing gym from db {:?}", existing_gym);
 
-    // Update the gym data with new values
     let updated_gym = Gym {
-        name: existing_gym.name,
-        owner_username: json_value["Owner_Username"].as_str().unwrap_or_default().to_string(),
-        deck: json_value["Deck"].to_string(),
+        name: existing_gym.name.clone(),
+        owner_username: json_value["owner_username"].as_str().unwrap_or_default().to_string(),
+        deck: json_value["deck"].as_str().unwrap_or_default().to_string(),
     };
+    // Update the gym data with new values
+    if existing_gym == updated_gym {
+        return HttpResponse::Ok().body("No changes detected, gym not updated");
+    } else {
+        match queries::update_gym_query(&conn, updated_gym).await {
+            Ok(_) => HttpResponse::Ok().body("Gym updated successfully"),
+            Err(e) => HttpResponse::InternalServerError()
+                .body(format!("Database error: {}", e)),
+        }
 
-    match queries::update_gym_query(&conn, updated_gym).await {
-        Ok(_) => HttpResponse::Ok().body("Gym updated successfully"),
-        Err(e) => HttpResponse::InternalServerError()
-            .body(format!("Database error: {}", e)),
     }
+
 }
 
 // #[get("/upload_cards")]

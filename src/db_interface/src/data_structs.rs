@@ -40,7 +40,7 @@ pub struct CreateUser {
 //     pub gyms_owned: String, // Array<String> JSON array of Gym names
 // }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct Gym {
     pub name: String, // fire, water,...
     pub owner_username: String,

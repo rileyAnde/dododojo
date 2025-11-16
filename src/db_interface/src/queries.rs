@@ -148,6 +148,7 @@ pub async fn get_one_gym_query(conn: &Connection, name: String) -> SqlResult<Gym
 }
 
 pub async fn update_gym_query(conn: &Connection, gym: Gym) -> SqlResult<()> {
+    println!("\nUpdating gym in queries: {:?}", gym);
     let name = gym.name;
     let owner_username = gym.owner_username;
     let deck = gym.deck;
