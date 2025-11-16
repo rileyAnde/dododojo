@@ -157,7 +157,7 @@ const CardJitsuGame: React.FC = () => {
   if (currentPage === 'battle') {
     return (
       <BattleScreen 
-        onReturnHome={() => setCurrentPage('home')}
+        onReturnHome={() => setCurrentPage('map')}
         playerName={user?.username} 
         gymElement={selectedGym}
         onVictory={(element) => {
