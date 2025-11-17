@@ -20,7 +20,7 @@ describe('User Services Routes - Integration Tests (real Rust server)', () => {
     // POST /users
     //
     it('should create a user successfully', async () => {
-        const newAccount = { username: 'han101', passwordHash: 'plaintextpassword' };
+        const newAccount = { username: 'ha', passwordHash: 'plaintextpassword' };
         const res = await request(app).post('/users').send({ account: newAccount });
         expect(res.status).toBe(200);
         expect(res.body.message).toBe('Account created successfully');
@@ -32,9 +32,11 @@ describe('User Services Routes - Integration Tests (real Rust server)', () => {
     //
     it('should return user data from Rust server', async () => {
         mockCompare.mockReturnValue(true);
-        const res = await request(app).get('/user/11').send({});
+        const res = await request(app)
+                    .get('/user/ha')
+                    .set("x-password", 'plaintextpassword');
         expect(res.status).toBe(200);
-        expect(res.body.account.username).toBe('han101');
+        expect(res.body.account.username).toBe('ha');
     });
 
     //
@@ -42,10 +44,10 @@ describe('User Services Routes - Integration Tests (real Rust server)', () => {
     //
     it('should update successfully', async () => {
         const res = await request(app)
-            .put('/user/11')
+            .put('/user/13')
             .send({
                 updateData: {
-                    id: 11,
+                    id: 12,
                     username: 'han101',
                     password: "plaintextpassword",
                     level: 10,
@@ -69,7 +71,7 @@ describe('User Services Routes - Integration Tests (real Rust server)', () => {
     // DELETE /user/:userId
     //
     it('should delete successfully', async () => {
-        const res = await request(app).delete('/user/1');
+        const res = await request(app).delete('/user/12');
         expect(res.status).toBe(200);
         expect(res.body.message).toBe('Service deleted successfully');
     });

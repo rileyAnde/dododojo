@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import bcrypt from 'bcrypt';
-import user_services from '../src/routes/user_services-routes';
+import user_services from '../src/routes/user_services-routes.js';
 
 const app = express();
 app.use(express.json());

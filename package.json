@@ -1,13 +1,17 @@
 {
   "name": "dododojo",
   "version": "1.0.0",
+  "type": "module",
   "description": "Card battle game",
   "main": "battle.ts",
   "scripts": {
-    "test": "jest"
+  "test": "jest",
+  "build": "tsc",
+  "dev": "npm run build && node dist/server.js"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^18.19.130",
@@ -19,6 +23,7 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "node": "^25.1.0",
     "supertest": "^7.1.4"
