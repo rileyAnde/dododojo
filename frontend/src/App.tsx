@@ -4,14 +4,22 @@ import DodoCharacter from './components/character';
 import BattleScreen from './components/BattleScreen';
 import MapScreen from './components/MapScreen';
 import Inventory from './components/Inventory'
+import { Card } from './game/battle';
+import { create_user, get_user } from './actions/userActions';
 
 type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
 
-interface User {
-  username: string;
-  password: string;
-  penguinColor: string;
-  dodoType: string;
+export interface User {
+    id: number;
+    username: string;
+    password: string;
+    level: number;
+    inventory: Card[];  
+    primaryDeck: Card[]; 
+    gymsOwned: string[];
+    penguinColor?: string
+    dodoType?: string
+    
 }
 
 const CardJitsuGame: React.FC = () => {
@@ -25,20 +33,22 @@ const CardJitsuGame: React.FC = () => {
   const [conqueredGyms, setConqueredGyms] = useState<Set<string>>(new Set());
 
   // connect this to the backend 
-  const handleLogin = () => {
-    if (!username.trim() || !password.trim()) {//works
+  const handleLogin = async () => {
+    setUsername(username.trim())
+    setPassword(password.trim())
+    if (!username || !password) {//works
       alert('Please enter a username and password.');
       return;
     }
-  
-    const existingUser = accounts.find(
-      (acc) =>
-        acc.username === username.trim() &&
-        acc.password === password.trim()
-    );
-    if (!existingUser) {
-      alert('Invalid login!');
+
+    try{
+      const new_user = await get_user(username, password)
+      setUser(new_user)
+      setCurrentPage('home')
       return;
+    }catch(e: any){
+        alert('Invalid Login')
+        return;
     }
 
 //don't need this if user already has or doesn't have an account
@@ -53,14 +63,12 @@ const CardJitsuGame: React.FC = () => {
     //  setCurrentPage('home');
 
     // // }
-    setUser(existingUser);
-    setCurrentPage('home');
   };
 
 
 //make sure password is tight bonded with username because currently every time a new session is launched, the username/passwords 
 // aren't saved on the server and are reset upon new execution
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!username.trim() || !password.trim() || !confirmPassword.trim()) { 
       alert('Please fill out the fields!');
       return;
@@ -70,12 +78,15 @@ const CardJitsuGame: React.FC = () => {
       alert('Passwords do not match!');
       return;
     }
-
-    const existingUser = accounts.find((acc) => acc.username === username.trim());
-    if (existingUser) {
-      alert('This account already exists!');
+    let createdUser: User |undefined
+    try{
+      createdUser  = await create_user(username.trim(), password.trim())
+      if (!createdUser){
+        throw new Error('User creation failed')
+      }
+    }catch (err){
+      alert("Issue please try again")
       return;
-
     }
 
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
@@ -83,16 +94,17 @@ const CardJitsuGame: React.FC = () => {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const randomType = types[Math.floor(Math.random() * types.length)]
 
-    const newUser = ({
-      username: username.trim(),
-      password: password.trim(),
-      penguinColor: randomColor,
-      dodoType: randomType,
-    });
-    setAccounts([...accounts, newUser]);
-    console.log("Users Registered:", [...accounts, newUser]);
+    const newUser: User = {
+    ...createdUser,
+    username: createdUser.username, // or username.trim()
+    password: password.trim(),
+    level: createdUser.level ?? 1,
+    penguinColor: randomColor,
+    dodoType: randomType,
+    };
+
+    console.log('Users Registered:', [...accounts, newUser]);
     setUser(newUser);
-    setCurrentPage('home');
   };
 
 
