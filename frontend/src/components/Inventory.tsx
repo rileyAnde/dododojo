@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Swords, Flame, Droplet, Snowflake, Filter, SortAsc } from 'lucide-react';
 import { Card } from '../game/battle';
 import { generateEnemyDeck } from '../game/deckGenerator';
 import { loadCardsFromXML } from '../utils/cardLoader';
+import { User } from '../App';
+import { update_PrimaryDeck } from '../actions/userActions';
 
 interface Inventory {
   onReturnHome?: () => void;
-  playerName?: string;
+  cur_user?: User;
 }
 //temp for displaying
 const cards = await loadCardsFromXML();
@@ -33,8 +35,23 @@ const getCardColor = (type: string) => {
   }
 };
 
-const InventoryManager: React.FC<Inventory> = ({ onReturnHome, playerName: propPlayerName }) => {
-  const [playerName] = useState(propPlayerName || 'Player1');
+const handleDeckUpdate = async (user:User|undefined, activeDeck:Card[], onReturnHome: () => void ) => {
+    try{
+      if (user){
+        console.log("user in handleDeckUpdate", user)
+        await update_PrimaryDeck(user, activeDeck)
+        onReturnHome()
+        return
+      }
+    }catch(error){
+      alert("Issue updating deck, reload and try again")
+      return
+    }
+
+  }
+
+const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
+  const [playerName] = useState(cur_user?.username || 'Player1');
   const [activeDeck, setActiveDeck] = useState<Card[]>(generateEnemyDeck(cards, 'fire', 10, 0.6));
   const [inventory, setInventory] = useState<Card[]>(generateEnemyDeck(cards, 'water', 20, 0.6));
   const [filterType, setFilterType] = useState<string>('all');
@@ -182,7 +199,12 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, playerName: propP
             </div>
           </div>
           <button
-            onClick={onReturnHome || (() => window.location.reload())}
+            onClick={async () => {
+            // Pass the function reference, not its return value
+            console.log("in onClick", cur_user)
+            const callback = onReturnHome || (() => window.location.reload());
+            await handleDeckUpdate?.(cur_user, activeDeck, callback);
+          }}
             className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold hover:scale-105 transition"
           >
             Return to Dojo

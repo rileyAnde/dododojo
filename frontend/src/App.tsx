@@ -24,7 +24,7 @@ export interface User {
 
 const CardJitsuGame: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('login');
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -34,19 +34,19 @@ const CardJitsuGame: React.FC = () => {
 
   // connect this to the backend 
   const handleLogin = async () => {
-    setUsername(username.trim())
-    setPassword(password.trim())
-    if (!username || !password) {//works
+    if (!username.trim() || !password.trim()) {//works
       alert('Please enter a username and password.');
+      setPassword("")
       return;
     }
 
     try{
       const new_user = await get_user(username, password)
+      console.log(new_user)
       setUser(new_user)
       setCurrentPage('home')
-      return;
     }catch(e: any){
+        setPassword("")
         alert('Invalid Login')
         return;
     }
@@ -105,11 +105,12 @@ const CardJitsuGame: React.FC = () => {
 
     console.log('Users Registered:', [...accounts, newUser]);
     setUser(newUser);
+    setCurrentPage('home')
   };
 
 
-  const handleLogout = () => { //figure out after getting the signup working
-    setUser(null);
+  const handleLogout = () => { 
+    setUser(undefined);
     setUsername('');
     setPassword('');
     setConfirmPassword('');
@@ -160,7 +161,7 @@ const CardJitsuGame: React.FC = () => {
     setAccounts(updatedAccounts);
 
     alert('Account deleted! Returning to the login page....');
-    setUser(null);
+    setUser(undefined);
     setUsername('');
     setPassword('');
     setCurrentPage('login');
@@ -180,9 +181,10 @@ const CardJitsuGame: React.FC = () => {
   }
 
   if (currentPage === 'inventory') {
+    console.log(user?.username)
     return (
       <Inventory onReturnHome={() => setCurrentPage('home')}
-      playerName={user?.username} />
+      cur_user={user} />
     )
   }
 
@@ -358,7 +360,7 @@ const CardJitsuGame: React.FC = () => {
       </div>
     );
   }
-  //home page!
+  //home page
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-900 to-blue-800 relative overflow-hidden">
       {/* Animated background elements */}
@@ -375,7 +377,7 @@ const CardJitsuGame: React.FC = () => {
         <div className="container mx-auto px-6 py-2 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Swords className="text-cyan-400" size={32} />
-            <h1 className="text-2xl font-bold text-white">Your Dojo</h1>
+            <h1 className="text-2xl font-bold text-white">Welcome to your home dojo</h1>
           </div>
           <div className="flex items-center gap-6">
             <div className="text-white">
@@ -403,13 +405,12 @@ const CardJitsuGame: React.FC = () => {
           {/* Character display */}
           <div className="lg:col-span-2">
             <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-20 shadow-2xl">
-              <h2 className="text-2xl font-bold text-white mb-6">Your Dodo</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">{user?.username || "player1"}</h2>
 
               <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center py-1">
                   <DodoCharacter
                     type={user?.dodoType || 'default'}
-                    color={user?.penguinColor || '#FF6B6B'}
                     size="large"
                     flipped='n'
                   />

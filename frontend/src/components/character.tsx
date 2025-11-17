@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface DodoCharacterProps {
-  color: string;
   type?: string; // 'fire' | 'air' | 'water' | 'earth' | 'ice' | 'default' | 'jay';
   size?: 'small' | 'medium' | 'large';
   flipped?: 'y' | 'n';
@@ -9,7 +8,6 @@ interface DodoCharacterProps {
 }
 
 const Character: React.FC<DodoCharacterProps> = ({ 
-  color, 
   size = 'medium',
   type = 'default',
   flipped = 'n',
@@ -37,7 +35,7 @@ const Character: React.FC<DodoCharacterProps> = ({
     <img
       src={dodoImages[type] || 'dodo.png'} 
       alt="Dodo character"
-      className={`${sizeClasses[size]} bg-${color} object-contain drop-shadow-2xl ${flipped=='y' ? 'flipped' : ''} ${className}`}
+      className={`${sizeClasses[size]} object-contain drop-shadow-2xl ${flipped=='y' ? 'flipped' : ''} ${className}`}
     />
   );
 };

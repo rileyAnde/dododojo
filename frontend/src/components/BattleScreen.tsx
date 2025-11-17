@@ -468,7 +468,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
             <div className="flex flex-row w-[calc(75%)] h-auto justify-between">
               <div className='flex'>
                 <Character
-                  color='RED'
                   type='jay'
                   flipped='y'
                   size='large'
@@ -476,7 +475,6 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
           </div>
           <div className='flex'>
               <Character
-                color='RED'
                 type={propGymElement}
                 flipped='n'
                 size='large'
