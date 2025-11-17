@@ -3,7 +3,7 @@
 export interface existing_Account {
     id: number;
     username: string;
-    passwordHash: string;
+    password: string;
     level: number;
     inventory: backend_Card[];  
     primaryDeck: backend_Card[]; 

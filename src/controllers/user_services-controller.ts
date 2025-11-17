@@ -40,7 +40,7 @@ export const getUserServices = async (req: Request, res: Response) => {
     const accountData: existing_Account = {
         id: rustData.id,
         username: rustData.username,
-        passwordHash: rustData.password,
+        password: rustData.password,
         level: rustData.level,
         inventory: rustData.inventory,
         primaryDeck: rustData.primary_deck,
@@ -52,7 +52,6 @@ export const getUserServices = async (req: Request, res: Response) => {
 //POST /users - add a new user service
 export const addUserService = async (req: Request, res: Response) => {
     //check for required data
-    console.log("HI HANNAH")
     if (!req.body?.account?.Username || !req.body?.account?.Password) {
         return res.status(400).json({ message: 'Username and password are required' });
     }
@@ -108,7 +107,7 @@ export const updateUserService = async (req: Request, res: Response) => {
     //construct updated account data
     const updateData: new_Account = {
         Username: req.body.updateData.username,
-        Password: req.body.updateData.passwordHash,
+        Password: req.body.updateData.password,
         Level: Number(req.body.updateData.level),
         Inventory: newInventory,
         primary_deck: newPrimaryDeck,
@@ -120,13 +119,12 @@ export const updateUserService = async (req: Request, res: Response) => {
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData)
     });
-    console.log('HANNAH LOOK:', rustResponse);
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error updating account' });
     }
     console.log('rustResponse:', rustResponse);
     console.log(`Updating account ${req.params.userId} with data:`, req.body.updateData);
-    return res.status(200).json({ message: 'Service updated successfully' });
+    return res.status(200).json({ message: 'Service updated successfully', updatedAccount: updateData });
     
 };
 
