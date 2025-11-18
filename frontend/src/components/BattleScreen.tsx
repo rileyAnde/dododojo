@@ -329,7 +329,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
             onClick={onReturnHome || (() => window.location.reload())}
             className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold text-xl hover:scale-105 transition"
           >
-            Return to Dojo
+            Return to Map
           </button>
         </div>
       </div>
