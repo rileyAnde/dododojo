@@ -62,23 +62,73 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
       };
     });
   };
+
+  const generateSingleEncounter = () => {
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    const thisgym = gyms.find(gym => gym.element === randomElement.id)
+    //drift from spawn point center
+    let offsetX = (Math.random() * 4) + 4;
+    let offsetY = (Math.random() * 4) + 4;
+    const new_coords = pullTowardCenter(thisgym.x * 100 / 2416, thisgym.y * 100 / 1359, Math.random() / 2);
+    if ((thisgym.x * 100 / 2416) >= 50) {
+      offsetX = -offsetX
+    }
+    if ((thisgym.y * 100 / 1359) >= 50) {
+      offsetY = -offsetY
+    }
+    console.log(new_coords)
+
+    return {
+      id: `enc-${Math.random().toString(36).slice(2)}`,
+      element: randomElement.id,
+      icon: randomElement.icon,
+      x: (new_coords.x + offsetX) ,
+      y: (new_coords.y + offsetY) ,
+    };
+  };
+  
   const pullTowardCenter = (x: number, y: number, factor = 0.4) => {
     // Center of map to put the encounter sprites in, not perfect but relatively close!
     const centerX = 50;
     const centerY = 40;
 
     return {
-      x: x + (centerX - x) * factor,
-      y: y + (centerY - y) * factor,
+      x: x + ((centerX - x) * factor),
+      y: y + ((centerY - y) * factor),
     };
   };
-  const [encounters, setEncounters] = useState(generateEncounters);
+
+  const [encounter, setEncounter] = useState<any | null>(null);
+  const [visible, setVisible] = useState(false);
+
 
   const handleGymClick = (gym: Gym) => setSelectedGym(gym);
 
   const handleEnterBattle = () => {
     if (selectedGym && onEnterBattle) onEnterBattle(selectedGym.element);
   };
+
+  React.useEffect(() => {
+  // spawn one dodo immediately
+  let current = generateSingleEncounter();
+  setEncounter(current);
+  setVisible(true);
+
+  const interval = setInterval(() => {
+    // fade out
+    setVisible(false);
+
+    setTimeout(() => {
+      // after fade-out finishes, spawn new encounter
+      current = generateSingleEncounter();
+      setEncounter(current);
+      setVisible(true);
+    }, 1000); // fade-out duration (1s)
+  }, 5000); // 5 seconds per cycle
+
+  return () => clearInterval(interval);
+}, []);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
@@ -165,25 +215,29 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
             </div>
           )} */}
           {/* MULTIPLE encounter sprites */}
-          {encounters.map((enc) => { // here is how the current sprite randomization occurs
-            const pulled = pullTowardCenter(enc.x, enc.y, 0.6);
+          {encounter && (
+            <div
+              key={encounter.id}
+              className={`
+                absolute cursor-pointer 
+                transition-all duration-1000
+                ${visible ? "opacity-100" : "opacity-0"}
+              `}
+              style={{
+                left: `${encounter.x}%`,
+                top: `${encounter.y}%`,
+                transform: "translate(-50%, -50%)",
+                zIndex: 30,
+              }}
+              onClick={() => onEnterBattle && onEnterBattle(`encounter:${encounter.element}`)}
+            >
+              <img
+                src={encounter.icon}
+                className="w-24 h-24 drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]"
+              />
+            </div>
+          )}
 
-            return (
-              <div
-                key={enc.id}
-                className="absolute cursor-pointer hover:scale-125 transition duration-300"
-                style={{
-                  left: `${pulled.x}%`,
-                  top: `${pulled.y}%`,
-                  transform: "translate(-50%, -50%)",
-                  zIndex: 20,
-                }}
-                onClick={() => onEnterBattle && onEnterBattle(`encounter:${enc.element}`)}
-              >
-                <img src={enc.icon} className="w-20 h-20" />
-              </div>
-            );
-          })}
 
 
 

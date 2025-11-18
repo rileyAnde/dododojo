@@ -410,7 +410,7 @@ const CardJitsuGame: React.FC = () => {
               <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center py-1">
                   <DodoCharacter
-                    type={user?.dodoType || 'default'}
+                    type={user?.dodoType || 'jay'}
                     size="large"
                     flipped='n'
                   />
