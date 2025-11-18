@@ -25,11 +25,11 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
   // FIRE is lined up on the lava section near the bottom-center.
   // Adjust numbers live if you want finer placement.
   const gyms: Gym[] = [
-    { id: 'fire-dojo', name: 'Fire Dojo', element: 'fire', x: 55, y: 76, icon: '/fire_placeholder.png' },
-    { id: 'water-temple', name: 'Water Temple', element: 'water', x: 55, y: 18, icon: '/water_placeholder.png' },
-    { id: 'ice-fortress', name: 'Ice Fortress', element: 'ice', x: 84, y: 48, icon: '/ice_placeholder.png' },
-    { id: 'earth-shrine', name: 'Earth Shrine', element: 'earth', x: 22, y: 57, icon: '/earth_placeholder.png' },
-    { id: 'air-peak', name: 'Air Peak', element: 'air', x: 25, y: 18, icon: '/air_placeholder.png' },
+    { id: 'fire-dojo', name: 'Fire Dojo', element: 'fire', x: 2000, y: 100, icon: '/elementsymbols/fire.png' },
+    { id: 'water-temple', name: 'Water Temple', element: 'water', x: 300, y: 1220, icon: '/elementsymbols/water.png' },
+    { id: 'ice-fortress', name: 'Ice Fortress', element: 'ice', x: 2200, y: 1050, icon: '/elementsymbols/ice.png' },
+    { id: 'earth-shrine', name: 'Earth Shrine', element: 'earth', x: 1370, y: 300, icon: '/elementsymbols/earth.png' },
+    { id: 'air-peak', name: 'Air Peak', element: 'air', x: 150, y: 450, icon: '/elementsymbols/air.png' },
   ];
 
   // here are the encounter icons --images will be updated later!
@@ -115,9 +115,9 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
           <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden">
             {/* parchment background from /public */}
             <img
-              src="/map.png"
+              src="/world_map.png"
               alt="Element Map"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-contain"
             />
 
             {/* Clickable dojo placeholders */}
@@ -125,15 +125,15 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
               <button
                 key={gym.id}
                 onClick={() => handleGymClick(gym)}
-                className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer hover:scale-125 transition duration-200 group"
-                style={{ left: `${gym.x}%`, top: `${gym.y}%` }}
+                className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer transition duration-200 group"
+                style={{ left: `${gym.x*100/2416}%`, top: `${gym.y*100/1359}%` }}
                 aria-label={gym.name}
                 title={gym.name}
               >
                 <img
                   src={gym.icon}
                   alt={gym.name}
-                  className="w-20 h-20 object-contain drop-shadow-lg"
+                  className="w-20 h-20 object-contain drop-shadow-lg hover:scale-125 transition duration-200"
                 />
                 {/* Hover label */}
                 <div className="absolute bottom-full mb-2 hidden group-hover:block">
