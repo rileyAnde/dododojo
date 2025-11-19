@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/actions/useractions.ts","./src/components/battlescreen.tsx","./src/components/inventory.tsx","./src/components/mapscreen.tsx","./src/components/character.tsx","./src/config/dojos.ts","./src/game/battle.ts","./src/game/deckgenerator.ts","./src/utils/cardloader.ts"],"errors":true,"version":"5.9.3"}

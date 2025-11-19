@@ -52,8 +52,20 @@ const handleDeckUpdate = async (user:User|undefined, activeDeck:Card[], onReturn
 
 const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
   const [playerName] = useState(cur_user?.username || 'Player1');
-  const [activeDeck, setActiveDeck] = useState<Card[]>(generateEnemyDeck(cards, 'fire', 10, 0.6));
-  const [inventory, setInventory] = useState<Card[]>(generateEnemyDeck(cards, 'water', 20, 0.6));
+  const initialActiveDeck: Card[] =
+    (Array.isArray(cur_user?.primaryDeck) && cur_user!.primaryDeck.length > 0)
+      ? cur_user!.primaryDeck
+      : generateEnemyDeck(cards, 'fire', 10, 0.6);
+
+  const initialInventory: Card[] =
+    (Array.isArray(cur_user?.inventory) && cur_user!.inventory.length > 0)
+      ? cur_user!.inventory
+      : generateEnemyDeck(cards, 'water', 20, 0.6);
+  
+  console.log(initialActiveDeck)
+  console.log(initialInventory)
+  const [activeDeck, setActiveDeck] = useState<Card[]>(initialActiveDeck);
+  const [inventory, setInventory] = useState<Card[]>(initialInventory);
   const [filterType, setFilterType] = useState<string>('all');
   const [sortAsc, setSortAsc] = useState<boolean>(true);
 

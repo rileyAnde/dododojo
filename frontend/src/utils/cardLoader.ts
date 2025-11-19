@@ -1,4 +1,4 @@
-import { Card } from '../game/battle';
+import { backend_Card, Card } from '../game/battle';
 import { generateEnemyDeck as generateEnemyDeckFromPool } from '../game/deckGenerator';
 import { sampleWithoutReplacement } from '../game/deckGenerator';
 
@@ -24,6 +24,18 @@ export async function loadCardsFromXML(): Promise<Card[]> {
   }
   
   return cards;
+}
+
+export async function expand_cards(curUser_cards: backend_Card[]):Promise<Card[]>{
+  const allCards: Card[] | undefined =  await loadCardsFromXML()
+  let curUserExpandedCards: Card[] = []
+  curUser_cards.forEach((card)=>{
+    const FE_Card:Card =  allCards[card.id]
+    for (let i=0; i<card.quantity; i++){
+      curUserExpandedCards.push(FE_Card)
+    }
+  })
+  return curUserExpandedCards
 }
 
 //creates a shuffled 30-card deck for the player, will be changed to grabbing active deck

@@ -9,6 +9,13 @@ export class Card {
     ) {}
 }
 
+export class backend_Card {
+    constructor(
+        public id: number,
+        public quantity: number 
+    ){}
+}
+
 export class Battle {
     private player_won: Card[][] = [[], [], [], [], []];
     private enemy_won: Card[][] = [[], [], [], [], []];

@@ -1,5 +1,7 @@
 import { User } from "../App";
 import { Card } from "../game/battle";
+import { expand_cards } from "../utils/cardLoader";
+
 
 
 export async function get_user(username:string, password: string): Promise<User> {
@@ -16,8 +18,10 @@ export async function get_user(username:string, password: string): Promise<User>
         }
         let result = await response.json()
         result = result.account
-        console.log(result)
-        
+        console.log(result.inventory)
+        console.log(result.primary_deck)
+        const inventory = expand_cards(result.inventory)
+        const primary_deck = expand_cards(result.primary_deck)
         const new_user: User = {
             id: result.id,
             username: result.username, 
@@ -89,5 +93,25 @@ export async function update_PrimaryDeck(cur_user:User, new_Deck:Card[]) {
     }catch(error){
         console.log(error)
         throw error
+    }
+}
+
+export async function delete_user(cur_user: User){
+    try{
+        if (!cur_user){
+            throw new Error("Missing info")
+        }
+        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+        })
+        if (!response.ok){
+            throw new Error("Server issue please try again")
+        }
+    }catch(error){
+        alert("Server issue please try again")
+        throw error 
     }
 }

@@ -90,6 +90,7 @@ function compressCards(cards: frontend_Card[]): backend_Card[] {
         counts.set(card.id, (counts.get(card.id) ?? 0) + 1);
     }
 
+
     return Array.from(counts.entries()).map(([id, quantity]) => ({
         id,
         quantity
@@ -144,5 +145,3 @@ export const deleteUserService = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Invalid user ID' });
     } 
 };
-
-
