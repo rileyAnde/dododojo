@@ -29,6 +29,9 @@ export async function loadCardsFromXML(): Promise<Card[]> {
 export async function expand_cards(curUser_cards: backend_Card[]):Promise<Card[]>{
   const allCards: Card[] | undefined =  await loadCardsFromXML()
   let curUserExpandedCards: Card[] = []
+  if (curUser_cards.length == 0){
+    return createStarterDeck(allCards)
+  }
   curUser_cards.forEach((card)=>{
     const FE_Card:Card =  allCards[card.id]
     for (let i=0; i<card.quantity; i++){

@@ -20,16 +20,19 @@ export async function get_user(username:string, password: string): Promise<User>
         result = result.account
         console.log(result.inventory)
         console.log(result.primary_deck)
-        const inventory = expand_cards(result.inventory)
-        const primary_deck = expand_cards(result.primary_deck)
+        const inventory = await expand_cards(result.inventory)
+        const primary_deck = await expand_cards(result.primary_deck)
         const new_user: User = {
             id: result.id,
             username: result.username, 
             password: result.password,
             level: result.level,
-            inventory: result.inventory,
-            primaryDeck: result.primaryDeck,
+            inventory: inventory ?? [],
+            primaryDeck: primary_deck ?? [],
             gymsOwned: result.gymsOwned
+        }
+        if (new_user.inventory.length == 0 || new_user.primaryDeck.length == 0){
+            throw new Error("Error with Deck processing ")
         }
         return new_user
     } catch (error){
@@ -90,6 +93,42 @@ export async function update_PrimaryDeck(cur_user:User, new_Deck:Card[]) {
         }
         return updated_user
 
+    }catch(error){
+        console.log(error)
+        throw error
+    }
+}
+
+export async function update_Inventory(cur_user:User, new_Deck:Card[]) {
+    try{
+        if (!cur_user || !new_Deck){
+            throw new Error("Missing info ")
+        }
+        const updateData = {updateData: { ...cur_user, inventory: new_Deck }}
+        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData)
+        })
+        if (!response.ok){
+            throw new Error ("Issue Processing ")
+        }
+        let result = await response.json()
+        result = result.updatedAccount
+        console.log(result)
+        
+        const updated_user: User = {
+            id: result.id,
+            username: result.username, 
+            password: result.password,
+            level: result.level,
+            inventory: result.inventory,
+            primaryDeck: result.primaryDeck,
+            gymsOwned: result.gymsOwned
+        }
+        return updated_user
     }catch(error){
         console.log(error)
         throw error
