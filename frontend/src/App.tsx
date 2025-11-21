@@ -1,3 +1,17 @@
+/*
+Functions: 
+handleLogin -> validate input and attempts to fetch user from the backend
+handleSignUp -> validate input and call API to create a new user
+handleLogout -> clear user session and show the login screen
+handleDeleteAccount -> prompt for confirmation, remove user from state, reset application to login screen
+Inputs: None
+Outputs: the DOM tree that React will render to the browser
+Outside Sources: minor ChatGPT and Github Copilot
+Authors: Riley Anderson, Colin Treanor, Dusin Le, Hannah Smith
+Creation Date: 10/20/2025
+*/
+
+
 import React, { useState } from 'react';
 import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
@@ -7,8 +21,10 @@ import Inventory from './components/Inventory'
 import { Card } from './game/battle';
 import { create_user, get_user } from './actions/userActions';
 
+// Define the posible screens users can view
 type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
 
+// Define the structure of a player object
 export interface User {
     id: number;
     username: string;
@@ -22,17 +38,33 @@ export interface User {
     
 }
 
+/* 
+Main container for the application. This handles the following
+- global state
+- authentication logic
+- conditional rendering of the screens 
+*/
 const CardJitsuGame: React.FC = () => {
+  // State management
+
+  // State for which screen is currently visible
   const [currentPage, setCurrentPage] = useState<Page>('login');
+  // State to hold current user
   const [user, setUser] = useState<User | undefined>(undefined);
+  // State to hold login/signup info
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  // State to store local history of accounts
   const [accounts, setAccounts] = useState<User[]>([]);
+  // Game states
   const [selectedGym, setSelectedGym] = useState<string>('fire');
   const [conqueredGyms, setConqueredGyms] = useState<Set<string>>(new Set());
-
-  // connect this to the backend 
+ 
+  /* Function to deal with a user login
+  - on success: set the user state and display home page
+  - on fail: alert user and clear password
+  */
   const handleLogin = async () => {
     if (!username.trim() || !password.trim()) {//works
       alert('Please enter a username and password.');
@@ -50,24 +82,9 @@ const CardJitsuGame: React.FC = () => {
         alert('Invalid Login')
         return;
     }
-
-//don't need this if user already has or doesn't have an account
-    // if (username.trim()) {
-    //   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
-    //   const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    //   setUser({ // cannot have a user without a valid usr/paswd
-    //     username: username.trim(),
-    //     penguinColor: randomColor
-    //   });
-    // }
-    //  setCurrentPage('home');
-
-    // // }
   };
 
-
-//make sure password is tight bonded with username because currently every time a new session is launched, the username/passwords 
-// aren't saved on the server and are reset upon new execution
+  // Function to handle a new user sign up
   const handleSignUp = async () => {
     if (!username.trim() || !password.trim() || !confirmPassword.trim()) { 
       alert('Please fill out the fields!');
@@ -89,11 +106,13 @@ const CardJitsuGame: React.FC = () => {
       return;
     }
 
+    // randomize character
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
     const types = ['fire', 'air', 'water', 'earth', 'ice', 'default', 'jay']
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const randomType = types[Math.floor(Math.random() * types.length)]
 
+    // create the user
     const newUser: User = {
     ...createdUser,
     username: createdUser.username, // or username.trim()
@@ -108,7 +127,9 @@ const CardJitsuGame: React.FC = () => {
     setCurrentPage('home')
   };
 
-
+  /* Function to log out the user
+  - will clear the current session data and show the login page
+  */
   const handleLogout = () => { 
     setUser(undefined);
     setUsername('');
@@ -148,7 +169,11 @@ const CardJitsuGame: React.FC = () => {
 //     alert('Password successfully reset! Head back to the login to play!');
 //     setPassword('');
 //   };
-    const handleDeleteAccount = () => {
+
+  /* Handle deleting a users account
+  - prompt for confirmation, then show login screen
+  */
+  const handleDeleteAccount = () => {
     if (!user) return;
 
     const confirmDelete = window.confirm(
@@ -167,6 +192,12 @@ const CardJitsuGame: React.FC = () => {
     setCurrentPage('login');
   };
 
+
+  // Conditional Rendering 
+
+  /* Display the battle screen
+  - when a user enters a battle, render this component which handles battle logic
+  */ 
   if (currentPage === 'battle') {
     return (
       <BattleScreen 
@@ -180,6 +211,9 @@ const CardJitsuGame: React.FC = () => {
     );
   }
 
+  /* Display inventory screen
+  - display the users cards and allow them to manage their deck
+  */
   if (currentPage === 'inventory') {
     console.log(user?.username)
     return (
@@ -188,6 +222,9 @@ const CardJitsuGame: React.FC = () => {
     )
   }
 
+  /* Display the map
+  - show the map and allow user to select gyms and encounter battles
+  */
   if (currentPage === 'map') {
     return (
       <MapScreen 
@@ -202,19 +239,20 @@ const CardJitsuGame: React.FC = () => {
     );
   }
 
-  // may need a way to log what user logins have been made!
+  /*Display login screen
+  - entry point of the app, contains login form 
+  */
   if (currentPage === 'login') {
+    // may need a way to log what user logins have been made!
     return (
-      // outer container with a gradient background: done 
-      // box to click to enter the game (works)
-      // sign up button doesn't do anything -- working on making it like an actual site
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center p-4">
+        {/* background animations */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-32 h-32 bg-white rounded-full opacity-10 animate-pulse"></div>
           <div className="absolute bottom-40 right-20 w-48 h-48 bg-white rounded-full opacity-5 animate-pulse"></div>
           <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-white rounded-full opacity-10"></div>
         </div>
-
+        {/* login form container */}
         <div className="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-full mb-4">
@@ -271,22 +309,12 @@ const CardJitsuGame: React.FC = () => {
               
             </p>
           </div>
-          {/* <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-            Forgot your password?{''}
-              <button
-                onClick={handleForgotPassword}
-                className="text-sm text-blue-600 hover:text-blue-800 font-semibold">
-                Click here!
-              </button>
-               </p>
-            </div> */}
         </div>
       </div>
     );
   }
 
-
+  // Display signup screen
   if (currentPage === 'signup') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-yellow-700 to-green-500 flex items-center justify-center p-4">
@@ -360,7 +388,10 @@ const CardJitsuGame: React.FC = () => {
       </div>
     );
   }
-  //home page
+
+  /*Display the home page
+  - show users character, map button, inventory button
+  */
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-900 to-blue-800 relative overflow-hidden">
       {/* Animated background elements */}
