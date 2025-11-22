@@ -1,3 +1,17 @@
+/*
+Functions:
+generateEncounters --> creates randomized sprite encounter with an offset
+generateSingleEncounter -->generates a constant changing sprite, works with react module to make this change
+pullTowardCenter --> allows buttons to be in the center to call an encounter 
+handleGymClick:--> sets gym and opens its respective modal
+handleEnterBattle --> calls the BattleScreen and enters battle 
+Inputs: none
+Outputs: render the full map with encounters and dojos
+Outside sources: minor chatGPT and GitHub Copilot
+Authors: Riley Anderson, Colin Treanor, Dustin Le, Jacob Richards
+Creation Date: 11/2/2025
+*/
+
 import React, { useState } from 'react';
 import { Swords, X } from 'lucide-react';
 
@@ -17,6 +31,11 @@ interface Gym {
   icon: string; // public path to placeholder image
 }
 
+/*Main container for the map screen. This handles the following
+- gym location
+- encounter buttons
+- dojo battle selection
+*/
 const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, playerName = 'Player', conqueredGyms = new Set() }) => {
   const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
   const [showAdvantage, setShowAdvantage] = useState(false);
@@ -32,7 +51,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
     { id: 'air-peak', name: 'Air Peak', element: 'air', x: 150, y: 450, icon: '/elementsymbols/air.png' },
   ];
 
-  // here are the encounter icons --images will be updated later!
+  // Call an encounter sprite element 
   const elements = [
     { id: 'fire', icon: '/fire.png' },
     { id: 'water', icon: '/water.png' },
@@ -40,10 +59,10 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
     { id: 'earth', icon: '/earth.png' },
     { id: 'air', icon: '/air.png' },
   ];
-  // Generate multiple encounters near each of the dojo -- need to make sure this does not mark the main dojo as defended
+  // Generate encounters near each dojo
   const generateEncounters = () => { 
     return gyms.map((gym) => {
-
+//random element to appear on screen
       const random = Math.floor(Math.random() * elements.length);
       const chosen = elements[random];
 
@@ -63,6 +82,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
     });
   };
 
+  // generates a single encounter and changes every few seconds
   const generateSingleEncounter = () => {
     const randomElement = elements[Math.floor(Math.random() * elements.length)];
     const thisgym = gyms.find(gym => gym.element === randomElement.id)
@@ -86,9 +106,9 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
       y: (new_coords.y + offsetY) ,
     };
   };
-  
+      
+  // Center of map to put the encounter sprites in, not perfect but relatively close!
   const pullTowardCenter = (x: number, y: number, factor = 0.4) => {
-    // Center of map to put the encounter sprites in, not perfect but relatively close!
     const centerX = 50;
     const centerY = 40;
 
@@ -101,9 +121,9 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
   const [encounter, setEncounter] = useState<any | null>(null);
   const [visible, setVisible] = useState(false);
 
-
+// function to click into a gym
   const handleGymClick = (gym: Gym) => setSelectedGym(gym);
-
+// function to enter element battle
   const handleEnterBattle = () => {
     if (selectedGym && onEnterBattle) onEnterBattle(selectedGym.element);
   };
@@ -129,7 +149,8 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
   return () => clearInterval(interval);
 }, []);
 
-
+// Display the world dojo map 
+// show user available dojos, sprite encounters and advantage chart as a UI
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
       {/* Header */}
@@ -194,26 +215,6 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
               </button>
             ))}
           </div>
-          {/* random encounter sprite in center zone--let's try putting multiple random sprites at one time and near their respective dojo 
-          Also need a way to make sure the sprite encounter doesn't mark the main dojo as defeated--should just remove */}
-          {/* {encounter && (
-            <div
-              className="absolute cursor-pointer hover:scale-125 transition duration-300"
-              style={{
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-              }}
-              onClick={() => onEnterBattle && onEnterBattle(encounter.id)}
-              title={`Encounter: ${encounter.id.toUpperCase()}`}
-            >
-              <img
-                src={encounter.icon}
-                alt={`${encounter.id} encounter`}
-                className="w-24 h-24 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]"
-              />
-            </div>
-          )} */}
           {/* MULTIPLE encounter sprites */}
           {encounter && (
             <div
