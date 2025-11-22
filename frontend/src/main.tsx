@@ -5,7 +5,7 @@ createRoot -> Entry point of the web application.
 Inputs: None
 Outputs: Injects the entire React component tree into the DOM
 Authors: Colin Treanor
-Creation Date: 10/20/2205
+Creation Date: 10/20/2025
 */
 
 import { StrictMode } from 'react'
