@@ -20,8 +20,8 @@ export async function get_user(username:string, password: string): Promise<User>
         result = result.account
         console.log(result.inventory)
         console.log(result.primary_deck)
-        const inventory = await expand_cards(result.inventory)
-        const primary_deck = await expand_cards(result.primary_deck)
+        const inventory = await expand_cards(result.inventory !== 'null' ? result.inventory : null)
+        const primary_deck = await expand_cards(result.primary_deck !== 'null' ? result.primary_deck : null)
         const new_user: User = {
             id: result.id,
             username: result.username, 

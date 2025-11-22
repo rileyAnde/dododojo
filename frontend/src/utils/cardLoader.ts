@@ -29,8 +29,9 @@ export async function loadCardsFromXML(): Promise<Card[]> {
 export async function expand_cards(curUser_cards: backend_Card[]):Promise<Card[]>{
   const allCards: Card[] | undefined =  await loadCardsFromXML()
   let curUserExpandedCards: Card[] = []
-  if (curUser_cards.length == 0){
-    return createStarterDeck(allCards)
+  console.log("check it out" ,curUser_cards)
+  if (curUser_cards == null) { 
+    return createStarterDeck(allCards);
   }
   curUser_cards.forEach((card)=>{
     const FE_Card:Card =  allCards[card.id]
@@ -40,6 +41,7 @@ export async function expand_cards(curUser_cards: backend_Card[]):Promise<Card[]
   })
   return curUserExpandedCards
 }
+
 
 //creates a shuffled 30-card deck for the player, will be changed to grabbing active deck
 export function createPlayerDeck(cards: Card[]): Card[] {

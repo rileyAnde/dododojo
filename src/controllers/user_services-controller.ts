@@ -1,4 +1,4 @@
-//TODO: update routes to match updated rust routes
+
 
 import { Request, Response } from 'express';
 import { existing_Account, backend_Card, new_Account, frontend_Card } from '../models/accounts.js';
@@ -27,8 +27,6 @@ export const getUserServices = async (req: Request, res: Response) => {
     } if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
-    console.log('Hi Hannah from getUserServices');
-    console.log('Rust service response:', rustResponse);
     const rustData = await rustResponse.json();
     console.log('Rust service response:', rustData);
     const userInputPassword = req.get("x-password")
@@ -60,20 +58,12 @@ export const addUserService = async (req: Request, res: Response) => {
     const newAccount :new_Account = {
         Username: passedInfo.Username,
         Password: hashPassword(passedInfo.Password),
-        // level: 1,
-        // inventory: [],
-        // primaryDeck: [],
-        // gymsOwned: [],
     }
     const rustResponse = await fetch(`http://localhost:8080/createuser`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(newAccount)
     });
-    console.log('New account created:', newAccount);
-    const text = await rustResponse.text();
-    console.log(text);
-    console.log('rustResponse:', rustResponse);
 
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error with processing, try again' });
@@ -89,8 +79,6 @@ function compressCards(cards: frontend_Card[]): backend_Card[] {
     for (const card of cards) {
         counts.set(card.id, (counts.get(card.id) ?? 0) + 1);
     }
-
-
     return Array.from(counts.entries()).map(([id, quantity]) => ({
         id,
         quantity
@@ -123,8 +111,6 @@ export const updateUserService = async (req: Request, res: Response) => {
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error updating account' });
     }
-    console.log('rustResponse:', rustResponse);
-    console.log(`Updating account ${req.params.userId} with data:`, req.body.updateData);
     return res.status(200).json({ message: 'Service updated successfully', updatedAccount: updateData });
     
 };
