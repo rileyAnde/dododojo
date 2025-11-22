@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 import { existing_Account, backend_Card, new_Account, frontend_Card } from '../models/accounts.js';
 import bcrypt from 'bcrypt';
-import { run } from 'node:test';
+
 
 const hashPassword = (password: string): string => {
     let SALT_ROUNDS = 10;
@@ -73,7 +73,7 @@ export const addUserService = async (req: Request, res: Response) => {
 };
 
 //helper function to convert frontend_Card[] to backend_Card[]
-function compressCards(cards: frontend_Card[]): backend_Card[] {
+export function compressCards(cards: frontend_Card[]): backend_Card[] {
     const counts = new Map<number, number>();
 
     for (const card of cards) {
