@@ -1,5 +1,6 @@
+import { getGymServices, updateGymService } from "../controllers/gym_services-controller.js";
 import express from 'express';
-import { getGymServices, updateGymService } from '../controllers/gym_services-controller';
+
 
 const gym_services= express.Router()
 

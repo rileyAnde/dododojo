@@ -18,24 +18,41 @@ export async function get_user(username:string, password: string): Promise<User>
         }
         let result = await response.json()
         result = result.account
-        console.log(result.inventory)
-        console.log(result.primary_deck)
-        const inventory = await expand_cards(result.inventory !== 'null' ? result.inventory : null)
-        const primary_deck = await expand_cards(result.primary_deck !== 'null' ? result.primary_deck : null)
+        // Check if inventory is a stringified array and parse it
+        const inventory_raw = typeof result.inventory === 'string' 
+            ? JSON.parse(result.inventory) 
+            : result.inventory;
+        console.log("inventory_raw", inventory_raw)
+        // Check if inventory is a stringified array and parse it
+        const primary_deck_raw = typeof result.primary_deck === 'string'
+            ? JSON.parse(result.primary_deck)
+            : result.primary_deck;
+        //always expand inventory first if inventory is missing we will create starter deck
+        const inventory = await expand_cards(
+            Array.isArray(inventory_raw) ? inventory_raw : []
+            );
+        // Expand primary deck, if missing use inventory as fallback
+        const primary_deck = primary_deck_raw ? await expand_cards( 
+            Array.isArray(primary_deck_raw) ? primary_deck_raw : []
+        ) : inventory;
         const new_user: User = {
             id: result.id,
-            username: result.username, 
+            username: result.username,
             password: result.password,
             level: result.level,
             inventory: inventory ?? [],
             primaryDeck: primary_deck ?? [],
             gymsOwned: result.gymsOwned
         }
+        console.log(new_user)
         if (new_user.inventory.length == 0 || new_user.primaryDeck.length == 0){
-            throw new Error("Error with Deck processing ")
+            throw new Error(result.id)
         }
         return new_user
-    } catch (error){
+    } catch (error: Error | any){
+        if (error.message !== "User return failed"){
+            delete_user({id: error.message} as User)
+        }
         console.log(error)
         throw error
     }
