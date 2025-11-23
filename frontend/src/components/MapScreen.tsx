@@ -86,6 +86,8 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
   const generateSingleEncounter = () => {
     const randomElement = elements[Math.floor(Math.random() * elements.length)];
     const thisgym = gyms.find(gym => gym.element === randomElement.id)
+    if (thisgym === undefined) {
+      return};
     //drift from spawn point center
     let offsetX = (Math.random() * 4) + 4;
     let offsetY = (Math.random() * 4) + 4;
