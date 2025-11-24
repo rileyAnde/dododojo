@@ -232,7 +232,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
                 transform: "translate(-50%, -50%)",
                 zIndex: 30,
               }}
-              onClick={() => onEnterBattle && onEnterBattle(`encounter:${encounter.element}`)}
+              onClick={() => onEnterBattle && onEnterBattle(encounter.element)}
             >
               <img
                 src={encounter.icon}

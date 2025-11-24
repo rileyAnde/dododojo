@@ -3,6 +3,7 @@ import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
 import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
 import Character from './character';
+import { rollCardDrop } from '../game/deckGenerator';
 
 interface BattleScreenProps {
   onReturnHome?: () => void;
@@ -13,7 +14,16 @@ interface BattleScreenProps {
   onVictory?: (element: string) => void;
 }
 
-const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName: propPlayerName, gymElement: propGymElement, onVictory }) => {
+const CardJitsuBattle: React.FC<BattleScreenProps> = ({
+  onReturnHome,
+  playerName: propPlayerName,
+  element: propElement,
+  gymElement: propGymElement,
+  onVictory,
+}) => {
+  // Use gymElement first if provided, otherwise fall back to element, then fire
+  const effectiveElement = propGymElement || propElement || 'fire';
+
   // Mock player data
   const [playerName] = useState(propPlayerName || 'Player1');
   const [enemyName] = useState('Sensei');
@@ -26,20 +36,21 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   const [roundWinner, setRoundWinner] = useState<string | null>(null);
   const [gameWinner, setGameWinner] = useState<number>(0);
 
-  //card data
+  // card data
   const [playerFullDeck, setPlayerFullDeck] = useState<Card[]>([]);
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
   const [enemyFullDeck, setEnemyDeck] = useState<Card[]>([]);
   const [enemyHand, setEnemyHand] = useState<Card[]>([]);
   const [showAdvantage, setShowAdvantage] = useState(false);
+  const [droppedCard, setDroppedCard] = useState<Card | null>(null);
 
-
-  //draw cards from deck to hand
+  // draw cards from deck to hand
   const drawCardsToHand = (deck: Card[], amount: number) => {
     const newCards = deck.slice(0, amount);
     const remainingDeck = deck.slice(amount);
     return [newCards, remainingDeck] as const;
   };
+
 
   // Load cards from XML
   useEffect(() => {
@@ -51,7 +62,8 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
         const [initialHand, remainingDeck] = drawCardsToHand(fullPlayerDeck, 5);
 
         //make enemy hand / deck for bot
-        const EnemyDeck = createEnemyDeck(cards, 'fire', 30)
+        const enemyElement = propGymElement || 'fire';
+        const EnemyDeck = createEnemyDeck(cards, enemyElement, 30);
         const [initEnemyHand, remEnemyDeck] = drawCardsToHand(EnemyDeck, 5);
 
         setPlayerFullDeck(remainingDeck);
@@ -94,16 +106,16 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
   };
 
   // get element specific background
-  const getBackgroundImage = () => {
-    switch (propGymElement) {
-      case 'fire': return '/FireDojo.png';
-      case 'water': return '/WaterDojo.png';
-      case 'ice': return '/IceDojo.png';
-      case 'air': return '/AirDojo.png';
-      case 'earth': return '/EarthDojo.png';
-      default: return '/dojo.png';
-    }
-  };
+const getBackgroundImage = () => {
+  switch (effectiveElement) {
+    case 'fire': return '/FireDojo.png';
+    case 'water': return '/WaterDojo.png';
+    case 'ice': return '/IceDojo.png';
+    case 'air': return '/AirDojo.png';
+    case 'earth': return '/EarthDojo.png';
+    default: return '/dojo.png';
+  }
+};
   const toggleAdvantageTable = () => {
     setShowAdvantage(!showAdvantage);
   };
@@ -130,7 +142,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     return () => {
       document.body.style.backgroundImage = '';
     };
-  }, [propGymElement]);
+  }, [effectiveElement]);
 
   // reusable card display component
   const CardDisplay: React.FC<{ card: Card; size?: 'small' | 'xsmall' | 'large'; blocked?: boolean }> = ({ card, size = 'large', blocked = false }) => {
@@ -236,50 +248,73 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     }
 
     //remove the selected card from hand
-    const newHand = playerHand.filter(c => c.id !== card.id);
+const handleCardSelect = (card: Card) => {
+  if (gamePhase !== 'selection') {
+    return;
+  }
 
-    //draw a new card from the deck if available TODO: shuffle at end of deck or draw game?
-    if (playerFullDeck.length > 0) {
-      const [drawnCards, remainingDeck] = drawCardsToHand(playerFullDeck, 1);
-      setPlayerFullDeck(remainingDeck);
-      setPlayerHand([...newHand, ...drawnCards]);
+  // remove the selected card from hand
+  const newHand = playerHand.filter(c => c.id !== card.id);
+
+  // draw a new card from the deck if available
+  if (playerFullDeck.length > 0) {
+    const [drawnCards, remainingDeck] = drawCardsToHand(playerFullDeck, 1);
+    setPlayerFullDeck(remainingDeck);
+    setPlayerHand([...newHand, ...drawnCards]);
+  } else {
+    setPlayerHand(newHand);
+  }
+
+  setSelectedCard(card);
+
+  // enemy plays a card
+  const randomEnemy = battle.agent_turn(enemyHand);
+  const EnemyNewHand = enemyHand.filter(c => c.id !== randomEnemy.id);
+
+  if (enemyFullDeck.length > 0) {
+    const [EdrawnCards, EremainingDeck] = drawCardsToHand(enemyFullDeck, 1);
+    setEnemyDeck(EremainingDeck);
+    setEnemyHand([...EnemyNewHand, ...EdrawnCards]);
+  } else {
+    setEnemyHand(EnemyNewHand);
+  }
+
+  setEnemyCard(randomEnemy);
+  setGamePhase('reveal');
+
+  setTimeout(() => {
+    const winner = battle.turn(card, randomEnemy);
+
+    if (winner?.id === card.id) {
+      setRoundWinner(playerName);
+    } else if (winner?.id === randomEnemy.id) {
+      setRoundWinner(enemyName);
     } else {
-      setPlayerHand(newHand);
+      setRoundWinner('Tie');
     }
 
-    setSelectedCard(card);
-    const randomEnemy = battle.agent_turn(enemyHand);
-    const EnemyNewHand = enemyHand.filter(c => c.id !== randomEnemy.id);
-    if (enemyFullDeck.length > 0) {
-      const [EdrawnCards, EremainingDeck] = drawCardsToHand(enemyFullDeck, 1);
-      setEnemyDeck(EremainingDeck);
-      setEnemyHand([...EnemyNewHand, ...EdrawnCards]);
-    } else {
-      setEnemyHand(EnemyNewHand);
+    const result = battle.checkwin();
+    setGameWinner(result);
+
+    // CARD DROP LOGIC – ONLY for non-gym battles (random encounters)
+    if (result === 1 && !propGymElement) {
+      const enemyPool = [...enemyFullDeck, ...enemyHand];
+      const [didDrop, cardDrop] = rollCardDrop(enemyPool);
+
+      if (didDrop && cardDrop) {
+        setDroppedCard(cardDrop);
+      }
     }
 
-    setEnemyCard(randomEnemy);
-    setGamePhase('reveal');
-    setTimeout(() => {
-      // battle.turn(card, randomEnemy);
-      const winner = battle.turn(card, randomEnemy);
-      if (winner?.id === card.id) {
-        setRoundWinner(playerName);
-      }
-      else if (winner?.id === randomEnemy.id) {
-        setRoundWinner(enemyName);
-      }
-      else {
-        setRoundWinner('Tie');
-      }
-      const result = battle.checkwin();
-      setGameWinner(result);
-      if (result === 1 && onVictory && propGymElement) {
-        onVictory(propGymElement);
-      }
-      setGamePhase('result');
-    }, 2000);
-  };
+    // Victory callback (keeps old gym behavior, now also works for encounters)
+    if (result === 1 && onVictory) {
+      const elementForParent = propGymElement || effectiveElement;
+      onVictory(elementForParent);
+    }
+
+    setGamePhase('result');
+  }, 2000);
+};
 
   const handleNextRound = () => {
     setSelectedCard(null);
@@ -314,27 +349,38 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
     );
   }
 
-  if (gameWinner !== 0) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-black flex items-center justify-center p-4">
-        <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-3xl p-12 text-center border border-white border-opacity-20">
-          <Trophy className="w-32 h-32 text-yellow-400 mx-auto mb-6" />
-          <h1 className="text-5xl font-bold text-white mb-4">
-            {gameWinner === 1 ? 'Victory!' : 'Defeat!'}
-          </h1>
-          <p className="text-2xl text-cyan-300 mb-8">
-            {gameWinner === 1 ? `${playerName} wins the battle!` : `${enemyName} wins the battle!`}
-          </p>
-          <button
-            onClick={onReturnHome || (() => window.location.reload())}
-            className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold text-xl hover:scale-105 transition"
-          >
-            Return to Map
-          </button>
-        </div>
+if (gameWinner !== 0) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-black flex items-center justify-center p-4">
+      <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-3xl p-12 text-center border border-white border-opacity-20">
+        <Trophy className="w-32 h-32 text-yellow-400 mx-auto mb-6" />
+        <h1 className="text-5xl font-bold text-white mb-4">
+          {gameWinner === 1 ? 'Victory!' : 'Defeat!'}
+        </h1>
+        <p className="text-2xl text-cyan-300 mb-8">
+          {gameWinner === 1 ? `${playerName} wins the battle!` : `${enemyName} wins the battle!`}
+        </p>
+
+        {/*Show dropped card on victory (random encounters) */}
+        {gameWinner === 1 && droppedCard && (
+          <div className="mb-8">
+            <p className="text-xl text-yellow-300 mb-4">You found a new card!</p>
+            <div className="flex justify-center">
+              <CardDisplay card={droppedCard} />
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={onReturnHome || (() => window.location.reload())}
+          className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold text-xl hover:scale-105 transition"
+        >
+          Return to Map
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // rendering stacks
   const renderStacks = (stacks: Record<string, Card[]>) => {
@@ -471,14 +517,14 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({ onReturnHome, playerName
                   type='jay'
                   flipped='y'
                   size='large'
-                ></Character>
+                />
           </div>
           <div className='flex'>
               <Character
-                type={propGymElement}
+                type={effectiveElement}
                 flipped='n'
                 size='large'
-            ></Character>
+            />
           </div>
             </div>
           </div>
