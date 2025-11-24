@@ -1,8 +1,8 @@
-import { Gym } from "../components/MapScreen"
+import { BackendGym, Gym } from "../components/MapScreen"
 import { Card } from "../game/battle"
 
 
-export async function get_gyms() {
+export async function get_gyms(): Promise<BackendGym[]> {
     try {
         const results = await fetch(`http://localhost:3000/gyms`)
         if (!results.ok){
@@ -16,7 +16,7 @@ export async function get_gyms() {
     }
 }
 
-export async function update_gym(cur_gym:Gym, new_user: string, new_Deck:Card[]) {
+export async function update_gym(cur_gym:Gym, new_user: string, new_Deck:Card[]): Promise<BackendGym> {
     try{
         if (!cur_gym || !new_Deck){
             throw new Error("Missing info ")

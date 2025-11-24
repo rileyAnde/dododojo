@@ -15,12 +15,18 @@ Creation Date: 11/2/2025
 import React, { useState } from 'react';
 import { Swords, X } from 'lucide-react';
 import { Card } from '../game/battle';
+import { get_gyms } from '../actions/gymActions';
 
 interface MapScreenProps {
   onReturnHome?: () => void;
   onEnterBattle?: (element: string) => void;
   playerName?: string;
   conqueredGyms?: Set<string>;
+}
+export interface BackendGym {
+  name: string; //element labeling name for consistency
+  owner_username?: string;
+  deck?: Card[];
 }
 
 export interface Gym {
@@ -39,10 +45,7 @@ export interface Gym {
 - encounter buttons
 - dojo battle selection
 */
-const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, playerName = 'Player', conqueredGyms = new Set() }) => {
-  const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
-  const [showAdvantage, setShowAdvantage] = useState(false);
-
+const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) => {
   // Coordinates tuned for your parchment:
   // FIRE is lined up on the lava section near the bottom-center.
   // Adjust numbers live if you want finer placement.
@@ -53,6 +56,10 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
     { id: 'earth-shrine', name: 'Earth Shrine', element: 'earth', x: 1370, y: 300, icon: '/elementsymbols/earth.png' },
     { id: 'air-peak', name: 'Air Peak', element: 'air', x: 150, y: 450, icon: '/elementsymbols/air.png' },
   ];
+
+  const [selectedGym, setSelectedGym] = useState<Gym | null>(null);
+  const [showAdvantage, setShowAdvantage] = useState(false);
+  const [gymsState, setGyms] = useState<Gym[]>(gyms);
 
   // Call an encounter sprite element 
   const elements = [
@@ -136,6 +143,28 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
   };
 
   React.useEffect(() => {
+    //on load fetch gym data from backend and update state
+    (async () => {
+      try {
+        const cur_gyms: BackendGym[] = await get_gyms()
+        if (!cur_gyms || cur_gyms.length === 0) {
+          throw new Error("No gyms found");
+        }
+          setGyms(prev =>
+            prev.map(gym => {
+              const match = cur_gyms.find(g => g.name === gym.element);
+              return match
+                ? { ...gym, owner_username: match.owner_username, deck: match.deck }
+                : gym;
+            })
+          );
+        }catch (error) {
+        alert("Error fetching gyms: " + error);
+        console.error("Error fetching gyms:", error);
+        } 
+        })();
+
+  
   // spawn one dodo immediately
   let current = generateSingleEncounter();
   setEncounter(current);
@@ -199,7 +228,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
             />
 
             {/* Clickable dojo placeholders */}
-            {gyms.map((gym) => (
+            {gymsState.map((gym) => (
               <button
                 key={gym.id}
                 onClick={() => handleGymClick(gym)}
@@ -263,8 +292,8 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
 
             <p className="text-center text-cyan-300 mb-4">
               Defended by: <span className="font-bold text-yellow-400">
-                {conqueredGyms.has(selectedGym.element)
-                  ? playerName
+                {selectedGym.owner_username
+                  ? selectedGym.owner_username
                   : `Sensei ${selectedGym.element.charAt(0).toUpperCase() + selectedGym.element.slice(1)}`}
               </span>
             </p>

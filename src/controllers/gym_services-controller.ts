@@ -4,10 +4,6 @@ import { gym } from '../models/gyms.js';
 import { compressCards } from './user_services-controller.js';
 
 export const getGymServices = async (req: Request, res: Response) => {
-    if (!req.params.name){
-        return res.status(400).json({ message: 'Gym name is required' });
-    }
-    const gymName = req.params.name;
     const rustResponse = await fetch(`http://localhost:8080/gyms`);
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
