@@ -62,10 +62,8 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
       ? cur_user!.inventory
       : generateEnemyDeck(cards, 'water', 20, 0.6);
   
-  console.log(initialActiveDeck)
-  console.log(initialInventory)
   const [activeDeck, setActiveDeck] = useState<Card[]>(initialActiveDeck);
-  const [inventory, setInventory] = useState<Card[]>(initialInventory);
+  const [inventory, setInventory] = useState<Card[]>(initialInventory.filter(c => !initialActiveDeck.includes(c)));
   const [filterType, setFilterType] = useState<string>('all');
   const [sortAsc, setSortAsc] = useState<boolean>(true);
 
