@@ -247,12 +247,6 @@ const getBackgroundImage = () => {
       return;
     }
 
-    //remove the selected card from hand
-const handleCardSelect = (card: Card) => {
-  if (gamePhase !== 'selection') {
-    return;
-  }
-
   // remove the selected card from hand
   const newHand = playerHand.filter(c => c.id !== card.id);
 

@@ -59,28 +59,30 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, play
     { id: 'earth', icon: '/earth.png' },
     { id: 'air', icon: '/air.png' },
   ];
-  // Generate encounters near each dojo
-  const generateEncounters = () => { 
-    return gyms.map((gym) => {
-//random element to appear on screen
-      const random = Math.floor(Math.random() * elements.length);
-      const chosen = elements[random];
+  
+  //unneeded
+//   // Generate encounters near each dojo
+//   const generateEncounters = () => { 
+//     return gyms.map((gym) => {
+// //random element to appear on screen
+//       const random = Math.floor(Math.random() * elements.length);
+//       const chosen = elements[random];
 
-      // Slight random offset
-      const offsetX = (Math.random() * 8) - 4; // -4% to +4%
-      const offsetY = (Math.random() * 8) - 4;
-      // const rawX = gym.x + offsetX;
-      // const rawY = gym.y + offsetY;
+//       // Slight random offset
+//       const offsetX = (Math.random() * 8) - 4; // -4% to +4%
+//       const offsetY = (Math.random() * 8) - 4;
+//       // const rawX = gym.x + offsetX;
+//       // const rawY = gym.y + offsetY;
 
-      return {
-        id: `${chosen.id}-${gym.id}-${Math.random().toString(36).slice(2)}`,
-        element: chosen.id,
-        icon: chosen.icon,
-        x: gym.x + offsetX,
-        y: gym.y + offsetY,
-      };
-    });
-  };
+//       return {
+//         id: `${chosen.id}-${gym.id}-${Math.random().toString(36).slice(2)}`,
+//         element: chosen.id,
+//         icon: chosen.icon,
+//         x: gym.x + offsetX,
+//         y: gym.y + offsetY,
+//       };
+//     });
+//   };
 
   // generates a single encounter and changes every few seconds
   const generateSingleEncounter = () => {

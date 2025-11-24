@@ -19,7 +19,7 @@ import BattleScreen from './components/BattleScreen';
 import MapScreen from './components/MapScreen';
 import Inventory from './components/Inventory'
 import { Card } from './game/battle';
-import { create_user, delete_user, get_user } from './actions/userActions';
+import { create_user, get_user } from './actions/userActions';
 
 // Define the posible screens users can view
 type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
