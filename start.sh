@@ -43,6 +43,6 @@ EOF
 }
 
 # Start all three services
-start_in_terminal "Server"   "./start_server.sh"
-start_in_terminal "Backend"  "./start_backend.sh"
-start_in_terminal "Frontend" "./start_dev.sh"
+start_in_terminal "Server"   "bash start_server.sh"
+start_in_terminal "Backend"  "bash start_backend.sh"
+start_in_terminal "Frontend" "bash start_dev.sh"

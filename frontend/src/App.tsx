@@ -60,7 +60,7 @@ const CardJitsuGame: React.FC = () => {
   // Game states
   const [selectedGym, setSelectedGym] = useState<string>('fire');
   const [conqueredGyms, setConqueredGyms] = useState<Set<string>>(new Set());
- 
+
   /* Function to deal with a user login
   - on success: set the user state and display home page
   - on fail: alert user and clear password

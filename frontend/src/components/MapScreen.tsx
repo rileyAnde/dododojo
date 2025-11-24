@@ -14,6 +14,7 @@ Creation Date: 11/2/2025
 
 import React, { useState } from 'react';
 import { Swords, X } from 'lucide-react';
+import { Card } from '../game/battle';
 
 interface MapScreenProps {
   onReturnHome?: () => void;
@@ -22,9 +23,11 @@ interface MapScreenProps {
   conqueredGyms?: Set<string>;
 }
 
-interface Gym {
+export interface Gym {
   id: string;
   name: string;
+  owner_username?: string;
+  deck?: Card[];
   element: 'fire' | 'water' | 'ice' | 'earth' | 'air';
   x: number; // percent from left edge of the map image
   y: number; // percent from top edge of the map image

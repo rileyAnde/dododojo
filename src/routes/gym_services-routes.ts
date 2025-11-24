@@ -5,7 +5,7 @@ import express from 'express';
 const gym_services= express.Router()
 
 // authenticate user service routes
-gym_services.get('/user/:username', getGymServices);
-gym_services.put('/user/:userId', updateGymService);
+gym_services.get('/gyms', getGymServices);
+gym_services.put('/gyms/:gymName', updateGymService);
 
 export default gym_services;

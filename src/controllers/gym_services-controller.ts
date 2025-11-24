@@ -8,13 +8,13 @@ export const getGymServices = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Gym name is required' });
     }
     const gymName = req.params.name;
-    const rustResponse = await fetch(`http://localhost:8080/gyms/${gymName}`);
+    const rustResponse = await fetch(`http://localhost:8080/gyms`);
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
     const rustData = await rustResponse.json();
     console.log('Rust service response:', rustData);
-    return res.status(200).json({ gym: rustData });
+    return res.status(200).json({ gyms: rustData });
 };
 
 export const updateGymService = async (req: Request, res: Response) => {
@@ -35,7 +35,5 @@ export const updateGymService = async (req: Request, res: Response) => {
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
-    const rustData = await rustResponse.json();
-    console.log('Rust service response:', rustData);
-    return res.status(200).json({ gym: rustData });
+    return res.status(200).json({ gym: updateData });
 };
