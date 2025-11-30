@@ -202,8 +202,9 @@ const CardJitsuGame: React.FC = () => {
     return (
       <BattleScreen 
         onReturnHome={() => setCurrentPage('map')}
-        playerName={user?.username} 
+        cur_user={user}
         gymElement={selectedGym}
+        //TODO: update onVictory to update gyms db 
         onVictory={(element) => {
           setConqueredGyms(prev => new Set(prev).add(element));
           }}

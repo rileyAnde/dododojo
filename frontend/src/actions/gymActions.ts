@@ -42,7 +42,6 @@ export async function update_gym(cur_gym:Gym, new_user: string, new_Deck:Card[])
             deck: result.deck
         }
         return updated_gym
-
     }catch(error){
         console.log(error)
         throw error

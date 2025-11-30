@@ -4,10 +4,11 @@ import { Battle, Card } from '../game/battle';
 import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
 import Character from './character';
 import { rollCardDrop } from '../game/deckGenerator';
+import { User } from '../App';
 
 interface BattleScreenProps {
   onReturnHome?: () => void;
-  playerName?: string;
+  cur_user?: User;
   gymName?: string;
   element?: string;
   gymElement?: string;
@@ -16,7 +17,7 @@ interface BattleScreenProps {
 
 const CardJitsuBattle: React.FC<BattleScreenProps> = ({
   onReturnHome,
-  playerName: propPlayerName,
+  cur_user: propCur_user,
   element: propElement,
   gymElement: propGymElement,
   onVictory,
@@ -25,11 +26,11 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({
   const effectiveElement = propGymElement || propElement || 'fire';
 
   // Mock player data
-  const [playerName] = useState(propPlayerName || 'Player1');
+  const [cur_user] = useState<User|undefined>(propCur_user);
   const [enemyName] = useState('Sensei');
 
   // Game state
-  const [battle] = useState(() => new Battle(playerName, enemyName));
+  const [battle] = useState(() => new Battle(cur_user?.username || 'Player1', enemyName));
   const [gamePhase, setGamePhase] = useState<'loading' | 'selection' | 'reveal' | 'result'>('loading');
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [enemyCard, setEnemyCard] = useState<Card | null>(null);
@@ -58,7 +59,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({
       try {
         // loads all the cards in cards.xml 
         const cards = await loadCardsFromXML();
-        const fullPlayerDeck = createPlayerDeck(cards); // create / pull deck
+        const fullPlayerDeck = cur_user?.primaryDeck ? createPlayerDeck(cur_user?.primaryDeck) : createPlayerDeck(cards); // create player deck from user's primary deck or full card list
         const [initialHand, remainingDeck] = drawCardsToHand(fullPlayerDeck, 5);
 
         //make enemy hand / deck for bot
@@ -280,7 +281,7 @@ const getBackgroundImage = () => {
     const winner = battle.turn(card, randomEnemy);
 
     if (winner?.id === card.id) {
-      setRoundWinner(playerName);
+      setRoundWinner(cur_user?.username || 'Player1');
     } else if (winner?.id === randomEnemy.id) {
       setRoundWinner(enemyName);
     } else {
@@ -352,7 +353,7 @@ if (gameWinner !== 0) {
           {gameWinner === 1 ? 'Victory!' : 'Defeat!'}
         </h1>
         <p className="text-2xl text-cyan-300 mb-8">
-          {gameWinner === 1 ? `${playerName} wins the battle!` : `${enemyName} wins the battle!`}
+          {gameWinner === 1 ? `${cur_user?.username || 'Player1'} wins the battle!` : `${enemyName} wins the battle!`}
         </p>
 
         {/*Show dropped card on victory (random encounters) */}
@@ -530,10 +531,10 @@ if (gameWinner !== 0) {
             <div className="flex flex-col items-start gap-2">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {playerName[0]}
+                  {cur_user?.username[0] || 'P'}
                 </div>
                 <div>
-                  <div className="text-white font-bold">{playerName}</div>
+                  <div className="text-white font-bold">{cur_user?.username || 'Player1'}</div>
                 </div>
               </div>
             </div>
