@@ -42,8 +42,11 @@ export async function expand_cards(curUser_cards: backend_Card[]):Promise<Card[]
 }
 
 
-//creates a shuffled 30-card deck for the player, will be changed to grabbing active deck
+//creates a shuffled deck for the player
 export function createPlayerDeck(cards: Card[]): Card[] {
+  if (cards.length < 30) {
+    return sampleWithoutReplacement(cards, cards.length);
+  }
   return sampleWithoutReplacement(cards, 30);
 }
 
