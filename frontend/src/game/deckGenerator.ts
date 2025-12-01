@@ -56,7 +56,7 @@ function shuffle<T>(arr: T[]): T[] {
  */
 export function rollCardDrop(
   deck: Card[],
-  dropRate = 0.25
+  dropRate = 1.0
 ): [boolean, Card | null] {
   const roll = Math.random();
   if (roll <= dropRate && deck.length > 0) {
