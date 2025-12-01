@@ -5,10 +5,10 @@ if  [[ $1 = "-full" ]]; then
     npm install
 
     # generate xml
-    python3 scripts/generate_cards.py
+    python scripts/generate_cards.py
 
     # generate cards
-    python3 scripts/generate_card_images.py
+    python scripts/generate_card_images.py
 
     # nav to frontend to start server
     cd frontend

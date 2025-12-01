@@ -79,77 +79,86 @@ export async function create_user(username:string, password: string): Promise<Us
     }
 }
 
-export async function update_PrimaryDeck(cur_user:User, new_Deck:Card[]) {
-    try{
-        if (!cur_user || !new_Deck){
-            throw new Error("Missing info ")
-        }
-        const updateData = {updateData: { ...cur_user, primaryDeck: new_Deck }}
-        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updateData)
-        })
-        if (!response.ok){
-            throw new Error ("Issue Processing ")
-        }
-        let result = await response.json()
-        result = result.updatedAccount
-        console.log(result)
-        
-        const updated_user: User = {
-            id: result.id,
-            username: result.username, 
-            password: result.password,
-            level: result.level,
-            inventory: result.inventory,
-            primaryDeck: result.primaryDeck,
-            gymsOwned: result.gymsOwned
-        }
-        return updated_user
-
-    }catch(error){
-        console.log(error)
-        throw error
+export async function update_PrimaryDeck(cur_user: User, new_Deck: Card[]): Promise<User> {
+  try {
+    if (!cur_user || !new_Deck) {
+      throw new Error("Missing info ");
     }
+
+    const updateData = { updateData: { ...cur_user, primaryDeck: new_Deck } };
+
+    const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Issue Processing ");
+    }
+
+    let result = await response.json();
+    result = result.updatedAccount;
+    console.log(result);
+
+    const updated_user: User = {
+      id: result.id,
+      username: result.username,
+      password: result.password,
+      level: result.level,
+      inventory: result.inventory,
+      primaryDeck: result.primaryDeck,
+      gymsOwned: result.gymsOwned,
+    };
+
+    return updated_user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
-export async function update_Inventory(cur_user:User, new_Deck:Card[]) {
-    try{
-        if (!cur_user || !new_Deck){
-            throw new Error("Missing info ")
-        }
-        const updateData = {updateData: { ...cur_user, inventory: new_Deck }}
-        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updateData)
-        })
-        if (!response.ok){
-            throw new Error ("Issue Processing ")
-        }
-        let result = await response.json()
-        result = result.updatedAccount
-        console.log(result)
-        
-        const updated_user: User = {
-            id: result.id,
-            username: result.username, 
-            password: result.password,
-            level: result.level,
-            inventory: result.inventory,
-            primaryDeck: result.primaryDeck,
-            gymsOwned: result.gymsOwned
-        }
-        return updated_user
-    }catch(error){
-        console.log(error)
-        throw error
+export async function update_Inventory(cur_user: User, new_Deck: Card[]): Promise<User> {
+  try {
+    if (!cur_user || !new_Deck) {
+      throw new Error("Missing info ");
     }
+
+    const updateData = { updateData: { ...cur_user, inventory: new_Deck } };
+
+    const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Issue Processing ");
+    }
+
+    let result = await response.json();
+    result = result.updatedAccount;
+    console.log(result);
+
+    const updated_user: User = {
+      id: result.id,
+      username: result.username,
+      password: result.password,
+      level: result.level,
+      inventory: result.inventory,
+      primaryDeck: result.primaryDeck,
+      gymsOwned: result.gymsOwned,
+    };
+
+    return updated_user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 export async function delete_user(cur_user: User){

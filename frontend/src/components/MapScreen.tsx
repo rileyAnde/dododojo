@@ -19,10 +19,11 @@ import { get_gyms } from '../actions/gymActions';
 
 interface MapScreenProps {
   onReturnHome?: () => void;
-  onEnterBattle?: (element: string) => void;
+  onEnterBattle?: (element: string, isEncounter?: boolean) => void;
   playerName?: string;
   conqueredGyms?: Set<string>;
 }
+
 export interface BackendGym {
   name: string; //element labeling name for consistency
   owner_username?: string;
@@ -138,9 +139,13 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
 // function to click into a gym
   const handleGymClick = (gym: Gym) => setSelectedGym(gym);
 // function to enter element battle
+  // function to enter element battle
   const handleEnterBattle = () => {
-    if (selectedGym && onEnterBattle) onEnterBattle(selectedGym.element);
-  };
+  if (selectedGym && onEnterBattle) {
+    // Gym battle
+    onEnterBattle(selectedGym.element, false);
+  }
+};
 
   React.useEffect(() => {
     //on load fetch gym data from backend and update state
@@ -266,7 +271,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
                 transform: "translate(-50%, -50%)",
                 zIndex: 30,
               }}
-              onClick={() => onEnterBattle && onEnterBattle(encounter.element)}
+              onClick={() => onEnterBattle && onEnterBattle(encounter.element, true)}
             >
               <img
                 src={encounter.icon}

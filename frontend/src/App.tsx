@@ -7,7 +7,7 @@ handleDeleteAccount -> prompt for confirmation, remove user from state, reset ap
 Inputs: None
 Outputs: the DOM tree that React will render to the browser
 Outside Sources: minor ChatGPT and Github Copilot
-Authors: Riley Anderson, Colin Treanor, Dusin Le, Hannah Smith
+Authors: Riley Anderson, Colin Treanor, Dusin Le, Hannah Smith,Jacob Richards
 Creation Date: 10/20/2025
 */
 
@@ -19,7 +19,7 @@ import BattleScreen from './components/BattleScreen';
 import MapScreen from './components/MapScreen';
 import Inventory from './components/Inventory'
 import { Card } from './game/battle';
-import { create_user, get_user } from './actions/userActions';
+import { create_user, get_user, update_Inventory } from './actions/userActions';
 
 // Define the posible screens users can view
 type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
@@ -58,7 +58,9 @@ const CardJitsuGame: React.FC = () => {
   // State to store local history of accounts
   const [accounts, setAccounts] = useState<User[]>([]);
   // Game states
-  const [selectedGym, setSelectedGym] = useState<string>('fire');
+  // Track gym battles vs random encounters
+  const [selectedGym, setSelectedGym] = useState<string | null>(null);
+  const [encounterElement, setEncounterElement] = useState<string | null>(null);
   const [conqueredGyms, setConqueredGyms] = useState<Set<string>>(new Set());
 
   /* Function to deal with a user login
@@ -191,6 +193,22 @@ const CardJitsuGame: React.FC = () => {
     setPassword('');
     setCurrentPage('login');
   };
+// Save dropped card into the user's inventory
+const handleCardDrop = async (card: Card) => {
+  if (!user) return;
+
+  try {
+    const currentInventory = Array.isArray(user.inventory) ? user.inventory : [];
+    const newInventory = [...currentInventory, card];
+
+    // Make sure backend route exists
+    const updatedUser = await update_Inventory(user, newInventory);
+    setUser(updatedUser);
+  } catch (err) {
+    console.error("Failed to update inventory:", err);
+    alert("You found a new card, but saving it failed. It may appear later.");
+  }
+};
 
 
   // Conditional Rendering 
@@ -198,19 +216,20 @@ const CardJitsuGame: React.FC = () => {
   /* Display the battle screen
   - when a user enters a battle, render this component which handles battle logic
   */ 
-  if (currentPage === 'battle') {
-    return (
-      <BattleScreen 
-        onReturnHome={() => setCurrentPage('map')}
-        cur_user={user}
-        gymElement={selectedGym}
-        //TODO: update onVictory to update gyms db 
-        onVictory={(element) => {
-          setConqueredGyms(prev => new Set(prev).add(element));
-          }}
-        />
-    );
-  }
+if (currentPage === 'battle') {
+  return (
+    <BattleScreen 
+      onReturnHome={() => setCurrentPage('map')}
+      cur_user={user}
+      gymElement={selectedGym ?? undefined}
+      element={encounterElement ?? undefined}
+      onVictory={(element) => {
+        setConqueredGyms(prev => new Set(prev).add(element));
+      }}
+      onCardDrop={handleCardDrop}
+    />
+  );
+}
 
   /* Display inventory screen
   - display the users cards and allow them to manage their deck
@@ -222,7 +241,6 @@ const CardJitsuGame: React.FC = () => {
       cur_user={user} />
     )
   }
-
   /* Display the map
   - show the map and allow user to select gyms and encounter battles
   */
@@ -230,8 +248,16 @@ const CardJitsuGame: React.FC = () => {
     return (
       <MapScreen 
         onReturnHome={() => setCurrentPage('home')}
-        onEnterBattle={(element) => {
-          setSelectedGym(element);
+        onEnterBattle={(element, isEncounter) => {
+          if (isEncounter) {
+            // Random encounter battle
+            setEncounterElement(element);
+            setSelectedGym(null);
+          } else {
+            // Gym battle
+            setSelectedGym(element);
+            setEncounterElement(null);
+          }
           setCurrentPage('battle');
         }}
         playerName={user?.username}
@@ -243,7 +269,7 @@ const CardJitsuGame: React.FC = () => {
   /*Display login screen
   - entry point of the app, contains login form 
   */
-  if (currentPage === 'login') {
+ if (currentPage === 'login') {
     // may need a way to log what user logins have been made!
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center p-4">
