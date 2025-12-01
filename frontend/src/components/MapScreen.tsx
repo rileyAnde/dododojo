@@ -24,6 +24,7 @@ interface MapScreenProps {
   onEnterBattle?: (element: string) => void;
   playerName?: string;
   conqueredGyms?: Set<string>;
+  isTutorial?: boolean;
 }
 export interface BackendGym {
   name: string; //element labeling name for consistency
@@ -47,7 +48,7 @@ export interface Gym {
 - encounter buttons
 - dojo battle selection
 */
-const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) => {
+const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, isTutorial }) => {
   // Coordinates tuned for your parchment:
   // FIRE is lined up on the lava section near the bottom-center.
   // Adjust numbers live if you want finer placement.
@@ -205,13 +206,13 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
 // show user available dojos, sprite encounters and advantage chart as a UI
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
-      <TutorialOverlay
+      {isTutorial && <TutorialOverlay
               visible={active}
               text={step.text}
               targetRef={step.targetRef}
               onNext={next}
               onSkip={skip}
-            />
+            />}
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-4 border border-white/20">

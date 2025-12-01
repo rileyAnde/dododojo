@@ -51,6 +51,7 @@ const CardJitsuGame: React.FC = () => {
 
   // State for which screen is currently visible
   const [currentPage, setCurrentPage] = useState<Page>('login');
+  const [isTutorial, setIsTutorial] = useState<boolean>(false);
   // State to hold current user
   const [user, setUser] = useState<User | undefined>(undefined);
   // State to hold login/signup info
@@ -73,9 +74,13 @@ const CardJitsuGame: React.FC = () => {
     { text: "Explore the map using this button.", targetRef: mapButtonRef },
     { text: "Try clicking the map button!", targetRef: mapButtonRef }
   ];
-
   const { active, step, next, skip } = useTutorial(homeSteps);
-
+  
+  React.useEffect(() => {
+    if (!active) {
+      setIsTutorial(false);
+    }
+}, [active]);
 
   /* Function to deal with a user login
   - on success: set the user state and display home page
@@ -141,6 +146,7 @@ const CardJitsuGame: React.FC = () => {
     console.log('Users Registered:', [...accounts, newUser]);
     setUser(newUser);
     setCurrentPage('home')
+    setIsTutorial(true);
   };
 
   /* Function to log out the user
@@ -251,6 +257,7 @@ const CardJitsuGame: React.FC = () => {
         }}
         playerName={user?.username}
         conqueredGyms={conqueredGyms}
+        isTutorial={isTutorial}
       />
     );
   }
@@ -410,13 +417,13 @@ const CardJitsuGame: React.FC = () => {
   */
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-900 to-blue-800 relative overflow-hidden">
-      <TutorialOverlay
+      {isTutorial && <TutorialOverlay
         visible={active}
         text={step.text}
         targetRef={step.targetRef}
         onNext={next}
         onSkip={skip}
-      />
+      />}
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">
