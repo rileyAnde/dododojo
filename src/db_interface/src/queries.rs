@@ -1,4 +1,4 @@
-"""
+/*
 Functions: 
 get_all_users_query:
     - Retrieves all users from the database
@@ -21,7 +21,7 @@ update_gym_query:
     
 Authors: Ryland Edwards
 Creation Date: 10/20/2025
-"""
+*/
 
 use rusqlite::{Connection, Result as SqlResult};
 use crate::data_structs::{GetUser, CreateUser, Gym};

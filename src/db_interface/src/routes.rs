@@ -1,4 +1,4 @@
-"""
+/*
 Functions: 
 get_one_user_http:
     - Handles HTTP GET requests to retrieve a single user by username
@@ -18,7 +18,7 @@ update_gym_http:
     - Handles HTTP PUT requests to update an existing gym's data
 Authors: Ryland Edwards
 Creation Date: 10/20/2025
-"""
+*/
 
 use actix_web::{post, put, delete, get, web, HttpResponse, Responder};
 

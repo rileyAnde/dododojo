@@ -1,4 +1,4 @@
-"""
+/*
 Functions: 
 main:
     - Establishes a connection to the SQLite database
@@ -9,7 +9,7 @@ Inputs: HTTP requests from frontend
 Outputs: HTTP responses to frontend
 Authors: Ryland Edwards
 Creation Date: 10/20/2025
-"""
+*/
 
 mod queries;
 mod routes;
