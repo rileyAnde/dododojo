@@ -85,6 +85,9 @@ export async function update_PrimaryDeck(cur_user:User, new_Deck:Card[]) {
             throw new Error("Missing info ")
         }
         const updateData = {updateData: { ...cur_user, primaryDeck: new_Deck }}
+        console.log('inventory length in action:', cur_user.inventory.length);
+        console.log('primaryDeck length in action:', cur_user.primaryDeck.length);
+        console.log('updateData being sent:', updateData);
         const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
                 method: 'PUT',
                 headers: {
@@ -97,17 +100,36 @@ export async function update_PrimaryDeck(cur_user:User, new_Deck:Card[]) {
         }
         let result = await response.json()
         result = result.updatedAccount
-        console.log(result)
+        console.log('updatedAccount received:', result);
+
+        const inventory_raw = typeof result.Inventory === 'string' 
+            ? JSON.parse(result.Inventory) 
+            : result.Inventory;
+        // Check if inventory is a stringified array and parse it
+        const primary_deck_raw = typeof result.primary_deck === 'string'
+            ? JSON.parse(result.primary_deck)
+            : result.primary_deck;
+        //always expand inventory first if inventory is missing we will create starter deck
+        const inventory = await expand_cards(
+            Array.isArray(inventory_raw) ? inventory_raw : []
+            );
+        // Expand primary deck, if missing use inventory as fallback
+        const primary_deck = primary_deck_raw ? await expand_cards( 
+            Array.isArray(primary_deck_raw) ? primary_deck_raw : []
+        ) : inventory;
         
         const updated_user: User = {
-            id: result.id,
-            username: result.username, 
-            password: result.password,
-            level: result.level,
-            inventory: result.inventory,
-            primaryDeck: result.primaryDeck,
+            id: cur_user.id,
+            username: result.Username, 
+            password: result.Password,
+            level: result.Level,
+            inventory: inventory ?? [],
+            primaryDeck: primary_deck ?? [],
             gymsOwned: result.gymsOwned
         }
+        console.log('inventory length in response:', updated_user.inventory.length);
+        console.log('primaryDeck length in response:', updated_user.primaryDeck.length);
+        console.log('updated user in update_PrimaryDeck:', updated_user);
         return updated_user
 
     }catch(error){
@@ -134,17 +156,33 @@ export async function update_Inventory(cur_user:User, new_Deck:Card[]) {
         }
         let result = await response.json()
         result = result.updatedAccount
-        console.log(result)
+
+        const inventory_raw = typeof result.Inventory === 'string' 
+            ? JSON.parse(result.Inventory) 
+            : result.Inventory;
+        // Check if inventory is a stringified array and parse it
+        const primary_deck_raw = typeof result.primary_deck === 'string'
+            ? JSON.parse(result.primary_deck)
+            : result.primary_deck;
+        //always expand inventory first if inventory is missing we will create starter deck
+        const inventory = await expand_cards(
+            Array.isArray(inventory_raw) ? inventory_raw : []
+            );
+        // Expand primary deck, if missing use inventory as fallback
+        const primary_deck = primary_deck_raw ? await expand_cards( 
+            Array.isArray(primary_deck_raw) ? primary_deck_raw : []
+        ) : inventory;
         
         const updated_user: User = {
-            id: result.id,
-            username: result.username, 
-            password: result.password,
-            level: result.level,
-            inventory: result.inventory,
-            primaryDeck: result.primaryDeck,
+            id: cur_user.id,
+            username: result.Username, 
+            password: result.Password,
+            level: result.Level,
+            inventory: inventory ?? [],
+            primaryDeck: primary_deck ?? [],
             gymsOwned: result.gymsOwned
         }
+
         return updated_user
     }catch(error){
         console.log(error)

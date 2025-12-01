@@ -218,7 +218,9 @@ const CardJitsuGame: React.FC = () => {
   if (currentPage === 'inventory') {
     console.log(user?.username)
     return (
-      <Inventory onReturnHome={() => setCurrentPage('home')}
+      <Inventory onReturnHome={(cur_user:User) => {
+        setUser(cur_user);
+        setCurrentPage('home')}}
       cur_user={user} />
     )
   }

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Swords, Flame, Droplet, Snowflake, Filter, SortAsc } from 'lucide-react';
 import { Card } from '../game/battle';
@@ -6,8 +7,9 @@ import { loadCardsFromXML } from '../utils/cardLoader';
 import { User } from '../App';
 import { update_PrimaryDeck } from '../actions/userActions';
 
+
 interface Inventory {
-  onReturnHome?: () => void;
+  onReturnHome?: (cur_user: User) => void;
   cur_user?: User;
 }
 //temp for displaying
@@ -35,12 +37,19 @@ const getCardColor = (type: string) => {
   }
 };
 
-const handleDeckUpdate = async (user:User|undefined, activeDeck:Card[], onReturnHome: () => void ) => {
+//updates user's primary deck on backend -- calls a user action
+//passes updated user to onReturnHome callback
+//won't let user leave until update is successful
+const handleDeckUpdate = async (user:User|undefined, activeDeck:Card[], onReturnHome: (cur_user: User) => void ) => {
     try{
       if (user){
         console.log("user in handleDeckUpdate", user)
-        await update_PrimaryDeck(user, activeDeck)
-        onReturnHome()
+        console.log('activeDeck length:', activeDeck.length);
+        console.log('old activeDeck length:', user.primaryDeck.length);
+        console.log('inventory length:', user.inventory.length);
+        user = await update_PrimaryDeck(user, activeDeck)
+        console.log("updated user in handleDeckUpdate", user)
+        onReturnHome(user)
         return
       }
     }catch(error){
@@ -49,9 +58,31 @@ const handleDeckUpdate = async (user:User|undefined, activeDeck:Card[], onReturn
     }
 
   }
+  //subtract active deck from inventory to get remaining inventory 
+  //--this is only for the visual this does not update backend inventory
+  export function subtractDecks(all: Card[], active: Card[]) {
+  // build counts of active ids
+  const counts = new Map<number, number>();
+  for (const c of active) counts.set(c.id, (counts.get(c.id) ?? 0) + 1);
+
+  // produce remaining inventory by consuming counts
+  const result: Card[] = [];
+  for (const c of all) {
+    const cnt = counts.get(c.id) ?? 0;
+    if (cnt > 0) {
+      counts.set(c.id, cnt - 1); // consume one instance
+    } else {
+      result.push(c);
+    }
+  }
+  return result;
+}
 
 const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
+  console.log('cur_user in InventoryManager:', cur_user);
+  
   const [playerName] = useState(cur_user?.username || 'Player1');
+  //initializes active deck and inventory, insures not empty, if so generates default deck -- ideally doesn't happen
   const initialActiveDeck: Card[] =
     (Array.isArray(cur_user?.primaryDeck) && cur_user!.primaryDeck.length > 0)
       ? cur_user!.primaryDeck
@@ -61,11 +92,20 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
     (Array.isArray(cur_user?.inventory) && cur_user!.inventory.length > 0)
       ? cur_user!.inventory
       : generateEnemyDeck(cards, 'water', 20, 0.6);
-  
+  //
   const [activeDeck, setActiveDeck] = useState<Card[]>(initialActiveDeck);
-  const [inventory, setInventory] = useState<Card[]>(initialInventory.filter(c => !initialActiveDeck.includes(c)));
+  //if inventory or activeDeck change, recompute inventory
+  const computedInventory = React.useMemo(
+  () => subtractDecks(initialInventory, activeDeck),
+  [initialInventory, activeDeck]
+  );
+  //state for inventory  
+  const [inventory, setInventory] = useState<Card[]>(computedInventory);
+  //filter and sort states
   const [filterType, setFilterType] = useState<string>('all');
   const [sortAsc, setSortAsc] = useState<boolean>(true);
+  console.log('inventory length in InventoryManager:', inventory.length);
+  console.log('activeDeck length in InventoryManager:', activeDeck.length);
 
   const handleDragStart = (card: Card, from: 'active' | 'inventory') => {
     (event as DragEvent).dataTransfer?.setData('card', JSON.stringify({ card, from }));
