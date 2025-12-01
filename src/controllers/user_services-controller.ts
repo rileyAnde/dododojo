@@ -59,11 +59,13 @@ export const addUserService = async (req: Request, res: Response) => {
         Username: passedInfo.Username,
         Password: hashPassword(passedInfo.Password),
     }
+    console.log('Creating new account:', newAccount);
     const rustResponse = await fetch(`http://localhost:8080/createuser`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(newAccount)
     });
+    console.log('Rust service response:', rustResponse);
 
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error with processing, try again' });
