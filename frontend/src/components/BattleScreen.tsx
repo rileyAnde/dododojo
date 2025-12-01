@@ -13,6 +13,7 @@ interface BattleScreenProps {
   element?: string;
   gymElement?: string;
   onVictory?: (element: string) => void;
+  onCardDrop?: (card: Card) => void;
 }
 
 const CardJitsuBattle: React.FC<BattleScreenProps> = ({
@@ -21,6 +22,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({
   element: propElement,
   gymElement: propGymElement,
   onVictory,
+  onCardDrop,
 }) => {
   // Use gymElement first if provided, otherwise fall back to element, then fire
   const effectiveElement = propGymElement || propElement || 'fire';
@@ -63,7 +65,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({
         const [initialHand, remainingDeck] = drawCardsToHand(fullPlayerDeck, 5);
 
         //make enemy hand / deck for bot
-        const enemyElement = propGymElement || 'fire';
+        const enemyElement = propGymElement || propElement || 'fire';
         const EnemyDeck = createEnemyDeck(cards, enemyElement, 30);
         const [initEnemyHand, remEnemyDeck] = drawCardsToHand(EnemyDeck, 5);
 
@@ -292,14 +294,25 @@ const getBackgroundImage = () => {
     setGameWinner(result);
 
     // CARD DROP LOGIC – ONLY for non-gym battles (random encounters)
-    if (result === 1 && !propGymElement) {
-      const enemyPool = [...enemyFullDeck, ...enemyHand];
-      const [didDrop, cardDrop] = rollCardDrop(enemyPool);
+// CARD DROP LOGIC – ONLY for non-gym battles (random encounters)
+if (result === 1 && !propGymElement) {
+  // always drop a card that matches this encounter's element
+  const dropElement = effectiveElement; // this is propElement for encounters
 
-      if (didDrop && cardDrop) {
-        setDroppedCard(cardDrop);
-      }
+  // Only use enemy cards of that element for drops
+  const enemyPool = [...enemyFullDeck, ...enemyHand].filter(
+    (card) => card.type === dropElement
+  );
+
+  const [didDrop, cardDrop] = rollCardDrop(enemyPool /*, 0.25 */);
+
+  if (didDrop && cardDrop) {
+    setDroppedCard(cardDrop);
+    if (onCardDrop) {
+      onCardDrop(cardDrop);
     }
+  }
+}
 
     // Victory callback (keeps old gym behavior, now also works for encounters)
     if (result === 1 && onVictory) {
