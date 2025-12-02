@@ -1,5 +1,6 @@
 // src/deckGenerator.ts
-import { Card } from '../../../battle';
+
+import { Card } from "./battle";
 
 /**
  * Generates an enemy deck biased toward a specific type.
