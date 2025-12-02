@@ -1,17 +1,21 @@
 /**
 Functions: 
+loadCardsFromXML --> load cards and card information from cards.xml
+expand_cards --> function to convert backend_Card[] to frontend_Card[]
+createPlayerDeck --> creates shuffled deck for player
+createEnemyDeck --> creates deck for the enemy
+createStarterDeck --> function to create the starting deck 
 main: helper functions to load and create card decks for users and enemies
 Inputs: players cards, total card pool from XML, desired deck properties
 Outputs: created or expanded card decks for players and enemies
-Authors: Hannah Smith 
+Authors: Colin Treanor, Hannah Smith 
 **/
 import { backend_Card, Card } from '../game/battle';
 import { generateEnemyDeck as generateEnemyDeckFromPool } from '../game/deckGenerator';
 import { sampleWithoutReplacement } from '../game/deckGenerator';
 
+// Function to get cards from the cards.xml file
 export async function loadCardsFromXML(): Promise<Card[]> {
-  // this is where we will make a call to the backend to get all of the users cards 
-  // might not work unless the users cards.xml is in the public folder
   const response = await fetch('/cards.xml');
   const xmlText = await response.text();
   const parser = new DOMParser();
@@ -20,6 +24,7 @@ export async function loadCardsFromXML(): Promise<Card[]> {
   const cardElements = xmlDoc.getElementsByTagName('card');
   const cards: Card[] = [];
   
+  // loop to extract info from each card in the xml
   for (let i = 0; i < cardElements.length; i++) {
     const cardEl = cardElements[i];
     const id = parseInt(cardEl.getAttribute('id') || '0');
