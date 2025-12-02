@@ -1,9 +1,44 @@
-import React, { useState, useEffect } from 'react';
+/*
+Functions:
+- CardDisplay --> Renders a card with dynamic sizing, ripple effects, blocking overlay, and fallback image logic
+- drawCardsToHand --> Draws a specified number of cards from a deck
+- getCardIcon / getCardColor --> Returns appropriate icon or gradient styling based on element type
+- getBackgroundImage --> Selects dojo background image based on element
+- handleCardSelect --> Executes a full round sequence: remove selected card, draw replacements, enemy turn, determine winner, apply effects, and check for victory
+- handleNextRound --> Resets state for the next round
+- groupCardsByType --> Groups won cards by their elemental type
+- renderStacks --> Renders stacked piles of won cards
+- renderfx --> Displays active card effects for the current turn
+
+Inputs:
+- onReturnHome: optional callback to exit the battle
+- playerName: optional string for player’s displayed name
+- gymName: (unused) optional gym identifier
+- element: optional player element
+- gymElement: optional gym-based override element
+- onVictory: callback fired on battle victory, passed the winning element
+
+Outputs:
+- Full rendering of the battle UI, including hands, selected cards, effects, animations, victory screen, and advantage chart
+
+Outside sources:
+- chatGPT, GitHub Copilot
+
+Authors:
+- Riley Anderson, Colin Treanor
+
+Creation Date:
+- 10/22/2025
+*/
+
+import React, { useState, useEffect, useRef } from 'react';
 import { Swords, Trophy, Flame, Droplet, Snowflake } from 'lucide-react';
 import { Battle, Card } from '../game/battle';
 import { createEnemyDeck, createPlayerDeck, FALLBACK_ENEMY_DECK, FALLBACK_PLAYER_DECK, loadCardsFromXML } from '../utils/cardLoader';
 import Character from './character';
 import { rollCardDrop } from '../game/deckGenerator';
+import TutorialOverlay from "./tutorial";
+import { useTutorial } from "./usetutorial";
 import { User } from '../App';
 
 interface BattleScreenProps {
@@ -13,6 +48,7 @@ interface BattleScreenProps {
   element?: string;
   gymElement?: string;
   onVictory?: (element: string) => void;
+  isTutorial?: boolean;
   onCardDrop?: (card: Card) => void;
 }
 
@@ -22,6 +58,7 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({
   element: propElement,
   gymElement: propGymElement,
   onVictory,
+  isTutorial,
   onCardDrop,
 }) => {
   // Use gymElement first if provided, otherwise fall back to element, then fire
@@ -53,6 +90,19 @@ const CardJitsuBattle: React.FC<BattleScreenProps> = ({
     const remainingDeck = deck.slice(amount);
     return [newCards, remainingDeck] as const;
   };
+
+  //tut setup
+  const handRef = useRef(null);
+  const advantageRef = useRef(null);
+  
+    const battlesteps = [
+      { text: "Welcome to your first battle!", targetRef: null },
+      { text: "You can see the cards in your hand here.", targetRef: handRef },
+      { text: "Your goal is to get 5 cards of DIFFERENT types, or 5 cards of the SAME type, all in different colors.", targetRef: null },
+      { text: "You can always use this button to check which elements beat which, but pay attention to which elements are blocked or swapped!", targetRef: advantageRef },
+      { text: "Now beat that dodo! If you do, it will drop a card of it's type for you to use in later battles. Check your inventory frequently! Good luck!", targetRef: null }
+    ];
+    const { active, step, next, skip } = useTutorial(battlesteps);
 
 
   // Load cards from XML
@@ -517,6 +567,13 @@ if (gameWinner !== 0) {
 
   return (
     <div className="min-h-screen p-6 bg-transparent">
+      {isTutorial && <TutorialOverlay
+                    visible={active}
+                    text={step.text}
+                    targetRef={step.targetRef}
+                    onNext={next}
+                    onSkip={skip}
+                  />}
       {/* display dodo sprites */}
           <div className='z-20 flex fixed w-[calc(100%-3rem)] h-auto flex-row justify-center pt-60 pointer-events-none'>
             <div className="flex flex-row w-[calc(75%)] h-auto justify-between">
@@ -635,7 +692,7 @@ if (gameWinner !== 0) {
 
       {/* player Hand */}
       {gamePhase === 'selection' && (
-        <div className="flex flex-col max-w-3xl mx-auto fixed-bottom-center z-100 mb-4 bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
+        <div ref={handRef} className="flex flex-col max-w-3xl mx-auto fixed-bottom-center z-100 mb-4 bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl p-4 border border-white border-opacity-20">
           {/* <h3 className="text-white font-bold text-xl mb-4 text-center">Choose Your Card</h3> */}
           <div className="flex gap-2 justify-center flex-wrap">
             {playerHand.map((card: Card) => (
@@ -652,6 +709,7 @@ if (gameWinner !== 0) {
       )} {/* Advantage Table Button */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
+          ref={advantageRef}
           onClick={toggleAdvantageTable}
           className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-bold shadow-lg hover:scale-105 transition"
         >

@@ -12,7 +12,7 @@ Creation Date: 10/20/2025
 */
 
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Swords, Map, Users } from 'lucide-react';
 import DodoCharacter from './components/character';
 import BattleScreen from './components/BattleScreen';
@@ -20,6 +20,8 @@ import MapScreen from './components/MapScreen';
 import Inventory from './components/Inventory'
 import { Card } from './game/battle';
 import { create_user, get_user, update_Inventory } from './actions/userActions';
+import TutorialOverlay from "./components/tutorial";
+import { useTutorial } from "./components/usetutorial";
 
 // Define the posible screens users can view
 type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
@@ -49,6 +51,7 @@ const CardJitsuGame: React.FC = () => {
 
   // State for which screen is currently visible
   const [currentPage, setCurrentPage] = useState<Page>('login');
+  const [isTutorial, setIsTutorial] = useState<boolean>(false);
   // State to hold current user
   const [user, setUser] = useState<User | undefined>(undefined);
   // State to hold login/signup info
@@ -62,6 +65,24 @@ const CardJitsuGame: React.FC = () => {
   const [selectedGym, setSelectedGym] = useState<string | null>(null);
   const [encounterElement, setEncounterElement] = useState<string | null>(null);
   const [conqueredGyms, setConqueredGyms] = useState<Set<string>>(new Set());
+
+  const inventoryButtonRef = useRef(null);
+  const mapButtonRef = useRef(null);
+
+  const homeSteps = [
+    { text: "Welcome to your Home Dojo!", targetRef: null },
+    { text: "Manage your deck here.", targetRef: inventoryButtonRef },
+    { text: "In the inventory manager, try moving cards between piles and sorting them.", targetRef: inventoryButtonRef },
+    { text: "Explore the map using this button.", targetRef: mapButtonRef },
+    { text: "Try clicking the map button!", targetRef: mapButtonRef }
+  ];
+  const { active, step, next, skip } = useTutorial(homeSteps);
+  
+  React.useEffect(() => {
+    if (!active) {
+      setIsTutorial(false);
+    }
+}, [active]);
 
   /* Function to deal with a user login
   - on success: set the user state and display home page
@@ -127,6 +148,7 @@ const CardJitsuGame: React.FC = () => {
     console.log('Users Registered:', [...accounts, newUser]);
     setUser(newUser);
     setCurrentPage('home')
+    setIsTutorial(true);
   };
 
   /* Function to log out the user
@@ -229,6 +251,7 @@ if (currentPage === 'battle') {
       onVictory={(element) => {
         setConqueredGyms(prev => new Set(prev).add(element));
       }}
+      isTutorial={isTutorial}
       onCardDrop={handleCardDrop}
     />
   );
@@ -267,6 +290,7 @@ if (currentPage === 'battle') {
         }}
         playerName={user?.username}
         conqueredGyms={conqueredGyms}
+        isTutorial={isTutorial}
       />
     );
   }
@@ -426,6 +450,13 @@ if (currentPage === 'battle') {
   */
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-800 via-blue-900 to-blue-800 relative overflow-hidden">
+      {isTutorial && <TutorialOverlay
+        visible={active}
+        text={step.text}
+        targetRef={step.targetRef}
+        onNext={next}
+        onSkip={skip}
+      />}
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">
@@ -440,7 +471,7 @@ if (currentPage === 'battle') {
         <div className="container mx-auto px-6 py-2 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Swords className="text-cyan-400" size={32} />
-            <h1 className="text-2xl font-bold text-white">Welcome to your home dojo</h1>
+            <h1 className="text-2xl font-bold text-white">Your Dojo</h1>
           </div>
           <div className="flex items-center gap-6">
             <div className="text-white">
@@ -487,7 +518,7 @@ if (currentPage === 'battle') {
 
           {/* Action buttons */}
           <div className="space-y-4">
-            <button onClick={() => setCurrentPage('inventory')} className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
+            <button ref={inventoryButtonRef} onClick={() => setCurrentPage('inventory')} className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
               <div className="flex items-center justify-center gap-4">
                 <Swords size={32} />
                 <div className="text-left">
@@ -497,7 +528,7 @@ if (currentPage === 'battle') {
               </div>
             </button>
 
-            <button onClick={() => setCurrentPage('map')} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
+            <button ref={mapButtonRef} onClick={() => setCurrentPage('map')} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-6 rounded-2xl shadow-xl transform hover:scale-105 transition duration-200 border border-white border-opacity-20">
               <div className="flex items-center justify-center gap-4">
                 <Map size={32} />
                 <div className="text-left">

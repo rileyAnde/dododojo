@@ -1,3 +1,47 @@
+/*
+Classes:
+- Card --> simple model for an in-battle card (id, type, rank, color, fx)
+- backend_Card --> representation of a card stack stored in DB (id + quantity)
+- Battle --> full battle engine handling turn logic, effects, win conditions, and AI behavior
+
+Battle Engine Responsibilities:
+- winner --> resolves a single card-vs-card matchup, applying:
+    --> global type changes  
+    --> temporary type changes  
+    --> color-based discard  
+    --> blocked types (this turn and next turn)  
+    --> rank modifiers (immediate + next-turn)  
+    --> “lower wins” rules  
+    --> elemental advantage relationships  
+- parseFxForComparison --> interprets FX strings and applies their effects:
+    --> DISCARD_COLOR  
+    --> CHANGE_TYPE  
+    --> RULE_LOWER_WINS  
+    --> BLOCK_TYPE_NEXT  
+    --> MODIFY_NEXT  
+    --> supports fallback text parsing (e.g., “lower value card wins”, “discard blue cards”)  
+- turn --> executes winner(), assigns won cards to correct buckets, returns round winner
+- agent_turn --> AI card selection logic with difficulty scaling and strategy heuristics
+- checkwin --> determines if either player satisfies a win condition
+- getState --> returns read-only copies of player/enemy win buckets
+
+Inputs:
+- player (string) --> name/id used only for instantiation
+- enemy (string) --> same as above
+
+Outputs:
+- Fully functional battle instance capable of playing a full Card-Jitsu match, tracking state, and applying complex FX interactions
+
+Outside sources:
+- GitHub Copilot
+
+Authors:
+- Riley Anderson, Colin Treanor, Hannah Smith
+
+Creation Date:
+- 10/14/2025
+*/
+
 // file containing class for instance of a battle
 export class Card {
     constructor(

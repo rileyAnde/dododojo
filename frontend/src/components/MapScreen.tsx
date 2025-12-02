@@ -7,21 +7,24 @@ handleGymClick:--> sets gym and opens its respective modal
 handleEnterBattle --> calls the BattleScreen and enters battle 
 Inputs: none
 Outputs: render the full map with encounters and dojos
-Outside sources: minor chatGPT and GitHub Copilot
+Outside sources: chatGPT and GitHub Copilot
 Authors: Riley Anderson, Colin Treanor, Dustin Le, Jacob Richards
 Creation Date: 11/2/2025
 */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Swords, X } from 'lucide-react';
 import { Card } from '../game/battle';
 import { get_gyms } from '../actions/gymActions';
+import TutorialOverlay from "./tutorial";
+import { useTutorial } from "./usetutorial";
 
 interface MapScreenProps {
   onReturnHome?: () => void;
   onEnterBattle?: (element: string, isEncounter?: boolean) => void;
   playerName?: string;
   conqueredGyms?: Set<string>;
+  isTutorial?: boolean;
 }
 
 export interface BackendGym {
@@ -46,7 +49,7 @@ export interface Gym {
 - encounter buttons
 - dojo battle selection
 */
-const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) => {
+const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, isTutorial }) => {
   // Coordinates tuned for your parchment:
   // FIRE is lined up on the lava section near the bottom-center.
   // Adjust numbers live if you want finer placement.
@@ -70,6 +73,20 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
     { id: 'earth', icon: '/earth.png' },
     { id: 'air', icon: '/air.png' },
   ];
+
+  const advantageButtonRef = useRef(null);
+  const dojoButtonRef = useRef(null);
+  const dodoButtonRef = useRef(null);
+
+  const homeSteps = [
+    { text: "Welcome to the Map Screen!", targetRef: null },
+    { text: "View which cards beat which here, as well as what each symbol represents", targetRef: advantageButtonRef },
+    { text: "This is one of the dojos. You can challenge their masters for glory! If you win, your name will be displayed on the dojo and the dojo master will take over your deck.", targetRef: dojoButtonRef },
+    { text: "You will see many dodos wandering the wilds! You can enter a battle with them by clicking, and if you win they will drop a card of thier type for you to use in your deck.", targetRef: dodoButtonRef },
+    { text: "Try entering a battle with one of these wild dodos now!", targetRef: dodoButtonRef }
+  ];
+
+  const { active, step, next, skip } = useTutorial(homeSteps);
   
   //unneeded
 //   // Generate encounters near each dojo
@@ -194,6 +211,13 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
 // show user available dojos, sprite encounters and advantage chart as a UI
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6">
+      {isTutorial && <TutorialOverlay
+              visible={active}
+              text={step.text}
+              targetRef={step.targetRef}
+              onNext={next}
+              onSkip={skip}
+            />}
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-6">
         <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
@@ -204,6 +228,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
             </h1>
             <div className="flex gap-3">
               <button
+                ref={advantageButtonRef}
                 onClick={() => setShowAdvantage(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition"
               >
@@ -227,6 +252,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
           <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden">
             {/* parchment background from /public */}
             <img
+              ref={dodoButtonRef}
               src="/world_map.png"
               alt="Element Map"
               className="absolute inset-0 w-full h-full object-contain"
@@ -235,6 +261,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
             {/* Clickable dojo placeholders */}
             {gymsState.map((gym) => (
               <button
+                ref={dojoButtonRef}
                 key={gym.id}
                 onClick={() => handleGymClick(gym)}
                 className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer transition duration-200 group"
@@ -260,6 +287,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle }) =>
           {encounter && (
             <div
               key={encounter.id}
+              ref={encounter.ref}
               className={`
                 absolute cursor-pointer 
                 transition-all duration-1000
