@@ -19,7 +19,7 @@ import BattleScreen from './components/BattleScreen';
 import MapScreen from './components/MapScreen';
 import Inventory from './components/Inventory'
 import { Card } from './game/battle';
-import { create_user, get_user, update_Inventory } from './actions/userActions';
+import { create_user, delete_user, get_user, update_Inventory } from './actions/userActions';
 import TutorialOverlay from "./components/tutorial";
 import { useTutorial } from "./components/usetutorial";
 
@@ -205,9 +205,8 @@ const CardJitsuGame: React.FC = () => {
     );
 
     if (!confirmDelete) return;
-
-    const updatedAccounts = accounts.filter(acc => acc.username !== user.username);
-    setAccounts(updatedAccounts);
+    
+    await delete_user(user);
 
     alert('Account deleted! Returning to the login page....');
     setUser(undefined);
