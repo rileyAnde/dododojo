@@ -1,10 +1,18 @@
 
-
+/**
+Functions: 
+main:creates controller functions for user services (get, add, update, delete)
+helper:compressCards - converts frontend_Card[] to backend_Card[]
+hashPassword - hashes passwords using bcrypt
+Inputs: HTTP requests from frontend
+Outputs: HTTP responses to frontend
+Authors: Hannah Smith 
+**/
 import { Request, Response } from 'express';
 import { existing_Account, backend_Card, new_Account, frontend_Card } from '../models/accounts.js';
 import bcrypt from 'bcrypt';
 
-
+//helper function to hash passwords
 const hashPassword = (password: string): string => {
     let SALT_ROUNDS = 10;
     return bcrypt.hashSync(password, SALT_ROUNDS);
@@ -27,14 +35,13 @@ export const getUserServices = async (req: Request, res: Response) => {
     } if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
-    const rustData = await rustResponse.json();
-    console.log('Rust service response:', rustData);
+    const rustData = await rustResponse.json();;
     const userInputPassword = req.get("x-password")
+    //verify password
     if (bcrypt.compareSync(userInputPassword|| '', rustData.password) === false) {
         return res.status(401).json({ message: 'Incorrect Password' });
     }
-    
-    //TODO: Confirm we don't need to process inventory and deck data further
+    //construct account data to send back to frontend
     const accountData: existing_Account = {
         id: rustData.id,
         username: rustData.username,
@@ -54,7 +61,7 @@ export const addUserService = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Username and password are required' });
     }
     let passedInfo = req.body.account;
-
+    //construct the account data for backend 
     const newAccount :new_Account = {
         Username: passedInfo.Username,
         Password: hashPassword(passedInfo.Password),
@@ -64,7 +71,6 @@ export const addUserService = async (req: Request, res: Response) => {
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(newAccount)
     });
-
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error with processing, try again' });
     }
@@ -102,12 +108,16 @@ export const updateUserService = async (req: Request, res: Response) => {
         primary_deck: newPrimaryDeck,
         gyms_owned: req.body.updateData.gymsOwned,
     }
+    console.log('inventory length in controller:', req.body.updateData.inventory.length);
+    console.log('primaryDeck length in controller:', req.body.updateData.primaryDeck.length);
+    console.log('updateData being sent:', updateData);
     //send update to Rust service
     const rustResponse = await fetch(`http://localhost:8080/updateuser/${req.params.userId}`,{
         method: 'PUT',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData)
     });
+    console.log('rustResponse:', rustResponse);
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error updating account' });
     }

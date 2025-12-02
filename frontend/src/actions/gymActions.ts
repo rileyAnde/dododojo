@@ -1,7 +1,16 @@
+/**
+Functions: 
+main: does actions related to gyms this is the bridge between frontend and backend
+--only two functions get gyms and update gym we never create or delete gyms from frontend
+helper:none
+Inputs: information about gyms from frontend, such as name, owner username, deck
+Outputs: updated gym information to frontend
+Authors: Hannah Smith 
+**/
 import { BackendGym, Gym } from "../components/MapScreen"
 import { Card } from "../game/battle"
 
-
+//
 export async function get_gyms(): Promise<BackendGym[]> {
     try {
         const results = await fetch(`http://localhost:3000/gyms`)

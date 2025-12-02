@@ -1,3 +1,15 @@
+/**
+Functions: 
+main: manages user inventory and deck building in the frontend
+helper: 
+  getCardIcon: returns appropriate icon for card type
+  getCardColor: returns appropriate color gradient for card type
+  handleDeckUpdate: updates user's primary deck on backend
+  subtractDecks: computes remaining inventory after accounting for active deck
+Inputs: information about user accounts from frontend, such as username, password, inventory, primary deck
+Outputs: updated user account information to frontend
+Authors: Hannah Smith, Riley Anderson
+**/
 
 import React, { useState } from 'react';
 import { Swords, Flame, Droplet, Snowflake, Filter, SortAsc } from 'lucide-react';

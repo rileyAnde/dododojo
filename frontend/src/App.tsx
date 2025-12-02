@@ -198,11 +198,14 @@ const handleCardDrop = async (card: Card) => {
   if (!user) return;
 
   try {
+
     const currentInventory = Array.isArray(user.inventory) ? user.inventory : [];
     const newInventory = [...currentInventory, card];
+    console.log('Current inventory length:', currentInventory.length);
+    console.log('New inventory length:', newInventory.length);
 
-    // Make sure backend route exists
     const updatedUser = await update_Inventory(user, newInventory);
+    console.log('Updated user after inventory update:', updatedUser);
     setUser(updatedUser);
   } catch (err) {
     console.error("Failed to update inventory:", err);

@@ -1,3 +1,10 @@
+/**
+Functions: 
+main: helper functions to load and create card decks for users and enemies
+Inputs: players cards, total card pool from XML, desired deck properties
+Outputs: created or expanded card decks for players and enemies
+Authors: Hannah Smith 
+**/
 import { backend_Card, Card } from '../game/battle';
 import { generateEnemyDeck as generateEnemyDeckFromPool } from '../game/deckGenerator';
 import { sampleWithoutReplacement } from '../game/deckGenerator';
@@ -26,12 +33,15 @@ export async function loadCardsFromXML(): Promise<Card[]> {
   return cards;
 }
 
+//helper function to convert backend_Card[] to frontend_Card[]
 export async function expand_cards(curUser_cards: backend_Card[]):Promise<Card[]>{
   const allCards: Card[] | undefined =  await loadCardsFromXML()
   let curUserExpandedCards: Card[] = []
+  //if user has no cards return starter deck -- this is for new accounts only
   if (curUser_cards.length == 0) { 
     return createStarterDeck(allCards);
   }
+  //otherwise expand cards normally
   curUser_cards.forEach((card)=> { 
     const FE_Card:Card =  allCards[card.id]
     for (let i=0; i<card.quantity; i++){

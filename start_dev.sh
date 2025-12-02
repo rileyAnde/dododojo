@@ -1,5 +1,10 @@
-#!/bin/bash
 
+# Functions: 
+# main: start the frontend server for the application
+# Inputs: either "-full" to install dependencies and generate cards, or no arguments to just start the server
+# Outputs: starts the frontend server in terminal
+# Authors: Riley Anderson 
+#!/bin/bash
 if  [[ $1 = "-full" ]]; then
     # install battle npm packages
     npm install

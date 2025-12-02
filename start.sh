@@ -1,7 +1,12 @@
+# Functions: 
+# main: all three services for the application
+# Inputs: none
+# Outputs: starts all three services in three separate terminals
+# Authors: Riley Anderson 
 #!/usr/bin/env bash
 
 echo "starting all services..."
-
+# Function to start a command in a new terminal window
 start_in_terminal() {
     local title="$1"
     local cmd="$2"

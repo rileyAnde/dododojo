@@ -1,3 +1,12 @@
+/**
+Functions: 
+main:creates controller functions for gym services (get, update)
+    --we never create or delete gyms through the controllers, should never change unless game structure changes
+helper:none
+Inputs: HTTP requests from frontend
+Outputs: HTTP responses to frontend
+Authors: Hannah Smith 
+**/
 
 import { Request, Response } from 'express';
 import { gym } from '../models/gyms.js';
