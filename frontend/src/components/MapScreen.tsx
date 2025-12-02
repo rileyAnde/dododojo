@@ -7,7 +7,7 @@ handleGymClick:--> sets gym and opens its respective modal
 handleEnterBattle --> calls the BattleScreen and enters battle 
 Inputs: none
 Outputs: render the full map with encounters and dojos
-Outside sources: minor chatGPT and GitHub Copilot
+Outside sources: chatGPT and GitHub Copilot
 Authors: Riley Anderson, Colin Treanor, Dustin Le, Jacob Richards
 Creation Date: 11/2/2025
 */

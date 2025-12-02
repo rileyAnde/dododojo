@@ -1,3 +1,27 @@
+/*
+Functions:
+- SpotlightOverlay --> renders a guided-tutorial spotlight overlay highlighting a specific element while dimming the rest of the screen
+
+Inputs:
+- visible --> controls whether the overlay is shown
+- text --> message displayed in the tutorial popup
+- targetRef --> reference to the DOM element being highlighted
+- onNext --> callback fired when the user clicks “Next”
+- onSkip --> callback fired when the user clicks “Skip”
+
+Outputs:
+- A fully interactive spotlight overlay: darkened screen sections, highlighted target region, and tutorial controls
+
+Outside sources:
+- GitHub Copilot
+
+Authors:
+- Riley Anderson
+
+Creation Date:
+- 11/30/2025
+*/
+
 import React, { useEffect, useState } from "react";
 
 interface SpotlightOverlayProps {

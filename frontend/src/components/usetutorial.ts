@@ -1,3 +1,27 @@
+/*
+Functions:
+- useTutorial --> manages state for a multi-step tutorial sequence
+
+Inputs:
+- steps --> array of tutorial step objects to iterate through
+
+Outputs:
+- index --> current tutorial step index
+- active --> boolean indicating if the tutorial is still running
+- step --> the current step object
+- next --> advances to the next step or ends the tutorial
+- skip --> immediately deactivates the tutorial
+
+Outside sources:
+- GitHub Copilot
+
+Authors:
+- Riley Anderson, Colin Treanor, Dustin Le, Jacob Richards
+
+Creation Date:
+- 11/30/2025
+*/
+
 import { useState } from "react";
 
 export function useTutorial(steps: any[]) {

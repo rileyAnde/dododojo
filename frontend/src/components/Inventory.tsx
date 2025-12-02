@@ -1,3 +1,30 @@
+/*
+Functions:
+- getCardIcon --> returns an icon component for the given element type
+- getCardColor --> returns a gradient string for card border/background based on element
+- handleDeckUpdate --> saves the player's active deck to the database and returns to previous screen
+- handleDragStart --> begins drag operation, encoding card + origin deck
+- handleDrop --> moves a card between active deck and inventory, enforcing deck size cap
+- CardDisplay --> renders a draggable card with ripple effects, fallback styling, and dynamic sizing
+- render_deck --> renders a droppable deck area populated with CardDisplay components
+
+Inputs:
+- onReturnHome --> optional callback to navigate back to a previous screen
+- cur_user --> user object containing username, primaryDeck, and inventory
+
+Outputs:
+- Full inventory/deck management interface allowing dragging, filtering, sorting, and saving a player’s deck configuration
+
+Outside sources:
+- GitHub Copilot
+
+Authors:
+- Riley Anderson, Hannah Smith
+
+Creation Date:
+- 11/3/2025
+*/
+
 import React, { useState } from 'react';
 import { Swords, Flame, Droplet, Snowflake, Filter, SortAsc } from 'lucide-react';
 import { Card } from '../game/battle';

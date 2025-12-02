@@ -229,6 +229,7 @@ const CardJitsuGame: React.FC = () => {
         onVictory={(element) => {
           setConqueredGyms(prev => new Set(prev).add(element));
           }}
+        isTutorial={isTutorial}
         />
     );
   }
