@@ -36,7 +36,7 @@ Outside sources:
 - GitHub Copilot
 
 Authors:
-- Riley Anderson, Colin Treanor, Hannah Smith
+- Riley Anderson, Colin Treanor, Hannah Smith, Jacob Richards
 
 Creation Date:
 - 10/14/2025

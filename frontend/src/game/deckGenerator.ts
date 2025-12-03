@@ -1,5 +1,41 @@
 // src/deckGenerator.ts
 
+
+/*
+Functions:
+- generateEnemyDeck --> builds an enemy deck biased toward a specific element using the full card pool
+- shuffle --> randomly shuffles a list of cards in-place
+- sampleWithoutReplacement --> samples cards from a list without replacement
+- rollCardDrop --> rolls for post-battle card drops from a given deck
+
+Inputs:
+- allCards: Card[] --> master pool of all available cards
+- enemyType: string --> element the enemy specializes in (e.g., "fire", "water")
+- deckSize: number --> desired size of the generated deck
+- typeBias: number --> fraction of the deck that should match the enemyType
+- deck (for rollCardDrop): Card[] --> pool of candidate cards for drops
+- dropRate: number --> probability that a drop occurs in a given roll
+
+Outputs:
+- generateEnemyDeck --> returns a Card[] deck biased toward the enemyType
+- shuffle --> returns a shuffled copy of the input array
+- sampleWithoutReplacement --> returns a Card[] subset with no duplicates pulled
+- rollCardDrop --> returns [didDrop: boolean, droppedCard: Card | null]
+
+Outside sources:
+- ChatGPT
+- GitHub Copilot
+- Stack Overflow 
+-Google
+
+Authors:
+- Jacob Richards
+
+Creation Date:
+- 11/2025
+*/
+
+
 import { Card } from "./battle";
 
 /**
