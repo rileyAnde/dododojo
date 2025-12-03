@@ -25,7 +25,7 @@ Outside sources:
 - chatGPT, GitHub Copilot
 
 Authors:
-- Riley Anderson, Colin Treanor
+- Riley Anderson, Colin Treanor, Jacob Richards
 
 Creation Date:
 - 10/22/2025
@@ -294,85 +294,126 @@ const getBackgroundImage = () => {
     );
   };
 
-  // gameplay logic
+ // gameplay logic
   const handleCardSelect = (card: Card) => {
     if (gamePhase !== 'selection') {
       return;
     }
 
-  // remove the selected card from hand
-  const newHand = playerHand.filter(c => c.id !== card.id);
+    // remove the selected card from hand
+    const newHand = playerHand.filter((c) => c.id !== card.id);
 
-  // draw a new card from the deck if available
-  if (playerFullDeck.length > 0) {
-    const [drawnCards, remainingDeck] = drawCardsToHand(playerFullDeck, 1);
-    setPlayerFullDeck(remainingDeck);
-    setPlayerHand([...newHand, ...drawnCards]);
-  } else {
-    setPlayerHand(newHand);
-  }
+    // ---- PLAYER DRAW LOGIC ----
+    let nextPlayerDeck = playerFullDeck;
+    let nextPlayerHand = newHand;
 
-  setSelectedCard(card);
-
-  // enemy plays a card
-  const randomEnemy = battle.agent_turn(enemyHand);
-  const EnemyNewHand = enemyHand.filter(c => c.id !== randomEnemy.id);
-
-  if (enemyFullDeck.length > 0) {
-    const [EdrawnCards, EremainingDeck] = drawCardsToHand(enemyFullDeck, 1);
-    setEnemyDeck(EremainingDeck);
-    setEnemyHand([...EnemyNewHand, ...EdrawnCards]);
-  } else {
-    setEnemyHand(EnemyNewHand);
-  }
-
-  setEnemyCard(randomEnemy);
-  setGamePhase('reveal');
-
-  setTimeout(() => {
-    const winner = battle.turn(card, randomEnemy);
-
-    if (winner?.id === card.id) {
-      setRoundWinner(cur_user?.username || 'Player1');
-    } else if (winner?.id === randomEnemy.id) {
-      setRoundWinner(enemyName);
-    } else {
-      setRoundWinner('Tie');
+    if (playerFullDeck.length > 0) {
+      const [drawnCards, remainingDeck] = drawCardsToHand(playerFullDeck, 1);
+      nextPlayerDeck = remainingDeck;
+      nextPlayerHand = [...newHand, ...drawnCards];
     }
 
-    const result = battle.checkwin();
-    setGameWinner(result);
+    setPlayerFullDeck(nextPlayerDeck);
+    setPlayerHand(nextPlayerHand);
+    setSelectedCard(card);
 
-    // CARD DROP LOGIC – ONLY for non-gym battles (random encounters)
-// CARD DROP LOGIC – ONLY for non-gym battles (random encounters)
-if (result === 1 && !propGymElement) {
-  // always drop a card that matches this encounter's element
-  const dropElement = effectiveElement; // this is propElement for encounters
+    // ---- ENEMY TURN + DRAW ----
+    const randomEnemy = battle.agent_turn(enemyHand);
+    const enemyBaseNewHand = enemyHand.filter(
+      (c) => c.id !== randomEnemy.id
+    );
 
-  // Only use enemy cards of that element for drops
-  const enemyPool = [...enemyFullDeck, ...enemyHand].filter(
-    (card) => card.type === dropElement
-  );
+    let nextEnemyDeck = enemyFullDeck;
+    let nextEnemyHand = enemyBaseNewHand;
 
-  const [didDrop, cardDrop] = rollCardDrop(enemyPool /*, 0.25 */);
-
-  if (didDrop && cardDrop) {
-    setDroppedCard(cardDrop);
-    if (onCardDrop) {
-      onCardDrop(cardDrop);
-    }
-  }
-}
-
-    // Victory callback (keeps old gym behavior, now also works for encounters)
-    if (result === 1 && onVictory) {
-      const elementForParent = propGymElement || effectiveElement;
-      onVictory(elementForParent);
+    if (enemyFullDeck.length > 0) {
+      const [EdrawnCards, EremainingDeck] = drawCardsToHand(enemyFullDeck, 1);
+      nextEnemyDeck = EremainingDeck;
+      nextEnemyHand = [...enemyBaseNewHand, ...EdrawnCards];
     }
 
-    setGamePhase('result');
-  }, 2000);
-};
+    setEnemyDeck(nextEnemyDeck);
+    setEnemyHand(nextEnemyHand);
+
+    // who will be totally out of cards after this round?
+    const noPlayerCardsRemaining =
+      nextPlayerHand.length === 0 && nextPlayerDeck.length === 0;
+    const noEnemyCardsRemaining =
+      nextEnemyHand.length === 0 && nextEnemyDeck.length === 0;
+
+    setEnemyCard(randomEnemy);
+    setGamePhase('reveal');
+
+    setTimeout(() => {
+      const winner = battle.turn(card, randomEnemy);
+
+      if (winner?.id === card.id) {
+        setRoundWinner(cur_user?.username || 'Player1');
+      } else if (winner?.id === randomEnemy.id) {
+        setRoundWinner(enemyName);
+      } else {
+        setRoundWinner('Tie');
+      }
+
+      const result = battle.checkwin();
+      let finalResult = result;
+
+      // if no one has "won" by tokens, but someone has no cards left,
+      // force a winner so the battle can't soft-lock.
+      if (result === 0 && (noPlayerCardsRemaining || noEnemyCardsRemaining)) {
+        if (noPlayerCardsRemaining && !noEnemyCardsRemaining) {
+          // player has no cards, enemy still does
+          finalResult = 2;
+        } else if (!noPlayerCardsRemaining && noEnemyCardsRemaining) {
+          // enemy has no cards, player still does
+          finalResult = 1;
+        } else {
+          // BOTH out of cards: break tie using who has more won cards
+          const stateNow = battle.getState();
+          const playerTokens = stateNow.player_won.flat().length;
+          const enemyTokens = stateNow.enemy_won.flat().length;
+
+          if (playerTokens > enemyTokens) {
+            finalResult = 1;
+          } else if (enemyTokens > playerTokens) {
+            finalResult = 2;
+          } else {
+            // perfect tie: give it to the enemy so game always ends
+            finalResult = 2;
+          }
+        }
+      }
+
+      setGameWinner(finalResult);
+
+      // CARD DROP LOGIC – ONLY for non-gym battles (random encounters)
+      if (finalResult === 1 && !propGymElement) {
+        const dropElement = effectiveElement; // this is propElement for encounters
+
+        // Only use enemy cards of that element for drops
+        const enemyPool = [...nextEnemyDeck, ...nextEnemyHand].filter(
+          (c) => c.type === dropElement
+        );
+
+        const [didDrop, cardDrop] = rollCardDrop(enemyPool /*, 0.25 */);
+
+        if (didDrop && cardDrop) {
+          setDroppedCard(cardDrop);
+          if (onCardDrop) {
+            onCardDrop(cardDrop);
+          }
+        }
+      }
+
+      // Victory callback (works for gyms + encounters)
+      if (finalResult === 1 && onVictory) {
+        const elementForParent = propGymElement || effectiveElement;
+        onVictory(elementForParent);
+      }
+
+      setGamePhase('result');
+    }, 1500);
+  };
 
   const handleNextRound = () => {
     setSelectedCard(null);

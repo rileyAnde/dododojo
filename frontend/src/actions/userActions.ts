@@ -66,7 +66,7 @@ export async function get_user(username:string, password: string): Promise<User>
     } catch (error: Error | any){
         //if error not related to user return delete user because it was not created properly
         if (error.message !== "User return failed"){
-            delete_user({id: error.message} as User)
+            await delete_user({id: error.message} as User)
         }
 
         console.log(error)

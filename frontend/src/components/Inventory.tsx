@@ -19,7 +19,7 @@ Outside sources:
 - GitHub Copilot
 
 Authors:
-- Riley Anderson, Hannah Smith
+- Riley Anderson, Hannah Smith, Jacob Richards 
 
 Creation Date:
 - 11/3/2025
