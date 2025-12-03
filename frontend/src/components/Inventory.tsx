@@ -121,12 +121,12 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
   //
   const [activeDeck, setActiveDeck] = useState<Card[]>(initialActiveDeck);
   //if inventory or activeDeck change, recompute inventory
-  const computedInventory = React.useMemo(
+  const inventory = React.useMemo(
   () => subtractDecks(initialInventory, activeDeck),
   [initialInventory, activeDeck]
   );
   //state for inventory  
-  const [inventory, setInventory] = useState<Card[]>(computedInventory);
+  //const [inventory, setInventory] = useState<Card[]>(computedInventory);
   //filter and sort states
   const [filterType, setFilterType] = useState<string>('all');
   const [sortAsc, setSortAsc] = useState<boolean>(true);
@@ -150,13 +150,12 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
     // allow duplicates: don't filter by id, remove only first instance
     if (from === 'active') {
       const idx = activeDeck.findIndex((c) => c.id === card.id);
-      if (idx !== -1) activeDeck.splice(idx, 1);
-      setActiveDeck([...activeDeck]);
-      setInventory([...inventory, card]);
+      if (idx !== -1){
+        const newDeck = [...activeDeck];
+        newDeck.splice(idx, 1);
+        setActiveDeck(newDeck);
+      }
     } else {
-      const idx = inventory.findIndex((c) => c.id === card.id);
-      if (idx !== -1) inventory.splice(idx, 1);
-      setInventory([...inventory]);
       setActiveDeck([...activeDeck, card]);
     }
   };
