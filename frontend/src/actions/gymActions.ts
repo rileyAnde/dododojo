@@ -5,7 +5,7 @@ main: does actions related to gyms this is the bridge between frontend and backe
 helper:none
 Inputs: information about gyms from frontend, such as name, owner username, deck
 Outputs: updated gym information to frontend
-Authors: Hannah Smith 
+Authors: Hannah Smith
 **/
 import { BackendGym, Gym } from "../components/MapScreen"
 import { Card } from "../game/battle"
