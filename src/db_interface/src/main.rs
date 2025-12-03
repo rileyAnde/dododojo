@@ -46,7 +46,7 @@ async fn main() -> std::io::Result<()> {
             .service(routes::get_gyms_http)
             .service(routes::update_gym_http)
     })
-    .bind("127.0.0.1:8080")? //bind to localhost:8080
+    .bind("127.0.0.1:3001")? //bind to localhost:3001
     .run()
     .await?;
 

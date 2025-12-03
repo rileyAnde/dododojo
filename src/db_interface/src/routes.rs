@@ -108,11 +108,12 @@ async fn update_user_http(data: web::Data<AppState>, path: web::Path<i32>, new_u
         password: json_value["Password"].as_str().unwrap_or_default().to_string(),
         level: json_value["Level"].as_i64().unwrap_or(1) as i32,
         inventory: json_value["Inventory"].to_string(),
-        primary_deck: json_value["Primary_Deck"].to_string(),
+        primary_deck: json_value["primary_deck"].to_string(),
         gyms_owned: json_value["Gyms_Owned"].to_string(),
         created_at: existing_user.created_at.clone(),
         updated_at: existing_user.updated_at.clone(),
     };
+    println!("\n New user data for update: {:?}", user.primary_deck);
 
     //println!("\nReceived update_user request with data: {:?}", user);
     if existing_user == user { // compare existing and new data
@@ -137,6 +138,7 @@ async fn delete_user_http(data: web::Data<AppState>, path: web::Path<i32>) -> im
         Ok(user) => user, //user exists
         Err(_) => return HttpResponse::Ok().body("User not found"), //user not found
     };
+    println!("\n Deleting user with id: {}", id);
 
     match queries::delete_user_query(&conn, id).await { //call delete query
         Ok(_) => HttpResponse::Ok().body("User successfully deleted"), //return success
