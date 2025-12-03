@@ -7,7 +7,7 @@ handleDeleteAccount -> prompt for confirmation, remove user from state, reset ap
 Inputs: None
 Outputs: the DOM tree that React will render to the browser
 Outside Sources: minor ChatGPT and Github Copilot
-Authors: Riley Anderson, Colin Treanor, Dusin Le, Hannah Smith,Jacob Richards
+Authors: Riley Anderson, Colin Treanor, Dusin Le, Hannah Smith, Jacob Richards
 Creation Date: 10/20/2025
 */
 
@@ -22,6 +22,7 @@ import { Card } from './game/battle';
 import { create_user, delete_user, get_user, update_Inventory } from './actions/userActions';
 import TutorialOverlay from "./components/tutorial";
 import { useTutorial } from "./components/usetutorial";
+import { update_gym } from './actions/gymActions';
 
 // Define the posible screens users can view
 type Page = 'login' | 'signup' | 'home' | 'battle' | 'map' | 'inventory';
@@ -58,8 +59,6 @@ const CardJitsuGame: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // State to store local history of accounts
-  const [accounts, setAccounts] = useState<User[]>([]);
   // Game states
   // Track gym battles vs random encounters
   const [selectedGym, setSelectedGym] = useState<string | null>(null);
@@ -83,6 +82,21 @@ const CardJitsuGame: React.FC = () => {
       setIsTutorial(false);
     }
 }, [active]);
+  React.useEffect(() => {
+    if (!selectedGym) return;
+    if (user) {
+      conqueredGyms.forEach(async gym => {
+        if (gym === selectedGym) {
+          try {
+            await update_gym(gym, user.username, user.primaryDeck);
+          } catch (error) {
+            console.error("Failed to update gym:", error);
+            alert("Gym conquered but failed to update gym info. It may appear later.");
+          }
+        }
+      });
+    }
+  }, [conqueredGyms, selectedGym, user]);
 
   /* Function to deal with a user login
   - on success: set the user state and display home page
@@ -145,7 +159,6 @@ const CardJitsuGame: React.FC = () => {
     dodoType: randomType,
     };
 
-    console.log('Users Registered:', [...accounts, newUser]);
     setUser(newUser);
     setCurrentPage('home')
     setIsTutorial(true);
@@ -161,38 +174,6 @@ const CardJitsuGame: React.FC = () => {
     setConfirmPassword('');
     setCurrentPage('login'); //back to the beginning
   };
-
-  //did you forget your password? click this button to do a simple reset!
-  // save til sprint 3
-// const handleForgotPassword = () => {
-//     if (!username.trim()) {
-//       alert('Please enter your username to continue!');
-//       return;
-//     }
-
-//     const existingUser = accounts.find(acc => acc.username === username.trim());
-//     if (!existingUser) { //user doesn't exist
-//       alert('No user found!');
-//       return;
-//     }
-
-//     const newPassword = prompt('Enter a new password:');
-//     if (!newPassword) { //no password entered
-//       alert('Password not reset!');
-//       return;
-//     }
-
-//     setAccounts( //password reset!
-//       accounts.map(acc =>
-//         acc.username === username.trim()
-//           ? { ...acc, password: newPassword.trim() }
-//           : acc
-//       )
-//     );
-
-//     alert('Password successfully reset! Head back to the login to play!');
-//     setPassword('');
-//   };
 
   /* Handle deleting a users account
   - prompt for confirmation, then show login screen
@@ -297,7 +278,7 @@ if (currentPage === 'battle') {
   /*Display login screen
   - entry point of the app, contains login form 
   */
- if (currentPage === 'login') {
+if (currentPage === 'login') {
     // may need a way to log what user logins have been made!
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center p-4">
