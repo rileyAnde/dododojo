@@ -38,7 +38,13 @@ export const getUserServices = async (req: Request, res: Response) => {
     const rustData = await rustResponse.json();;
     const userInputPassword = req.headers['x-password'] as string;
 
+    console.log('Login attempt for user:', username);
+    console.log('Input password length:', userInputPassword?.length);
+    console.log('Stored hash from DB:', rustData.password);
+    console.log('Password comparison result:', userInputPassword ? bcrypt.compareSync(userInputPassword, rustData.password) : 'no password provided');
+
     if (!userInputPassword || bcrypt.compareSync(userInputPassword, rustData.password) === false) {
+        console.log('Login failed: password mismatch');
         return res.status(401).json({ message: 'Incorrect Password' });
     }
     //construct account data to send back to frontend
@@ -62,7 +68,9 @@ export const addUserService = async (req: Request, res: Response) => {
     }
     let passedInfo = req.body.account;
 
+    console.log('Registration - plain password length:', passedInfo.Password?.length);
     const hashedPassword = hashPassword(passedInfo.Password);
+    console.log('Registration - hashed password:', hashedPassword);
     //construct the account data for backend 
     const newAccount :new_Account = {
         Username: passedInfo.Username,
@@ -104,12 +112,13 @@ export const updateUserService = async (req: Request, res: Response) => {
     //convert frontend_Card[] to backend_Card[]
     const newInventory: backend_Card[] = compressCards(req.body.updateData.inventory);
     const newPrimaryDeck: backend_Card[] = compressCards(req.body.updateData.primaryDeck);
-    //hash password
-    const hashedPassword = hashPassword(req.body.updateData.password);
+    //password is already hashed in the database, no need to hash again
+    console.log('Update - password received:', req.body.updateData.password);
+    console.log('Update - password is already hashed, not re-hashing');
     //construct updated account data
     const updateData: new_Account = {
         Username: req.body.updateData.username,
-        Password: hashedPassword,
+        Password: req.body.updateData.password,
         Level: Number(req.body.updateData.level),
         Inventory: newInventory,
         primary_deck: newPrimaryDeck,
