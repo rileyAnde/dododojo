@@ -145,6 +145,7 @@ const InventoryManager: React.FC<Inventory> = ({ onReturnHome, cur_user }) => {
 
     if (from === to) return;
     if (to === 'active' && activeDeck.length >= 30) return; // deck cap
+    if (to === 'inventory' && activeDeck.length <= 15) return; // deck min
 
     // allow duplicates: don't filter by id, remove only first instance
     if (from === 'active') {
