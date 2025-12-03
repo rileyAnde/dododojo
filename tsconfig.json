@@ -9,8 +9,13 @@
     "outDir": "./src/output",
     "rootDir": "./src",
     "sourceMap": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "frontend"]
+  "exclude": ["node_modules", "frontend"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }
