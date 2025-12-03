@@ -84,7 +84,7 @@ const CardJitsuGame: React.FC = () => {
 }, [active]);
   React.useEffect(() => {
     if (!selectedGym) return;
-    if (user) {
+    if (user && conqueredGyms.size>0) {
       conqueredGyms.forEach(async gym => {
         if (gym === selectedGym) {
           try {
