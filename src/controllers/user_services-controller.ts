@@ -36,9 +36,9 @@ export const getUserServices = async (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
     const rustData = await rustResponse.json();;
-    const userInputPassword = req.get("x-password")
-    //verify password
-    if (bcrypt.compareSync(userInputPassword|| '', rustData.password) === false) {
+    const userInputPassword = req.headers['x-password'] as string;
+
+    if (!userInputPassword || bcrypt.compareSync(userInputPassword, rustData.password) === false) {
         return res.status(401).json({ message: 'Incorrect Password' });
     }
     //construct account data to send back to frontend
@@ -61,10 +61,12 @@ export const addUserService = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Username and password are required' });
     }
     let passedInfo = req.body.account;
+
+    const hashedPassword = hashPassword(passedInfo.Password);
     //construct the account data for backend 
     const newAccount :new_Account = {
         Username: passedInfo.Username,
-        Password: hashPassword(passedInfo.Password),
+        Password: hashedPassword,
     }
     console.log('Creating new account:', newAccount);
     const rustResponse = await fetch(`http://localhost:8080/createuser`,{
@@ -102,10 +104,12 @@ export const updateUserService = async (req: Request, res: Response) => {
     //convert frontend_Card[] to backend_Card[]
     const newInventory: backend_Card[] = compressCards(req.body.updateData.inventory);
     const newPrimaryDeck: backend_Card[] = compressCards(req.body.updateData.primaryDeck);
+    //hash password
+    const hashedPassword = hashPassword(req.body.updateData.password);
     //construct updated account data
     const updateData: new_Account = {
         Username: req.body.updateData.username,
-        Password: req.body.updateData.password,
+        Password: hashedPassword,
         Level: Number(req.body.updateData.level),
         Inventory: newInventory,
         primary_deck: newPrimaryDeck,
