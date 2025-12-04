@@ -111,7 +111,7 @@ const CardJitsuGame: React.FC = () => {
 
     try{
       const new_user = await get_user(username, password)
-      console.log(new_user)
+      console.log('new user from handleLogin:', new_user)
       setUser(new_user)
       setCurrentPage('home')
     }catch(e: any){
@@ -153,7 +153,7 @@ const CardJitsuGame: React.FC = () => {
     const newUser: User = {
     ...createdUser,
     username: createdUser.username, // or username.trim()
-    password: password.trim(),
+    password: createdUser.password.trim(),
     level: createdUser.level ?? 1,
     penguinColor: randomColor,
     dodoType: randomType,
