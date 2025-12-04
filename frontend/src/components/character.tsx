@@ -37,9 +37,9 @@ const Character: React.FC<DodoCharacterProps> = ({
   className = '' 
 }) => {
   const sizeClasses = {
-    small: 'w-33% h-33%',
-    medium: 'w-67% h-67%',
-    large: 'w-100% h-100%'
+    small: 'w-[91px] h-[132px]',
+    medium: 'w-[200px] h-[300px]',
+    large: 'w-[400px] h-[500px]'
   };
 
   // Map colors to image files

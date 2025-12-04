@@ -224,7 +224,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ onReturnHome, onEnterBattle, isTu
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-white flex items-center gap-3">
               <Swords className="text-cyan-400" size={32} />
-              Card Jitsu World Map
+              Dodo Dojo World Map
             </h1>
             <div className="flex gap-3">
               <button

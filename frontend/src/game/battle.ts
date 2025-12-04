@@ -63,7 +63,7 @@ export class backend_Card {
 export class Battle {
     private player_won: Card[][] = [[], [], [], [], []];
     private enemy_won: Card[][] = [[], [], [], [], []];
-    private difficulty = 1.0;
+    private difficulty = 0.5; // 0.0 (fully random) to 1.0 (perfect play)
     private types = new Map<string, number>([
         ["water", 0],
         ["ice", 1],
