@@ -13,7 +13,7 @@ import { gym } from '../models/gyms.js';
 import { compressCards } from './user_services-controller.js';
 
 export const getGymServices = async (req: Request, res: Response) => {
-    const rustResponse = await fetch(`http://localhost:8080/gyms`);
+    const rustResponse = await fetch(`http://172.232.9.56:8080/gyms`);
     if (!rustResponse.ok) {
         return res.status(500).json({ message: 'Error communicating with Rust service' });
     }
@@ -32,7 +32,7 @@ export const updateGymService = async (req: Request, res: Response) => {
         owner_username: req.body.updateData.owner_username,
         deck: compressCards(req.body.updateData.deck)
     }
-    const rustResponse = await fetch(`http://localhost:8080/gyms/${gymName}`,{
+    const rustResponse = await fetch(`http://172.232.9.56:8080/gyms/${gymName}`,{
         method: 'PUT',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData)

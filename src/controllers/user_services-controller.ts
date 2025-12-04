@@ -28,7 +28,7 @@ export const getUserServices = async (req: Request, res: Response) => {
     }
     const username = req.params.username;
     //fetch user data from Rust service
-    const rustResponse = await fetch(`http://localhost:8080/user/${username}`);
+    const rustResponse = await fetch(`http://172.232.9.56:8080/user/${username}`);
     //handle Rust service not ok response
     if (rustResponse.status == 401) {
         return res.status(401).json({ message: 'Username Not Found' });
@@ -77,7 +77,7 @@ export const addUserService = async (req: Request, res: Response) => {
         Password: hashedPassword,
     }
     console.log('Creating new account:', newAccount);
-    const rustResponse = await fetch(`http://localhost:8080/createuser`,{
+    const rustResponse = await fetch(`http://172.232.9.56:8080/createuser`,{
         method: 'POST',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(newAccount)
@@ -128,7 +128,7 @@ export const updateUserService = async (req: Request, res: Response) => {
     console.log('primaryDeck length in controller:', req.body.updateData.primaryDeck.length);
     console.log('updateData being sent:', updateData);
     //send update to Rust service
-    const rustResponse = await fetch(`http://localhost:8080/updateuser/${req.params.userId}`,{
+    const rustResponse = await fetch(`http://172.232.9.56:8080/updateuser/${req.params.userId}`,{
         method: 'PUT',
         headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(updateData)
@@ -145,7 +145,7 @@ export const updateUserService = async (req: Request, res: Response) => {
 export const deleteUserService = async (req: Request, res: Response) => {
     if (req.params.userId ) {
         console.log('Deleting user with ID:', req.params.userId);
-        const rustResponse = await fetch(`http://localhost:8080/deleteuser/${req.params.userId}`,{
+        const rustResponse = await fetch(`http://172.232.9.56:8080/deleteuser/${req.params.userId}`,{
             method: 'DELETE',
         });
         console.log('rustResponse:', rustResponse);
