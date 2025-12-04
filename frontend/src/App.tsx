@@ -7,7 +7,7 @@ handleDeleteAccount -> prompt for confirmation, remove user from state, reset ap
 Inputs: None
 Outputs: the DOM tree that React will render to the browser
 Outside Sources: minor ChatGPT and Github Copilot
-Authors: Riley Anderson, Colin Treanor, Dusin Le, Hannah Smith, Jacob Richards
+Authors: Riley Anderson, Colin Treanor, Dustin Le, Hannah Smith, Jacob Richards
 Creation Date: 10/20/2025
 */
 
