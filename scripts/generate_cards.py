@@ -1,3 +1,15 @@
+"""
+Functions:
+parse_csv --> reads power_cards.csv and returns card data
+generate_xml --> converts card data to XML format
+main --> loads CSV, generates XML, writes to cards.xml
+Inputs: none
+Outputs: writes generated XML to resources/cards.xml
+Outside sources: GitHub Copilot
+Authors: Riley Anderson
+Creation Date: 10/14/2025
+"""
+import xml.etree.ElementTree as ET
 import xml.etree.ElementTree as ET
 from typing import List
 import csv

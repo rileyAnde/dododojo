@@ -1,3 +1,15 @@
+"""
+Functions:
+load_cards --> parses cards.xml and returns a list of card dicts (id, name, type, color, level)
+generate_card_image --> creates a card image using base texture, element symbol, and card data
+main --> loads cards and generates images for each card
+Inputs: none
+Outputs: writes generated PNGs to frontend/public/cards
+Outside sources: GitHub Copilot
+Authors: Riley Anderson
+Creation Date: 10/14/2025
+"""
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import xml.etree.ElementTree as ET
 import os
