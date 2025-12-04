@@ -9,11 +9,12 @@ Authors: Hannah Smith
 **/
 import { BackendGym } from "../components/MapScreen"
 import { Card } from "../game/battle"
+import { API_BASE_URL } from "../config/api"
 
 //
 export async function get_gyms(): Promise<BackendGym[]> {
     try {
-        const results = await fetch(`http://localhost:3000/gyms`)
+        const results = await fetch(`${API_BASE_URL}/gyms`)
         if (!results.ok){
             throw new Error("Issue fetching gyms ")
         }
@@ -31,7 +32,7 @@ export async function update_gym(cur_gym:string, new_user: string, new_Deck:Card
             throw new Error("Missing info ")
         }
         const updateData = {name: cur_gym, owner_username: new_user, deck: new_Deck }
-        const response = await fetch(`http://localhost:3000/gyms/${cur_gym}`, {
+        const response = await fetch(`${API_BASE_URL}/gyms/${cur_gym}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -10,12 +10,13 @@ Authors: Hannah Smith
 import { User } from "../App";
 import { Card } from "../game/battle";
 import { expand_cards } from "../utils/cardLoader";
+import { API_BASE_URL } from "../config/api";
 
 
 //fetch user account from backend
 export async function get_user(username:string, password: string): Promise<User> {
     try{
-        const response = await fetch(`http://localhost:3000/user/${username}`, {
+        const response = await fetch(`${API_BASE_URL}/user/${username}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ export async function create_user(username:string, password: string): Promise<Us
     try{
         
         const new_account = {account: {Username: username, Password: password}}
-        const response = await fetch(`http://localhost:3000/users`, {
+        const response = await fetch(`${API_BASE_URL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ export async function update_PrimaryDeck(cur_user:User, new_Deck:Card[]) {
         console.log('inventory length in action:', cur_user.inventory.length);
         console.log('primaryDeck length in action:', cur_user.primaryDeck.length);
         console.log('updateData being sent:', updateData);
-        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+        const response = await fetch(`${API_BASE_URL}/user/${cur_user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -165,7 +166,7 @@ export async function update_Inventory(cur_user:User, new_Deck:Card[]) {
             throw new Error("Missing info ")
         }
         const updateData = {updateData: { ...cur_user, inventory: new_Deck }}
-        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+        const response = await fetch(`${API_BASE_URL}/user/${cur_user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -218,7 +219,7 @@ export async function delete_user(cur_user: User){
         if (!cur_user){
             throw new Error("Missing info")
         }
-        const response = await fetch(`http://localhost:3000/user/${cur_user.id}`, {
+        const response = await fetch(`${API_BASE_URL}/user/${cur_user.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
